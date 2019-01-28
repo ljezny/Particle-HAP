@@ -10,7 +10,29 @@ I've used lot of inspiration and code from this repositories. I would really tha
 - [Bonjour inspiration](https://github.com/moflo/homekit-particle)
 
 ## Configuring project
-TODO:
+For integration with your project, look in particle-hap.ino.
+
+```
+HKServer hkServer;
+
+void setup() {
+  //call to setup TCP Server, Bonjour etc.
+  hkServer.setup();
+  //implement this method to create custom accessory
+  initAccessorySet();
+
+  //uncomment this to clean all paired devices, you will need this a lot when you will debug homekit ;)
+  //hkServer.persistor->resetPersistor();
+}
+
+// loop() runs over and over again, as quickly as it can execute.
+void loop() {
+  //call this to handle incoming TCP connections
+  hkServer.handle();
+}
+
+```
+
 
 ## Compiling project
 
