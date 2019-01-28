@@ -53,6 +53,9 @@ void loop() {
 
 ```
 
+## Dependencies
+There are no library dependencies. All the crypto is based on WolfSSL, but highly customized to work on Photon.
+
 ## What's planned:
 - need a lot of debugging, currently it's very unstable. Still it proves that it can work and thats important!
 - need lot of code refactorings - very messy code for now.
@@ -61,14 +64,14 @@ void loop() {
 ## Goal:
 - integration with [Nixie Clocks](https://www.daliborfarny.com) so it will support Non-commercial HAP.
 
-##
-
 ## Compiling project
-
 When you're ready to compile your project, make sure you have the correct Particle device target selected and run `particle compile <platform>` in the CLI or click the Compile button in the Desktop IDE. The following files in your project folder will be sent to the compile service:
 
 - Everything in the `/src` folder, including your `.ino` application file
 - The `project.properties` file for your project
+
+#Contribution
+Any contributions are more than welcomed. I would prefer to create PR instead of just posting an issues.
 
 ## Hire us:
 We are two guys, freelancers. We develop Android, iOS applications mostly. We also did some parts of FW for Nixie Clock and of course its iOS app.
