@@ -2,12 +2,12 @@
 
 Particle HAP is proof of concept to connection Photon to Homekit, directly, without any in-the-middle HAP JS server.
 
-#BIG THANKS TO:
+## BIG THANKS TO:
 I've used lot of inspiration and code from this repositories. I would really thanks.
 
-[Crypto inspiration](https://github.com/maximkulkin/esp-homekit-demo)
-[Accessory handling inspiration](https://github.com/etwmc/Personal-HomeKit-HAP)
-[Bonjour inspiration](https://github.com/moflo/homekit-particle)
+- [Crypto inspiration](https://github.com/maximkulkin/esp-homekit-demo)
+- [Accessory handling inspiration](https://github.com/etwmc/Personal-HomeKit-HAP)
+- [Bonjour inspiration](https://github.com/moflo/homekit-particle)
 
 ## Configuring project
 TODO:
