@@ -9,7 +9,7 @@ I've used lot of inspiration and code from this repositories. I would really tha
 - [Accessory handling inspiration](https://github.com/etwmc/Personal-HomeKit-HAP)
 - [Bonjour inspiration](https://github.com/moflo/homekit-particle)
 
-##Configuration
+## Configuration
 
 ```
 //TCP for handling server port
