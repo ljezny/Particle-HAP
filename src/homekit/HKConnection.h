@@ -57,7 +57,8 @@ private:
   int lastKeepAliveMs = 0;
 
   std::vector<characteristics *> notifiableCharacteristics;
-
+  std::vector<characteristics *> postedCharacteristics;
+  
   void writeEncryptedData(uint8_t* payload,size_t size);
   void decryptData(uint8_t* buffer,size_t *size);
   void readData(uint8_t* buffer,size_t *size);
@@ -82,7 +83,7 @@ public:
   void close(){
     client.stop();
   }
-
+  void postNotifyOnce(characteristics *c);
   void addNotify(characteristics *c);
   void removeNotify(characteristics *c);
 };

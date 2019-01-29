@@ -669,7 +669,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                             if (c->writable()) {
                                 c->setValue(value, sender);
 
-                                sender->addNotify(c);
+                                //sender->postNotifyOnce(c);
                                 /*char *broadcastTemp = new char[1024];
                                 snprintf(broadcastTemp, 1024, "{\"characteristics\":[{%s}]}", buffer1);
                                 broadcastInfo * info = new broadcastInfo;

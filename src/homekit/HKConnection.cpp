@@ -24,13 +24,11 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
   byte encrypted[1024 + 18];
   int payload_offset = 0;
   int part = 0;
-  Serial.printf("Encrypting message with total size:%d", size);
   while (payload_offset < size) {
 
       size_t chunk_size = size - payload_offset;
       if (chunk_size > 1024)
           chunk_size = 1024;
-      Serial.printf("Encrypting message part: %d chunk_size:%d\n", part, chunk_size);
       byte aead[2] = {chunk_size % 256, chunk_size / 256};
 
       memcpy(encrypted, aead, 2);
@@ -41,7 +39,6 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
           nonce[i++] = x % 256;
           x /= 256;
       }
-      Serial.printf("Encrypting message before wc_ChaCha20Poly1305_Encrypt.\n");
       int r = wc_ChaCha20Poly1305_Encrypt(
           (const byte *) readKey,
           nonce,
@@ -52,8 +49,9 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
       );
       if (r) {
           Serial.printf("Failed to chacha encrypt payload (code %d)\n", r);
+          client.stop();
+          return;
       }
-      Serial.printf("Sending message part: %d\n", part);
       payload_offset += chunk_size;
       if(client.status()){
         client.write(encrypted, chunk_size + 16 + 2, 2000);
@@ -129,7 +127,7 @@ void HKConnection::readData(uint8_t* buffer,size_t *size) {
     int len = client.read(tempBuffer,tempBufferSize);
     memcpy((buffer+total), tempBuffer,len);
     total += len;
-    delay(500);
+    //delay(500);
   }
 
   *size = total;
@@ -215,16 +213,14 @@ void HKConnection::keepAlive() {
       if(client.status()) {
         if(isEncrypted && readsCount > 0) {
           Serial.printf("Keeping alive..\n");
+          processNotifiableCharacteristics();
 
-          if(notifiableCharacteristics.size() > 0) { //if there's any notifiable properties, use it to keep alive
-            processNotifiableCharacteristics();
-          } else {
-            char *aliveMsg = new char[32];
-            memset(aliveMsg,0,32);
-            strncpy(aliveMsg, "{\"characteristics\": []}", 32);
-            announce(aliveMsg);
-            free(aliveMsg);
-          }
+          /*char *aliveMsg = new char[32];
+          memset(aliveMsg,0,32);
+          strncpy(aliveMsg, "{\"characteristics\": []}", 32);
+          announce(aliveMsg);
+          free(aliveMsg);*/
+
         }
       }
   }
@@ -685,6 +681,12 @@ void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
 }
 
 void HKConnection::processNotifiableCharacteristics() {
+  for(int i = 0; i < postedCharacteristics.size(); i++) {
+    Serial.println("Notifing posted characteristics value.");
+    postedCharacteristics.at(i)->notify(this);
+  }
+  postedCharacteristics.clear();
+
   for(int i = 0; i < notifiableCharacteristics.size(); i++) {
     Serial.println("Notifing characteristics value.");
     notifiableCharacteristics.at(i)->notify(this);
@@ -692,8 +694,15 @@ void HKConnection::processNotifiableCharacteristics() {
 }
 
 void HKConnection::addNotify(characteristics *c){
-  notifiableCharacteristics.push_back(c);
+  //notifiableCharacteristics.push_back(c);
+  postNotifyOnce(c);
   lastKeepAliveMs = 0;
+}
+
+void HKConnection::postNotifyOnce(characteristics *c){
+  postedCharacteristics.push_back(c);
+  lastKeepAliveMs = 0;
+  Serial.println("Post characteristics value.");
 }
 
 void HKConnection::removeNotify(characteristics *c){

@@ -31,7 +31,7 @@ void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
 
 void brightTrackable (int oldValue, int newValue, HKConnection *sender) {
   RGB.control(true);
-  RGB.color(newValue, newValue, newValue);
+  RGB.color((byte) newValue*2, (byte) newValue*2, (byte) newValue*2);
 }
 /*
 void _newConnection(HKConnection* info) {
@@ -197,7 +197,7 @@ void initAccessorySet() {
     powerState1->characteristics::setValue("true");
     powerState1->valueChangeFunctionCall = &powerTrackable;
     lightAcc1->addCharacteristics(lightService1, powerState1);
-
+/*
     intCharacteristics *brightnessState1 = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
     brightnessState1->characteristics::setValue("50");
     brightnessState1->valueChangeFunctionCall = &brightTrackable;
