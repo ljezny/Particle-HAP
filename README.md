@@ -13,7 +13,7 @@ I've used lot of inspiration and code from this repositories. I would really tha
 
 Example video of pairing and handling.
 
-![Watch the video](https://i.imgur.com/jLw-PZ73Wlw.png)](https://youtu.be/jLw-PZ73Wlw)
+![Watch the video](https://img.youtube.com/vi/jLw-PZ73Wlw/hqdefault.jpg)](https://youtu.be/jLw-PZ73Wlw)
 
 ## Configuration
 
