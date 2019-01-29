@@ -62,6 +62,10 @@ void loop() {
 ## Dependencies
 There are no library dependencies. All the crypto is based on WolfSSL, but highly customized to work on Photon.
 
+## Known major issues
+- Homekit lost connection after few minutes (keep alive, dont know...)
+- Cannot respond to Homekit with more than 1024B (so more sevices, characteristics, bridge is not available at the moment). I think the issue is related to encryption of 1024B block.
+
 ## What's planned:
 - need a lot of debugging, currently it's very unstable. Still it proves that it can work and thats important!
 - need lot of code refactorings - very messy code for now.
