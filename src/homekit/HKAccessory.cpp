@@ -13,22 +13,16 @@ const char hapJsonType[] = "application/hap+json";
 const char pairingTlv8Type[] = "application/pairing+tlv8";
 
 
-void *announce(void *info) {
-    broadcastInfo *_info = (broadcastInfo *)info;
-    void *sender = _info->sender;
-    char *desc = _info->desc;
+void *announce(HKConnection *conn, char* desc) {
+    char reply[4096];
+    memset(reply,0,4096);
+    int len = snprintf(reply, 4096, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nConnection: keep-alive\r\n\Content-Length: %lu\r\n\r\n%s", strlen(desc), desc);
 
-    char *reply = new char[1024];
-    int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nConnection: keep-alive\r\n\Content-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    Serial.println("--------BEGIN ANNOUNCE--------");
+    Serial.printf("%s\n",reply);
+    Serial.println("--------END ANNOUNCE--------");
 
-    Serial.printf("Announce called: \n");
-
-    //info->c->writeData(reply,len);
-
-    delete [] reply;
-
-    delete [] desc;
-    delete [] info;
+    conn->writeData((byte*)reply,len);
 }
 
 //Wrap to JSON
@@ -382,16 +376,11 @@ inline string dictionaryWrap(string *key, string *value, unsigned short len) {
 }
 
 void characteristics::notify(HKConnection* conn) {
-    char *broadcastTemp = new char[1024];
+    char broadcastTemp[1024];
     memset(broadcastTemp,0,1024);
     snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", accessory->aid, iid, value(NULL).c_str());
 
-    conn->writeData((byte*)broadcastTemp,strlen(broadcastTemp));
-    /*
-    broadcastInfo * info = new broadcastInfo;
-    info->sender = this;
-    info->desc = broadcastTemp;
-    announce(info);*/
+    announce(conn,broadcastTemp);
 }
 
 string boolCharacteristics::describe(HKConnection *sender) {

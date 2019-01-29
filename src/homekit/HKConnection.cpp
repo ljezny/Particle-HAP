@@ -717,7 +717,7 @@ void HKConnection::processNotifiableCharacteristics() {
     Serial.println("Notifing characteristics value.");
     notifiableCharacteristics.at(i)->notify(this);
   }
-  notifiableCharacteristics.clear();
+  //notifiableCharacteristics.clear();
 }
 
 void HKConnection::addNotify(characteristics *c){
