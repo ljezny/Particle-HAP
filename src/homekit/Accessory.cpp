@@ -19,10 +19,14 @@ intCharacteristics *occupyState;
 
 #define userListAddr "./userList"
 
-LEDStatus led(RGB_COLOR_BLUE, LED_PATTERN_BLINK);
 
 void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
-  led.setActive(newValue);
+  RGB.control(true);
+  if(!newValue){
+    RGB.color(0, 0, 0);
+  } else {
+    RGB.color(0xFF, 0xFF, 0xFF);
+  }
 }
 /*
 void _newConnection(HKConnection* info) {
@@ -185,7 +189,7 @@ void initAccessorySet() {
     lightAcc1->addCharacteristics(lightService1, lightServiceName1);
 
     boolCharacteristics *powerState1 = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
-    powerState1->characteristics::setValue("false");
+    powerState1->characteristics::setValue("true");
     powerState1->valueChangeFunctionCall = &powerTrackable;
     lightAcc1->addCharacteristics(lightService1, powerState1);
 /*

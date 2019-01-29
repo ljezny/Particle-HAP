@@ -19,7 +19,7 @@ void *announce(void *info) {
     char *desc = _info->desc;
 
     char *reply = new char[1024];
-    int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nConnection: keep-alive\r\n\Content-Length: %lu\r\n\r\n%s", strlen(desc), desc);
 
     Serial.printf("%s\n", reply);
 
@@ -720,7 +720,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
     //Calculate the length of header
     char * tmp = new char[256];
     bzero(tmp, 256);
-    int len = snprintf(tmp, 256, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u\r\n\r\n", protocol, statusCode, returnType, replyDataLen);
+    int len = snprintf(tmp, 256, "%s %d OK\r\nContent-Type: %s\r\nConnection: keep-alive\r\nContent-Length: %u\r\n\r\n", protocol, statusCode, returnType, replyDataLen);
     delete [] tmp;
 
     //replyLen should omit the '\0'.
@@ -728,7 +728,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
     //reply should add '\0', or the printf is incorrect
     *reply = new char[*replyLen + 1];
     bzero(*reply, *replyLen + 1);
-    snprintf(*reply, len + 1, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u\r\n\r\n", protocol, statusCode, returnType, replyDataLen);
+    snprintf(*reply, len + 1, "%s %d OK\r\nContent-Type: %s\r\nConnection: keep-alive\r\nContent-Length: %u\r\n\r\n", protocol, statusCode, returnType, replyDataLen);
 
     if (replyData) {
         bcopy(replyData, &(*reply)[len], replyDataLen);

@@ -179,7 +179,6 @@ void HKConnection::handleConnection() {
       } else if(isEncrypted) { //connection is secured
         Serial.printf("Handling message request: %s\n",msg.directory);
         handleAccessoryRequest((const char *)inputBuffer, len);
-        //client.stop();
       }
   }
   free(inputBuffer);
