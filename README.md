@@ -10,7 +10,10 @@ I've used lot of inspiration and code from this repositories. I would really tha
 - [Bonjour inspiration](https://github.com/moflo/homekit-particle)
 
 ## Video
-Example video of pairing and handling [Here](https://youtu.be/jLw-PZ73Wlw)
+
+Example video of pairing and handling.
+
+![Watch the video](https://i.imgur.com/jLw-PZ73Wlw.png)](https://youtu.be/jLw-PZ73Wlw)
 
 ## Configuration
 
