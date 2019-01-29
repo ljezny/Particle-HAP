@@ -13,18 +13,6 @@ const char hapJsonType[] = "application/hap+json";
 const char pairingTlv8Type[] = "application/pairing+tlv8";
 
 
-void *announce(HKConnection *conn, char* desc) {
-    char reply[4096];
-    memset(reply,0,4096);
-    int len = snprintf(reply, 4096, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nConnection: keep-alive\r\n\Content-Length: %lu\r\n\r\n%s", strlen(desc), desc);
-
-    Serial.println("--------BEGIN ANNOUNCE--------");
-    Serial.printf("%s\n",reply);
-    Serial.println("--------END ANNOUNCE--------");
-
-    conn->writeData((byte*)reply,len);
-}
-
 //Wrap to JSON
 inline string wrap(const char *str) { return (string)"\""+str+"\""; }
 //Value String
@@ -379,8 +367,7 @@ void characteristics::notify(HKConnection* conn) {
     char broadcastTemp[1024];
     memset(broadcastTemp,0,1024);
     snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", accessory->aid, iid, value(NULL).c_str());
-
-    announce(conn,broadcastTemp);
+    conn->announce(broadcastTemp);
 }
 
 string boolCharacteristics::describe(HKConnection *sender) {

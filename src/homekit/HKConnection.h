@@ -73,7 +73,7 @@ public:
   HKConnection(HKServer *s,TCPClient c);
   void handleConnection();
   void keepAlive();
-
+  void announce(char* buffer);
   void writeData(uint8_t* buffer,size_t size);
 
   bool isConnected(){

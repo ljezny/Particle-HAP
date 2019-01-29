@@ -55,8 +55,9 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
       }
       Serial.printf("Sending message part: %d\n", part);
       payload_offset += chunk_size;
-      client.write(encrypted, chunk_size + 16 + 2, 2000);
-
+      if(client.status()){
+        client.write(encrypted, chunk_size + 16 + 2, 2000);
+      }
       part++;
   }
 }
@@ -81,8 +82,7 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
 
   int payload_offset = 0;
   int decrypted_offset = 0;
-  Serial.printf("Message decryption started: payloadSize:%d\n", payload_size);
-  while (payload_offset < payload_size) {
+    while (payload_offset < payload_size) {
       size_t chunk_size = payload[payload_offset] + payload[payload_offset+1]*256;
       if (chunk_size+18 > payload_size-payload_offset) {
           // Unfinished chunk
@@ -97,7 +97,6 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
       }
       size_t decrypted_len = *decrypted_size - decrypted_offset;
 
-      Serial.printf("Message block decryption started: chunk:%d\n",chunk_size);
       int r= wc_ChaCha20Poly1305_Decrypt(
           (const byte *) writeKey,
           nonce,
@@ -107,6 +106,9 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
       );
       if (r) {
           Serial.printf("Failed to chacha decrypt payload (code %d)\n", r);
+          //Once session security has been established, if the accessory encounters a decryption failure then it must immediately close the connection used for the session.
+          client.stop();
+          *size = 0;
           return;
       }
 
@@ -116,7 +118,6 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
   memset(payload,0,*size);
   memcpy(payload,decryptedData,decryptedTotalSize);
   *size = decryptedTotalSize;
-  Serial.printf("Message block decryption ended: total size:%d\n",decryptedTotalSize);
   free(decryptedData);
 }
 
@@ -141,20 +142,30 @@ void HKConnection::readData(uint8_t* buffer,size_t *size) {
 }
 
 void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
-  //Serial.printf("Response: %s, %d, responseBuffer = %s, responseLen = %d\n", __func__, __LINE__, responseBuffer, responseLen);
+  Serial.printf("writeData: %s, %d, responseLen = %d\n", __func__, __LINE__, responseLen);
   if(client.status() && client.connected()){
     if(isEncrypted) {
       writeEncryptedData((uint8_t *)responseBuffer,responseLen);
     } else {
-      client.write((uint8_t *)responseBuffer, (size_t)responseLen, 2000);
+      if(client.status()){
+        client.write((uint8_t *)responseBuffer, (size_t)responseLen, 2000);
+      }
+
     }
   }
 }
 
 
 void HKConnection::handleConnection() {
-  if (!client.status() || !client.available()) {
+  if (!client.status()) {
       return;
+  }
+
+  if(!client.available()) {
+    if(isEncrypted){
+      keepAlive();
+    }
+    return;
   }
 
   int input_buffer_size = 4096;
@@ -185,6 +196,19 @@ void HKConnection::handleConnection() {
   free(inputBuffer);
 }
 
+void HKConnection::announce(char* desc){
+  char *reply = (char*)malloc(4096);
+  memset(reply,0,4096);
+  int len = snprintf(reply, 4096, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nConnection: keep-alive\r\n\Content-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+
+  Serial.println("--------BEGIN ANNOUNCE--------");
+  Serial.printf("%s\n",reply);
+  Serial.println("--------END ANNOUNCE--------");
+
+  writeData((byte*)reply,len);
+  free(reply);
+}
+
 void HKConnection::keepAlive() {
   if((millis() - lastKeepAliveMs) > 10000) {
       lastKeepAliveMs = millis();
@@ -192,9 +216,15 @@ void HKConnection::keepAlive() {
         if(isEncrypted && readsCount > 0) {
           Serial.printf("Keeping alive..\n");
 
-          char *aliveMsg = new char[32];
-          strncpy(aliveMsg, "{\"characteristics\": []}", 32);
-          //writeData((byte*)aliveMsg,32);
+          if(notifiableCharacteristics.size() > 0) { //if there's any notifiable properties, use it to keep alive
+            processNotifiableCharacteristics();
+          } else {
+            char *aliveMsg = new char[32];
+            memset(aliveMsg,0,32);
+            strncpy(aliveMsg, "{\"characteristics\": []}", 32);
+            announce(aliveMsg);
+            free(aliveMsg);
+          }
         }
       }
   }
@@ -223,7 +253,6 @@ bool HKConnection::handlePairVerify(const char *buffer) {
   bool completed = false;
   char state = State_Pair_Verify_M1;
 
-  Serial.printf("Start Pair Verify\n");
   HKNetworkMessage msg(buffer);
   HKNetworkResponse response = HKNetworkResponse(200);
   bcopy(msg.data.dataPtrForIndex(6), &state, 1);
@@ -235,7 +264,6 @@ bool HKConnection::handlePairVerify(const char *buffer) {
           int r = wc_curve25519_init(&controllerKey);
           r = wc_curve25519_import_public_ex((const byte *) msg.data.dataPtrForIndex(3) , 32, &controllerKey,EC25519_LITTLE_ENDIAN);
           memcpy(&controllerKeyData,msg.data.dataPtrForIndex(3) , 32);
-          Serial.printf("wc_curve25519_import_public: %d\n", r);
 
           curve25519_key secretKey;
           r = wc_curve25519_init(&secretKey);
@@ -259,9 +287,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
 
           size_t accessorySignSize = ED25519_SIG_SIZE;
           byte accesorySign[accessorySignSize];
-          //ed25519_key *accessoryKey = (ed25519_key*)ACESSORY_KEY;
           r = wc_ed25519_sign_msg(accessoryInfo, accessoryInfoSize, accesorySign, &accessorySignSize,accessoryKey);
-          Serial.printf("wc_ed25519_sign_msg: %d\n", r);
 
           HKNetworkMessageDataRecord signRecord;
           signRecord.activate = true;
@@ -269,7 +295,6 @@ bool HKConnection::handlePairVerify(const char *buffer) {
           signRecord.index = 10;
           signRecord.length = accessorySignSize;
           memcpy(signRecord.data,accesorySign,accessorySignSize);
-          Serial.printf("signRecord created: %d\n", r);
 
           HKNetworkMessageDataRecord idRecord;
           idRecord.index = 1;
@@ -277,18 +302,15 @@ bool HKConnection::handlePairVerify(const char *buffer) {
           idRecord.length = strlen(deviceIdentity);
           idRecord.data = new char[idRecord.length];
           memcpy(idRecord.data,deviceIdentity, idRecord.length);
-          Serial.printf("idRecord created: %d\n", r);
 
           HKNetworkMessageData data;
           data.addRecord(signRecord);
           data.addRecord(idRecord);
-          Serial.printf("plain response created: %d\n", r);
 
           char salt[] = "Pair-Verify-Encrypt-Salt";
           char info[] = "Pair-Verify-Encrypt-Info";
           size_t sessionKeySize = CHACHA20_POLY1305_AEAD_KEYSIZE;
           r = wc_HKDF(SHA512,(const byte*) sharedKey, sharedKeySize,(const byte*) salt, strlen(salt),(const byte*) info, strlen(info),sessionKeyData, CHACHA20_POLY1305_AEAD_KEYSIZE);
-          Serial.printf("wc_HKDF: r:%d\n",r);
 
           const char *plainMsg = 0;   unsigned short msgLen = 0;
           data.rawData(&plainMsg, &msgLen);
@@ -303,7 +325,6 @@ bool HKConnection::handlePairVerify(const char *buffer) {
               (byte *) encryptMsg,
               (byte *) (encryptMsg+msgLen)
           );
-          Serial.printf("wc_ChaCha20Poly1305_Encrypt: r:%d\n",r);
 
           HKNetworkMessageDataRecord stage;
           stage.activate = true;
@@ -326,7 +347,6 @@ bool HKConnection::handlePairVerify(const char *buffer) {
           pubKeyRecord.index = 3;
           pubKeyRecord.length = publicSecretKeySize;
           memcpy(pubKeyRecord.data, publicSecretKeyData, publicSecretKeySize);
-          Serial.printf("pubKeyRecord created: %d\n", r);
 
           response.data.addRecord(stage);
           response.data.addRecord(pubKeyRecord);
@@ -347,10 +367,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
               (const byte *)encryptedData, packageLen-16,
               (const byte *)encryptedData+packageLen-16, decryptedData
           );
-          Serial.printf("wc_ChaCha20Poly1305_Decrypt: r:%d\n",r);
-
           HKNetworkMessageData subData = HKNetworkMessageData((char *)decryptedData, packageLen-16);
-
           HKKeyRecord rec = server->persistor->getKey(subData.dataPtrForIndex(1));
 
           int controllerInfoSize = CURVE25519_KEYSIZE+CURVE25519_KEYSIZE+subData.lengthForIndex(1);
@@ -361,12 +378,9 @@ bool HKConnection::handlePairVerify(const char *buffer) {
 
           ed25519_key clKey;
           r = wc_ed25519_init(&clKey);
-          Serial.printf("wc_ed25519_init: r:%d\n",r);
           r = wc_ed25519_import_public((const byte*) rec.publicKey, ED25519_PUB_KEY_SIZE, &clKey);
-          Serial.printf("wc_ed25519_import_public: r:%d\n",r);
           int verified = 0;
           r = wc_ed25519_verify_msg((byte*) subData.dataPtrForIndex(10), subData.lengthForIndex(10),(const byte*)  controllerInfo,controllerInfoSize, &verified, &clKey);
-          Serial.printf("wc_ed25519_verify_msg: r:%d, verified:%d\n",r,verified);
           if(verified) {
             completed = true;
 
@@ -383,10 +397,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             const char read_info[] = "Control-Read-Encryption-Key";
             const char write_info[] = "Control-Write-Encryption-Key";
             r = wc_HKDF(SHA512,(const byte*) sharedKey, CHACHA20_POLY1305_AEAD_KEYSIZE,(const byte*) salt, strlen(salt),(const byte*) read_info, strlen(read_info),readKey, CHACHA20_POLY1305_AEAD_KEYSIZE);
-            Serial.printf("wc_HKDF: r:%d\n",r);
             r = wc_HKDF(SHA512,(const byte*) sharedKey, CHACHA20_POLY1305_AEAD_KEYSIZE,(const byte*) salt, strlen(salt),(const byte*) write_info, strlen(write_info),writeKey, CHACHA20_POLY1305_AEAD_KEYSIZE);
-            Serial.printf("wc_HKDF: r:%d\n",r);
-
             Serial.println("Pair verified, secure connection established");
           }
           else{
@@ -397,7 +408,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             error.index = 7;
             error.length = 1;
             response.data.addRecord(error);
-            Serial.println("Pair not verified.");
+            Serial.println("Pair NOT verified.");
           }
         }
       }
@@ -437,7 +448,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
     *stateRecord.data = (char)state+1;
     switch (state) {
         case State_M1_SRPStartRequest: {
-          Serial.println("State_M1_SRPStartRequest started");
+          Serial.println("State_M1_SRPStartRequest");
           stateRecord.data[0] = State_M2_SRPStartRespond;
           HKNetworkMessageDataRecord saltRec;
           HKNetworkMessageDataRecord publicKeyRec;
@@ -450,18 +461,12 @@ void HKConnection::handlePairSetup(const char *buffer) {
           int r = wc_SrpInit(&srp,SRP_TYPE_SHA512,SRP_CLIENT_SIDE);
           srp.keyGenFunc_cb = wc_SrpSetKeyH;
           if (!r) r = wc_SrpSetUsername(&srp,(const byte *)"Pair-Setup",strlen("Pair-Setup"));
-          Serial.printf("wc_SrpSetUsername: %d\n", r);
           if (!r) r = wc_SrpSetParams(&srp,(const byte *)N, sizeof(N),(const byte *)generator, 1,salt,16);
-          Serial.printf("wc_SrpSetParams: %d\n", r);
           if (!r) r = wc_SrpSetPassword(&srp,(const byte *)devicePassword,strlen(devicePassword));
-          Serial.printf("wc_SrpSetPassword: %d\n", r);
           if (!r) r = wc_SrpGetVerifier(&srp, (byte *)publicKey, &publicKeyLength); //use publicKey to store v
-          Serial.printf("wc_SrpGetVerifier: %d\n", r);
           srp.side=SRP_SERVER_SIDE; //switch to server mode
           if (!r) r = wc_SrpSetVerifier(&srp, (byte *)publicKey, publicKeyLength);
-          Serial.printf("wc_SrpSetVerifier: %d\n", r);
           if (!r) r = wc_SrpGetPublic(&srp, (byte *)publicKey, &publicKeyLength);
-          Serial.printf("wc_SrpGetPublic: %d\n", r);
           saltRec.index = 2;
           saltRec.activate = true;
           saltRec.length = sizeof(salt);
@@ -477,18 +482,11 @@ void HKConnection::handlePairSetup(const char *buffer) {
           mResponse.data.addRecord(publicKeyRec);
           mResponse.data.addRecord(saltRec);
 
-          Serial.println("State_M1_SRPStartRequest ended.");
-
-          //Serial.println("DUMP pubkey:");
-          //print_hex_memory(publicKeyRec.data,publicKeyRec.length);
-
-          //Serial.println("DUMP salt:");
-          //print_hex_memory(saltRec.data,saltRec.length);
         }
         break;
 
         case State_M3_SRPVerifyRequest: {
-            Serial.println("State_M3_SRPVerifyRequest started");
+            Serial.println("State_M3_SRPVerifyRequest");
             stateRecord.data[0] = State_M4_SRPVerifyRespond;
             const char *keyStr = 0;
             int keyLen = 0;
@@ -501,11 +499,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 proofStr = temp;
                 proofLen = msg.data.lengthForIndex(4);
             }
-            Serial.println("State_M3_SRPVerifyRequest data readed");
-            Serial.printf("Partner key len: %d\n", keyLen);
-            Serial.printf("My key len: %d\n", publicKeyLength);
-            Serial.printf("Partner proof len: %d\n", proofLen);
-
             int r = wc_SrpComputeKey(&srp,(byte*) keyStr,keyLen,(byte*) publicKey,publicKeyLength);
             if (!r) r = wc_SrpVerifyPeersProof(&srp, (byte*) proofStr, proofLen);
 
@@ -519,7 +512,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 mResponse.data.addRecord(stateRecord);
                 mResponse.data.addRecord(responseRecord);
 
-                Serial.println("Oops at M3");
+                Serial.println("INCORRECT PASSWORD");
             } else { //success
                 wc_SrpGetProof(&srp, (byte *)response,&responseLength);
                 //SRP_respond(srp, &response);
@@ -532,12 +525,12 @@ void HKConnection::handlePairSetup(const char *buffer) {
 
                 mResponse.data.addRecord(stateRecord);
                 mResponse.data.addRecord(responseRecord);
-                Serial.println("Password Correct");
+                Serial.println("PASSWORD OK");
             }
         }
             break;
         case State_M5_ExchangeRequest: {
-            Serial.println("State_M5_ExchangeRequest started");
+            Serial.println("State_M5_ExchangeRequest");
             stateRecord.data[0] = State_M6_ExchangeRespond;
             const char *encryptedPackage = NULL;int packageLen = 0;
             encryptedPackage = msg.data.dataPtrForIndex(5);
@@ -551,7 +544,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
             const char info1[] = "Pair-Setup-Encrypt-Info";
             uint8_t sharedKey[100];
             int r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt1, strlen(salt1),(const byte*) info1, strlen(info1),sharedKey, CHACHA20_POLY1305_AEAD_KEYSIZE);
-            Serial.printf("wc_HKDF: r:%d\n",r);
             uint8_t *decryptedData =  new uint8_t[packageLen-16];
             bzero(decryptedData, packageLen-16);
             r= wc_ChaCha20Poly1305_Decrypt(
@@ -561,7 +553,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 (const byte *)encryptedData, packageLen-16,
                 (const byte *)mac, decryptedData
             );
-            Serial.printf("wc_ChaCha20Poly1305_Decrypt: r:%d\n",r);
 
             HKNetworkMessageData *subTLV8 = new HKNetworkMessageData((char *)decryptedData, packageLen-16);
             char *controllerIdentifier = subTLV8->dataPtrForIndex(1);
@@ -580,18 +571,14 @@ void HKConnection::handlePairSetup(const char *buffer) {
             const char salt2[] = "Pair-Setup-Controller-Sign-Salt";
             const char info2[] = "Pair-Setup-Controller-Sign-Info";
             r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt2, strlen(salt2),(const byte*) info2, strlen(info2),(byte*)controllerHash, CHACHA20_POLY1305_AEAD_KEYSIZE);
-            Serial.printf("wc_HKDF: r:%d\n",r);
             memcpy(&controllerHash[32],controllerIdentifier, 36);
             memcpy(&controllerHash[68],controllerPublicKey, 32);
 
             ed25519_key clKey;
             r = wc_ed25519_init(&clKey);
-            Serial.printf("wc_ed25519_init: r:%d\n",r);
             r = wc_ed25519_import_public((const byte*) controllerPublicKey, controllerPublicKeySize, &clKey);
-            Serial.printf("wc_ed25519_import_public: r:%d\n",r);
             int verified = 0;
             r = wc_ed25519_verify_msg((byte*) controllerSignature, controllerSignatureSize,(const byte*)  controllerHash,100, &verified, &clKey);
-            Serial.printf("wc_ed25519_verify_msg: r:%d, verified:%d\n",r,verified);
             if(verified) {
               HKNetworkMessageData *returnTLV8 = new HKNetworkMessageData();
 
@@ -602,32 +589,23 @@ void HKConnection::handlePairSetup(const char *buffer) {
               usernameRecord.data = new char[usernameRecord.length];
               memcpy(usernameRecord.data,deviceIdentity,usernameRecord.length);
               returnTLV8->addRecord(usernameRecord);
-              Serial.printf("usernameRecord created.\n");
 
                // Generate Signature
               const char salt3[] = "Pair-Setup-Accessory-Sign-Salt";
               const char info3[] = "Pair-Setup-Accessory-Sign-Info";
               size_t outputSize = 64+strlen(deviceIdentity);
               uint8_t output[outputSize];
-              //hkdf((const unsigned char*)salt, strlen(salt), (const unsigned char*)srp.key, srp.keySz, (const unsigned char*)info, strlen(info), output, 32);
               r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt3, strlen(salt3),(const byte*) info3, strlen(info3),(byte*)output, CHACHA20_POLY1305_AEAD_KEYSIZE);
-              Serial.printf("wc_HKDF: r:%d\n",r);
-
-              //ed25519_key *accessoryKey = (ed25519_key*)ACESSORY_KEY;
-
 
               size_t accessoryPubKeySize = ED25519_PUB_KEY_SIZE;
               uint8_t accessoryPubKey[accessoryPubKeySize];
               r = wc_ed25519_export_public(accessoryKey, accessoryPubKey, &accessoryPubKeySize);
-              Serial.printf("wc_ed25519_export_public: r:%d\n",r);
               memcpy(&output[32],deviceIdentity,strlen(deviceIdentity));
               memcpy(&output[32+strlen(deviceIdentity)],accessoryPubKey,accessoryPubKeySize);
-              Serial.printf("output concatenated: r:%d\n",r);
               size_t signatureSize = 64;
               uint8_t signature[signatureSize];
 
               r = wc_ed25519_sign_msg(output,outputSize,signature,&signatureSize,accessoryKey);
-              Serial.printf("wc_ed25519_sign_msg accessoryKey: r:%d\n",r);
 
               HKNetworkMessageDataRecord signatureRecord;
               signatureRecord.activate = true;
@@ -636,7 +614,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
               signatureRecord.data = new char[64];
               memcpy(signatureRecord.data,signature,signatureSize);
               returnTLV8->addRecord(signatureRecord);
-              Serial.printf("signature record created: r:%d\n",r);
 
               HKNetworkMessageDataRecord publicKeyRecord;
               publicKeyRecord.activate = true;
@@ -645,7 +622,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
               publicKeyRecord.data = new char[accessoryPubKeySize];
               memcpy(publicKeyRecord.data,accessoryPubKey,accessoryPubKeySize);
               returnTLV8->addRecord(publicKeyRecord);
-              Serial.printf("public key record created: r:%d\n",r);
 
               const char *tlv8Data;unsigned short tlv8Len;
               returnTLV8->rawData(&tlv8Data, &tlv8Len);
@@ -663,8 +639,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
                   (byte*) tlv8Record.data,
                   (byte*) (tlv8Record.data + tlv8Len)
               );
-              Serial.printf("wc_ChaCha20Poly1305_Encrypt: r:%d\n",r);
-
 
               tlv8Record.activate = true;
               tlv8Record.index = 5;//5
@@ -708,8 +682,6 @@ void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
     Serial.println("--------END RESPONSE--------");
     writeData((byte*)resultData,resultLen);
   }
-
-  //processNotifiableCharacteristics();
 }
 
 void HKConnection::processNotifiableCharacteristics() {
@@ -717,11 +689,11 @@ void HKConnection::processNotifiableCharacteristics() {
     Serial.println("Notifing characteristics value.");
     notifiableCharacteristics.at(i)->notify(this);
   }
-  //notifiableCharacteristics.clear();
 }
 
 void HKConnection::addNotify(characteristics *c){
   notifiableCharacteristics.push_back(c);
+  lastKeepAliveMs = 0;
 }
 
 void HKConnection::removeNotify(characteristics *c){
