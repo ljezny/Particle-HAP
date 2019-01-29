@@ -700,6 +700,14 @@ void HKConnection::addNotify(characteristics *c){
 }
 
 void HKConnection::postNotifyOnce(characteristics *c){
+  if(postedCharacteristics.size() > 0){
+    return;
+  }
+  for(int i = 0; i < postedCharacteristics.size(); i++) {
+    if(postedCharacteristics.at(i) == c) {
+      return;
+    }
+  }
   postedCharacteristics.push_back(c);
   lastKeepAliveMs = 0;
   Serial.println("Post characteristics value.");
