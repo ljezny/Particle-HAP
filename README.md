@@ -9,6 +9,9 @@ I've used lot of inspiration and code from this repositories. I would really tha
 - [Accessory handling inspiration](https://github.com/etwmc/Personal-HomeKit-HAP)
 - [Bonjour inspiration](https://github.com/moflo/homekit-particle)
 
+## Video
+Example video of pairing and handling [Here](https://youtu.be/jLw-PZ73Wlw)
+
 ## Configuration
 
 ```
