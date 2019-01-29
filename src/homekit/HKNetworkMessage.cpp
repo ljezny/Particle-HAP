@@ -53,7 +53,7 @@ void HKNetworkMessage::getBinaryPtr(char **buffer, int *contentLength) {
     const char *_data; unsigned short dataSize;
     data.rawData(&_data, &dataSize);
     (*buffer) = new char[1024];
-    (*contentLength) = snprintf((*buffer), 1024, "%s /%s HTTP/1.1\r\nContent-Length: %hu\r\nContent-Type: %s\r\n\r\n", method, directory, dataSize, type);
+    (*contentLength) = snprintf((*buffer), 1024, "%s /%s HTTP/1.1\r\nContent-Length: %hu\r\n\Content-Type: %s\r\n\r\n", method, directory, dataSize, type);
     for (int i = 0; i < dataSize; i++) {
         (*buffer)[*contentLength+i] = _data[i];
     }

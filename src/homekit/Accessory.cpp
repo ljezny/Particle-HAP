@@ -28,6 +28,11 @@ void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
     RGB.color(0xFF, 0xFF, 0xFF);
   }
 }
+
+void brightTrackable (int oldValue, int newValue, HKConnection *sender) {
+  RGB.control(true);
+  RGB.color(newValue, newValue, newValue);
+}
 /*
 void _newConnection(HKConnection* info) {
     Serial.printf("New connection %s\n", info->hostname.c_str());
@@ -192,11 +197,12 @@ void initAccessorySet() {
     powerState1->characteristics::setValue("true");
     powerState1->valueChangeFunctionCall = &powerTrackable;
     lightAcc1->addCharacteristics(lightService1, powerState1);
-/*
+
     intCharacteristics *brightnessState1 = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
     brightnessState1->characteristics::setValue("50");
-    lightAcc1->addCharacteristics(lightService1, brightnessState1);*/
-    /*
+    brightnessState1->valueChangeFunctionCall = &brightTrackable;
+    lightAcc1->addCharacteristics(lightService1, brightnessState1);
+/*
     //Add Light
     Accessory *lightAcc2 = new Accessory();
 

@@ -21,9 +21,10 @@ void *announce(void *info) {
     char *reply = new char[1024];
     int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nConnection: keep-alive\r\n\Content-Length: %lu\r\n\r\n%s", strlen(desc), desc);
 
-    Serial.printf("%s\n", reply);
+    Serial.printf("Announce called: \n");
 
-    //broadcastMessage(sender, reply, len);
+    //info->c->writeData(reply,len);
+
     delete [] reply;
 
     delete [] desc;
@@ -380,13 +381,17 @@ inline string dictionaryWrap(string *key, string *value, unsigned short len) {
     return result;
 }
 
-void characteristics::notify() {
+void characteristics::notify(HKConnection* conn) {
     char *broadcastTemp = new char[1024];
+    memset(broadcastTemp,0,1024);
     snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", accessory->aid, iid, value(NULL).c_str());
+
+    conn->writeData((byte*)broadcastTemp,strlen(broadcastTemp));
+    /*
     broadcastInfo * info = new broadcastInfo;
     info->sender = this;
     info->desc = broadcastTemp;
-    announce(info);
+    announce(info);*/
 }
 
 string boolCharacteristics::describe(HKConnection *sender) {
@@ -481,7 +486,6 @@ void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value
 }
 
 void handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender) {
-    Serial.printf("Receive request: %s\n", request);
     int index = 5;
     char method[5];
     {
@@ -672,7 +676,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                         } else {
                             if (c->notifiable()) {
                                 if (strncmp(value, "1", 1)==0 || strncmp(value, "true", 4) == 0)
-                                    sender->addNotify(c, aid, iid);
+                                    sender->addNotify(c);
                                 else
                                     sender->removeNotify(c);
 
@@ -689,12 +693,13 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                             if (c->writable()) {
                                 c->setValue(value, sender);
 
-                                char *broadcastTemp = new char[1024];
+                                sender->addNotify(c);
+                                /*char *broadcastTemp = new char[1024];
                                 snprintf(broadcastTemp, 1024, "{\"characteristics\":[{%s}]}", buffer1);
                                 broadcastInfo * info = new broadcastInfo;
                                 info->sender = c;
                                 info->desc = broadcastTemp;
-                                announce(info);
+                                announce(info);*/
                                 statusCode = 204;
 
                             } else {
@@ -735,7 +740,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         delete [] replyData;
     }
 
-    Serial.printf("Reply: %s\n", *reply);
+    //Serial.printf("Reply: %s\n", *reply);
 
 }
 

@@ -217,7 +217,7 @@ public:
     string (*perUserQuery)(HKConnection *sender) = 0;
     bool writable() { return premission&premission_write; }
     bool notifiable() { return premission&premission_notify; }
-    void notify();
+    void notify(HKConnection* conn);
 };
 
 //To store value of device state, subclass the following type

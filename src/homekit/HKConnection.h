@@ -23,8 +23,10 @@ extern "C" {
   #include "crypto/curve25519.h"
   #include "crypto/hmac.h"
 }
+
 class HKServer;
 class characteristics;
+
 class HKConnection {
 
 private:
@@ -54,23 +56,34 @@ private:
   bool isEncrypted = false;
   int lastKeepAliveMs = 0;
 
+  std::vector<characteristics *> notifiableCharacteristics;
+
   void writeEncryptedData(uint8_t* payload,size_t size);
   void decryptData(uint8_t* buffer,size_t *size);
   void readData(uint8_t* buffer,size_t *size);
-  void writeData(uint8_t* buffer,size_t size);
-  void handlePair1(HKNetworkResponse *response);
+
   void handlePairSetup(const char *buffer);
   bool handlePairVerify(const char *buffer);
   void handleAccessoryRequest(const char *buffer,size_t size);
-
+  void processNotifiableCharacteristics();
 public:
   HKServer *server;
   bool relay = false;
 
   HKConnection(HKServer *s,TCPClient c);
   void handleConnection();
-  void addNotify(characteristics *c,int aid,int iid);
-  void removeNotify(characteristics *c);
   void keepAlive();
+
+  void writeData(uint8_t* buffer,size_t size);
+
+  bool isConnected(){
+    return client.status();
+  }
+  void close(){
+    client.stop();
+  }
+
+  void addNotify(characteristics *c);
+  void removeNotify(characteristics *c);
 };
 #endif
