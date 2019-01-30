@@ -33,87 +33,7 @@ void brightTrackable (int oldValue, int newValue, HKConnection *sender) {
   RGB.control(true);
   RGB.color((byte) newValue*2, (byte) newValue*2, (byte) newValue*2);
 }
-/*
-void _newConnection(HKConnection* info) {
-    Serial.printf("New connection %s\n", info->hostname.c_str());
 
-    bool originalOutput = activeUsers.size() > 0;
-    if ( trackingUserList.count(info->hostname) > 0 )
-        activeUsers.insert(info);
-
-    bool laterOutput = activeUsers.size() > 0;
-
-    if (originalOutput != laterOutput) {
-        //Should notify
-        printf("Changed\n");
-        occupyState->notify();
-    }
-}
-
-void _deadConnection(HKConnection *info) {
-    bool originalOutput = activeUsers.size() > 0;
-    activeUsers.erase(info);
-
-    bool laterOutput = activeUsers.size() > 0;
-
-    if (originalOutput != laterOutput) {
-        //Should notify
-        printf("Changed\n");
-        occupyState->notify();
-    }
-}
-
-void loadUserList() {
-    ifstream fs;
-    fs.open(userListAddr, std::ifstream::in);
-    char buffer[256];
-    bool isEmpty = fs.peek() == EOF;
-    while (!isEmpty&&fs.is_open()&&fs.good()&&!fs.eof()) {
-        fs.getline(buffer, 256);
-        string s = string(buffer);
-        trackingUserList.insert(s);
-    }
-    fs.close();
-}
-
-void saveUserList() {
-    ofstream fs;
-    fs.open(userListAddr, std::ifstream::out);
-    for (set<string>::iterator it = trackingUserList.begin(); it != trackingUserList.end(); it++) {
-        fs << *it << "\n";
-    }
-    fs.close();
-}
-
-string trackable(HKConnection *sender) {
-    pthread_mutex_lock(&recordMutex);
-    string result = trackingUserList.count(sender->hostname) > 0? "1": "0";
-    pthread_mutex_unlock(&recordMutex);
-    return result;
-}
-
-string calculateOccupy(HKConnection *sender) {
-    pthread_mutex_lock(&recordMutex);
-    string result = activeUsers.size() > 0? "1": "0";
-    pthread_mutex_unlock(&recordMutex);
-    return result;
-}
-
-void switchTrackable(bool oldValue, bool newValue, HKConnection *sender) {
-    if (newValue) {
-        //Track this device
-        trackingUserList.insert(sender->hostname);
-        saveUserList();
-        //Update active list
-        _newConnection(sender);
-    } else {
-        //Stop tracking
-        trackingUserList.erase(sender->hostname);
-        saveUserList();
-        //Update active list
-        _deadConnection(sender);
-    }
-}*/
 int lightStength = 0;
 int fanSpeedVal = 0;
 void identity(bool oldValue, bool newValue, HKConnection *sender) {
@@ -132,12 +52,6 @@ AccessorySet *accSet;
 
 void initAccessorySet() {
 
-    //newConnection = &_newConnection;
-    //deadConnection = &_deadConnection;
-
-    //loadUserList();
-
-    //currentDeviceType = deviceType_bridge;
 
     Serial.printf("Initial Sensor\n");
 /*
@@ -197,12 +111,12 @@ void initAccessorySet() {
     powerState1->characteristics::setValue("true");
     powerState1->valueChangeFunctionCall = &powerTrackable;
     lightAcc1->addCharacteristics(lightService1, powerState1);
-/*
+
     intCharacteristics *brightnessState1 = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
     brightnessState1->characteristics::setValue("50");
     brightnessState1->valueChangeFunctionCall = &brightTrackable;
     lightAcc1->addCharacteristics(lightService1, brightnessState1);
-/*
+
     //Add Light
     Accessory *lightAcc2 = new Accessory();
 
@@ -239,5 +153,5 @@ void initAccessorySet() {
 
     boolCharacteristics *fanPower = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
     fanPower->characteristics::setValue("true");
-    fan->addCharacteristics(fanService, fanPower);*/
+    fan->addCharacteristics(fanService, fanPower);
 };
