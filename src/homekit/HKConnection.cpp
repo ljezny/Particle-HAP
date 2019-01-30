@@ -155,7 +155,7 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
 
 
 void HKConnection::handleConnection() {
-  if (!client.status()) {
+  if (!isConnected()) {
       return;
   }
 

@@ -58,7 +58,7 @@ private:
 
   std::vector<characteristics *> notifiableCharacteristics;
   std::vector<characteristics *> postedCharacteristics;
-  
+
   void writeEncryptedData(uint8_t* payload,size_t size);
   void decryptData(uint8_t* buffer,size_t *size);
   void readData(uint8_t* buffer,size_t *size);
@@ -78,7 +78,7 @@ public:
   void writeData(uint8_t* buffer,size_t size);
 
   bool isConnected(){
-    return client.status();
+    return client.connected();
   }
   void close(){
     client.stop();

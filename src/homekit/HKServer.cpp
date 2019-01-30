@@ -46,7 +46,7 @@ void HKServer::handle() {
   while(i >= 0) {
     HKConnection *conn = clients.at(i);
     conn->handleConnection();
-
+    
     if(!conn->isConnected()) {
       conn->close();
       Serial.println("Client removed.");
