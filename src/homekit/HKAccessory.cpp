@@ -415,24 +415,19 @@ string Accessory::describe(HKConnection *sender) {
     string keys[2];
     string values[2];
 
-    {
-        keys[0] = "aid";
-        char temp[8];
-        sprintf(temp, "%d", aid);
-        values[0] = temp;
+    keys[0] = "aid";
+    char temp[8];
+    sprintf(temp, "%d", aid);
+    values[0] = temp;
+    //Form services list
+    int noOfService = numberOfService();
+    string *services = new string[noOfService];
+    for (int i = 0; i < noOfService; i++) {
+        services[i] = _services[i]->describe(sender);
     }
-
-    {
-        //Form services list
-        int noOfService = numberOfService();
-        string *services = new string[noOfService];
-        for (int i = 0; i < noOfService; i++) {
-            services[i] = _services[i]->describe(sender);
-        }
-        keys[1] = "services";
-        values[1] = arrayWrap(services, noOfService);
-        delete [] services;
-    }
+    keys[1] = "services";
+    values[1] = arrayWrap(services, noOfService);
+    delete [] services;
 
     string result = dictionaryWrap(keys, values, 2);
     return result;
