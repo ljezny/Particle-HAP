@@ -45,8 +45,6 @@ HKNetworkMessage::HKNetworkMessage(const char *rawData) {
 
     //Data
     data = HKNetworkMessageData(ptr, dataSize);
-    //Serial.printf("Network message data size %d dump:\n",dataSize );
-    //print_hex_memory((char*)ptr,dataSize);
 }
 
 void HKNetworkMessage::getBinaryPtr(char **buffer, int *contentLength) {
