@@ -62,7 +62,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
   }
 
   if(client.status()){
-    client.write(outputBuffer,output_offset, 2000);
+    client.write(outputBuffer,output_offset);
   }
   Serial.println("END: writeEncryptedData");
 }
@@ -158,7 +158,7 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
       writeEncryptedData((uint8_t *)responseBuffer,responseLen);
     } else {
       if(client.status()){
-        client.write((uint8_t *)responseBuffer, (size_t)responseLen, 2000);
+        client.write((uint8_t *)responseBuffer, (size_t)responseLen);
       }
 
     }
@@ -168,9 +168,9 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
 
 
 void HKConnection::handleConnection() {
-  if (!isConnected()) {
+  /*if (!isConnected()) {
       return;
-  }
+  }*/
 
   if(!client.available()) {
     if(isEncrypted){
@@ -195,7 +195,9 @@ void HKConnection::handleConnection() {
       }
       else if (!strcmp(msg.directory, "pair-verify")){
         Serial.printf("Handling Pair Varify...\n");
+        Serial.printf("BEFORE Handle Pair Verify MEM: %d\n",System.freeMemory() );
         if(handlePairVerify((const char *)inputBuffer)){
+          Serial.printf("AFTER Handle Pair Verify MEM: %d\n",System.freeMemory() );
           isEncrypted = true;
         }
       } else if (!strcmp(msg.directory, "identify")){
@@ -203,6 +205,8 @@ void HKConnection::handleConnection() {
       } else if(isEncrypted) { //connection is secured
         Serial.printf("Handling message request: %s\n",msg.directory);
         handleAccessoryRequest((const char *)inputBuffer, len);
+        Serial.printf("AFTER ACCESSORY MEM: %d\n",System.freeMemory() );
+
       }
   }
   free(inputBuffer);
@@ -211,7 +215,7 @@ void HKConnection::handleConnection() {
 void HKConnection::announce(char* desc){
   char *reply = (char*)malloc(4096);
   memset(reply,0,4096);
-  int len = snprintf(reply, 4096, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nConnection: keep-alive\r\n\Content-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+  int len = snprintf(reply, 4096, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
 
   Serial.println("--------BEGIN ANNOUNCE--------");
   Serial.printf("%s\n",reply);
@@ -222,18 +226,18 @@ void HKConnection::announce(char* desc){
 }
 
 void HKConnection::keepAlive() {
-  if((millis() - lastKeepAliveMs) > 10000) {
+  if((millis() - lastKeepAliveMs) > 2000) {
       lastKeepAliveMs = millis();
       if(client.status()) {
         if(isEncrypted && readsCount > 0) {
           Serial.printf("Keeping alive..\n");
           processNotifiableCharacteristics();
 
-          /*char *aliveMsg = new char[32];
+          char *aliveMsg = new char[32];
           memset(aliveMsg,0,32);
           strncpy(aliveMsg, "{\"characteristics\": []}", 32);
           announce(aliveMsg);
-          free(aliveMsg);*/
+          free(aliveMsg);
 
         }
       }

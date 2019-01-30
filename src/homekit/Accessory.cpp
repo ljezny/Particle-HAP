@@ -118,7 +118,7 @@ void initAccessorySet() {
     lightAcc1->addCharacteristics(lightService1, brightnessState1);
 
     //Add Light
-    Accessory *lightAcc2 = new Accessory();
+    /*Accessory *lightAcc2 = new Accessory();
 
     addInfoServiceToAccessory(lightAcc2, "Underlight", "DaliborFarny", "Nixie Clock v1", "12345678", &lightIdentify);
     accSet->addAccessory(lightAcc2);
@@ -153,5 +153,5 @@ void initAccessorySet() {
 
     boolCharacteristics *fanPower = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
     fanPower->characteristics::setValue("true");
-    fan->addCharacteristics(fanService, fanPower);
+    fan->addCharacteristics(fanService, fanPower);*/
 };

@@ -63,7 +63,7 @@ void loop() {
 There are no library dependencies. All the crypto is based on WolfSSL, but highly customized to work on Photon.
 
 ## Known major issues
-- Homekit lost connection after few minutes (keep alive, dont know...)
+- Homekit lost connection after few minutes (keep alive, dont know...). Simply you can pair a Homekit as Lightbulb, several times you can turn on/off but after 2 minutes it Photon won't read any more bytes. Investigations is about TCP Keep Alive (but not sure).
 - Cannot respond to Homekit with more than 1024B (so more sevices, characteristics, bridge is not available at the moment). I think the issue is related to encryption of 1024B block.
 
 ## What's planned:
