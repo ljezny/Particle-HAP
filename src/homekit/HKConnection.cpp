@@ -18,6 +18,7 @@ HKConnection::HKConnection(HKServer *s,TCPClient c) {
 }
 
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
+  Serial.println("BEGIN: writeEncryptedData");
   byte nonce[12];
   memset(nonce, 0, sizeof(nonce));
 
@@ -58,9 +59,11 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
       }
       part++;
   }
+  Serial.println("BEGIN: writeEncryptedData");
 }
 
 void HKConnection::decryptData(uint8_t* payload,size_t *size) {
+  Serial.println("BEGIN: decryptData");
   uint8_t *decryptedData =(uint8_t *) malloc((*size) * sizeof(uint8_t));
   size_t decryptedTotalSize = 0;
   size_t payload_size = *size;
@@ -117,9 +120,11 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
   memcpy(payload,decryptedData,decryptedTotalSize);
   *size = decryptedTotalSize;
   free(decryptedData);
+  Serial.println("END: decryptData");
 }
 
 void HKConnection::readData(uint8_t* buffer,size_t *size) {
+  Serial.println("BEGIN: readData");
   int total = 0;
   int tempBufferSize = 4096;
   uint8_t *tempBuffer =(uint8_t *) malloc(tempBufferSize * sizeof(uint8_t));
@@ -137,10 +142,12 @@ void HKConnection::readData(uint8_t* buffer,size_t *size) {
   }
 
   free(tempBuffer);
+  Serial.println("END: readData");
 }
 
 void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
-  Serial.printf("writeData: %s, %d, responseLen = %d\n", __func__, __LINE__, responseLen);
+  Serial.println("BEGIN: writeData");
+  Serial.printf("writeData responseLen = %d\n", responseLen);
   if(client.status() && client.connected()){
     if(isEncrypted) {
       writeEncryptedData((uint8_t *)responseBuffer,responseLen);
@@ -151,6 +158,7 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
 
     }
   }
+  Serial.println("END: writeData");
 }
 
 
@@ -168,13 +176,14 @@ void HKConnection::handleConnection() {
 
   int input_buffer_size = 4096;
   uint8_t *inputBuffer =(uint8_t *) malloc(input_buffer_size * sizeof(uint8_t));
+  memset(inputBuffer,0,input_buffer_size);
   size_t len = 0;
 
   readData(inputBuffer,&len);
   if (len > 0) {
       lastKeepAliveMs = millis();
       HKNetworkMessage msg((const char *)inputBuffer);
-      Serial.printf("Request Message: %s read length: \n", msg.directory, len);
+      Serial.printf("Request Message read length: \n", len);
       if (!strcmp(msg.directory, "pair-setup")){
           Serial.printf("Handling Pair Setup...\n");
           handlePairSetup((const char *)inputBuffer);
