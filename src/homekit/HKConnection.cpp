@@ -22,7 +22,9 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
   byte nonce[12];
   memset(nonce, 0, sizeof(nonce));
 
-  byte encrypted[1024 + 18];
+  byte outputBuffer[(size / 1024 + 1) * (1024 + 18)];
+
+  int output_offset = 0;
   int payload_offset = 0;
   int part = 0;
   while (payload_offset < size) {
@@ -32,7 +34,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
           chunk_size = 1024;
       byte aead[2] = {chunk_size % 256, chunk_size / 256};
 
-      memcpy(encrypted, aead, 2);
+      memcpy(outputBuffer + output_offset, aead, 2);
 
       byte i = 4;
       int x = readsCount++;
@@ -45,8 +47,8 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
           nonce,
           aead, 2,
           (const byte *)payload+payload_offset, chunk_size,
-          (byte *) encrypted+2,
-          (byte *) (encrypted+chunk_size+2)
+          (byte *) outputBuffer + output_offset +2,
+          (byte *) (outputBuffer + output_offset + chunk_size + 2)
       );
       if (r) {
           Serial.printf("Failed to chacha encrypt payload (code %d)\n", r);
@@ -54,12 +56,15 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
           return;
       }
       payload_offset += chunk_size;
-      if(client.status()){
-        client.write(encrypted, chunk_size + 16 + 2, 2000);
-      }
+      output_offset += chunk_size + 16 + 2;
+
       part++;
   }
-  Serial.println("BEGIN: writeEncryptedData");
+
+  if(client.status()){
+    client.write(outputBuffer,output_offset, 2000);
+  }
+  Serial.println("END: writeEncryptedData");
 }
 
 void HKConnection::decryptData(uint8_t* payload,size_t *size) {
@@ -180,10 +185,10 @@ void HKConnection::handleConnection() {
   size_t len = 0;
 
   readData(inputBuffer,&len);
+  Serial.printf("Request Message read length: %d \n", len);
   if (len > 0) {
       lastKeepAliveMs = millis();
       HKNetworkMessage msg((const char *)inputBuffer);
-      Serial.printf("Request Message read length: \n", len);
       if (!strcmp(msg.directory, "pair-setup")){
           Serial.printf("Handling Pair Setup...\n");
           handlePairSetup((const char *)inputBuffer);
