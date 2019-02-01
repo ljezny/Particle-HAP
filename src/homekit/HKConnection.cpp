@@ -61,7 +61,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
       part++;
   }
 
-  if(client.status()){
+  if(isConnected()){
     client.write(outputBuffer,output_offset);
   }
   Serial.println("END: writeEncryptedData");
@@ -153,15 +153,12 @@ void HKConnection::readData(uint8_t* buffer,size_t *size) {
 void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
   Serial.println("BEGIN: writeData");
   Serial.printf("writeData responseLen = %d\n", responseLen);
-  if(client.status() && client.connected()){
+  if(isConnected()){
     if(isEncrypted) {
       writeEncryptedData((uint8_t *)responseBuffer,responseLen);
     } else {
-      if(client.status()){
         client.write((uint8_t *)responseBuffer, (size_t)responseLen);
       }
-
-    }
   }
   Serial.println("END: writeData");
 }
@@ -224,7 +221,7 @@ void HKConnection::announce(char* desc){
 void HKConnection::keepAlive() {
   if((millis() - lastKeepAliveMs) > 2000) {
       lastKeepAliveMs = millis();
-      if(client.status()) {
+      if(isConnected()) {
         if(isEncrypted && readsCount > 0) {
           Serial.printf("Keeping alive..\n");
 
