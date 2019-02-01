@@ -177,7 +177,7 @@ void HKConnection::handleConnection() {
   memset(inputBuffer,0,input_buffer_size);
   size_t len = 0;
 
-  Serial.printf("Request Message read length: %d \n", len);
+  //Serial.printf("Request Message read length: %d \n", len);
 
   while (len > 0) {
       lastKeepAliveMs = millis();
