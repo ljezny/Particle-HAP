@@ -173,7 +173,7 @@ void HKConnection::handleConnection() {
   uint8_t *inputBuffer =(uint8_t *) malloc(input_buffer_size * sizeof(uint8_t));
   memset(inputBuffer,0,input_buffer_size);
   size_t len = 0;
-
+  readData(inputBuffer,&len);
   //Serial.printf("Request Message read length: %d \n", len);
 
   while (len > 0) {
