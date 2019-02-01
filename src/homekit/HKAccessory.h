@@ -202,6 +202,8 @@ typedef enum {
 class Accessory;
 
 class characteristics {
+private:
+  std::vector<HKConnection *> notifiedConnections;
 public:
     Accessory *accessory;
     const unsigned int type;
@@ -218,6 +220,22 @@ public:
     bool writable() { return premission&premission_write; }
     bool notifiable() { return premission&premission_notify; }
     void notify(HKConnection* conn);
+    void addNotifiedConnection(HKConnection *c){
+      notifiedConnections.push_back(c);
+
+      //c->postCharacteristicsValue(this);
+    }
+    void removeNotifiedConnection(HKConnection *c){
+      int i = notifiedConnections.size() - 1;
+      while(i >= 0) {
+        HKConnection *item = notifiedConnections.at(i);
+
+        if(item == c) {
+          notifiedConnections.erase(notifiedConnections.begin() + i);
+        }
+        i--;
+      }
+    }
 };
 
 //To store value of device state, subclass the following type

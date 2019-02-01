@@ -364,10 +364,11 @@ inline string dictionaryWrap(string *key, string *value, unsigned short len) {
 }
 
 void characteristics::notify(HKConnection* conn) {
-    char broadcastTemp[1024];
-    memset(broadcastTemp,0,1024);
-    snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", accessory->aid, iid, value(NULL).c_str());
-    conn->announce(broadcastTemp);
+  for(int i = 0; i<notifiedConnections.size();i++){
+    if(conn != notifiedConnections.at(i)) {
+      notifiedConnections.at(i)->postCharacteristicsValue(this);
+    }
+  }
 }
 
 string boolCharacteristics::describe(HKConnection *sender) {
@@ -647,10 +648,9 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                         } else {
                             if (c->notifiable()) {
                                 if (strncmp(value, "1", 1)==0 || strncmp(value, "true", 4) == 0)
-                                    sender->addNotify(c);
+                                  c->addNotifiedConnection(sender);
                                 else
-                                    sender->removeNotify(c);
-
+                                  c->removeNotifiedConnection(sender);
                                 statusCode = 204;
                             } else {
                                 statusCode = 400;
@@ -664,13 +664,8 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                             if (c->writable()) {
                                 c->setValue(value, sender);
 
-                                //sender->postNotifyOnce(c);
-                                /*char *broadcastTemp = new char[1024];
-                                snprintf(broadcastTemp, 1024, "{\"characteristics\":[{%s}]}", buffer1);
-                                broadcastInfo * info = new broadcastInfo;
-                                info->sender = c;
-                                info->desc = broadcastTemp;
-                                announce(info);*/
+                                c->notify(sender);
+
                                 statusCode = 204;
 
                             } else {

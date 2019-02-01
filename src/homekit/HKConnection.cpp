@@ -172,21 +172,14 @@ void HKConnection::handleConnection() {
       return;
   }*/
 
-  if(!client.available()) {
-    if(isEncrypted){
-      keepAlive();
-    }
-    return;
-  }
-
   int input_buffer_size = 4096;
   uint8_t *inputBuffer =(uint8_t *) malloc(input_buffer_size * sizeof(uint8_t));
   memset(inputBuffer,0,input_buffer_size);
   size_t len = 0;
 
-  readData(inputBuffer,&len);
   Serial.printf("Request Message read length: %d \n", len);
-  if (len > 0) {
+
+  while (len > 0) {
       lastKeepAliveMs = millis();
       HKNetworkMessage msg((const char *)inputBuffer);
       if (!strcmp(msg.directory, "pair-setup")){
@@ -208,7 +201,10 @@ void HKConnection::handleConnection() {
         Serial.printf("AFTER ACCESSORY MEM: %d\n",System.freeMemory() );
 
       }
+      readData(inputBuffer,&len);
   }
+  processPostedCharacteristics();
+
   free(inputBuffer);
 }
 
@@ -231,7 +227,6 @@ void HKConnection::keepAlive() {
       if(client.status()) {
         if(isEncrypted && readsCount > 0) {
           Serial.printf("Keeping alive..\n");
-          processNotifiableCharacteristics();
 
           char *aliveMsg = new char[32];
           memset(aliveMsg,0,32);
@@ -576,6 +571,8 @@ void HKConnection::handlePairSetup(const char *buffer) {
             size_t controllerSignatureSize = subTLV8->lengthForIndex(10);
             char controllerHash[100];
 
+            server->persistor->resetPersistor();
+
             HKKeyRecord newRecord;
             memcpy(newRecord.controllerID,controllerIdentifier, 36);
             memcpy(newRecord.publicKey,controllerPublicKey, 32);
@@ -701,48 +698,20 @@ void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
   }
 }
 
-void HKConnection::processNotifiableCharacteristics() {
+void HKConnection::processPostedCharacteristics() {
   for(int i = 0; i < postedCharacteristics.size(); i++) {
-    Serial.println("Notifing posted characteristics value.");
-    postedCharacteristics.at(i)->notify(this);
+    characteristics *c = postedCharacteristics.at(i);
+
+    char broadcastTemp[1024];
+    memset(broadcastTemp,0,1024);
+    snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
+    announce(broadcastTemp);
+
   }
   postedCharacteristics.clear();
 
-  for(int i = 0; i < notifiableCharacteristics.size(); i++) {
-    Serial.println("Notifing characteristics value.");
-    notifiableCharacteristics.at(i)->notify(this);
-  }
 }
 
-void HKConnection::addNotify(characteristics *c){
-  //notifiableCharacteristics.push_back(c);
-  postNotifyOnce(c);
-  lastKeepAliveMs = 0;
-}
-
-void HKConnection::postNotifyOnce(characteristics *c){
-  if(postedCharacteristics.size() > 0){
-    return;
-  }
-  for(int i = 0; i < postedCharacteristics.size(); i++) {
-    if(postedCharacteristics.at(i) == c) {
-      return;
-    }
-  }
+void HKConnection::postCharacteristicsValue(characteristics *c){
   postedCharacteristics.push_back(c);
-  lastKeepAliveMs = 0;
-  Serial.println("Post characteristics value.");
-}
-
-void HKConnection::removeNotify(characteristics *c){
-  int i = notifiableCharacteristics.size() - 1;
-  while(i >= 0) {
-    characteristics *item = notifiableCharacteristics.at(i);
-
-    if(item == c) {
-      Serial.println("removeNotify");
-      notifiableCharacteristics.erase(notifiableCharacteristics.begin() + i);
-    }
-    i--;
-  }
 }

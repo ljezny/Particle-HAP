@@ -66,7 +66,8 @@ private:
   void handlePairSetup(const char *buffer);
   bool handlePairVerify(const char *buffer);
   void handleAccessoryRequest(const char *buffer,size_t size);
-  void processNotifiableCharacteristics();
+  void processPostedCharacteristics();
+
 public:
   HKServer *server;
   bool relay = false;
@@ -83,8 +84,6 @@ public:
   void close(){
     client.stop();
   }
-  void postNotifyOnce(characteristics *c);
-  void addNotify(characteristics *c);
-  void removeNotify(characteristics *c);
+  void postCharacteristicsValue(characteristics *c);
 };
 #endif
