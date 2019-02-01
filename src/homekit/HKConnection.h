@@ -78,7 +78,7 @@ public:
   void writeData(uint8_t* buffer,size_t size);
 
   bool isConnected(){
-    return client.status();
+    return client.connected();
   }
   void close(){
     client.stop();
