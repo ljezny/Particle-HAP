@@ -113,7 +113,7 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
       if (r) {
           Serial.printf("Failed to chacha decrypt payload (code %d)\n", r);
           //Once session security has been established, if the accessory encounters a decryption failure then it must immediately close the connection used for the session.
-          client.stop();
+          //client.stop();
           *size = 0;
           return;
       }
@@ -129,7 +129,6 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
 }
 
 void HKConnection::readData(uint8_t* buffer,size_t *size) {
-  Serial.println("BEGIN: readData");
   int total = 0;
   int tempBufferSize = 4096;
   uint8_t *tempBuffer =(uint8_t *) malloc(tempBufferSize * sizeof(uint8_t));
@@ -142,12 +141,11 @@ void HKConnection::readData(uint8_t* buffer,size_t *size) {
 
   *size = total;
 
-  if(isEncrypted) {
+  if(isEncrypted && total > 0) {
     decryptData(buffer,size);
   }
 
   free(tempBuffer);
-  Serial.println("END: readData");
 }
 
 void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
@@ -176,7 +174,7 @@ void HKConnection::handleConnection() {
   readData(inputBuffer,&len);
   //Serial.printf("Request Message read length: %d \n", len);
 
-  while (len > 0) {
+  if (len > 0) {
       lastKeepAliveMs = millis();
       HKNetworkMessage msg((const char *)inputBuffer);
       if (!strcmp(msg.directory, "pair-setup")){
@@ -196,9 +194,7 @@ void HKConnection::handleConnection() {
         Serial.printf("Handling message request: %s\n",msg.directory);
         handleAccessoryRequest((const char *)inputBuffer, len);
         Serial.printf("AFTER ACCESSORY MEM: %d\n",System.freeMemory() );
-
       }
-      readData(inputBuffer,&len);
   }
   processPostedCharacteristics();
 
