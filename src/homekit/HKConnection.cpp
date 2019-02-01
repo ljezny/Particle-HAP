@@ -696,6 +696,9 @@ void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
     Serial.println("--------END RESPONSE--------");
     writeData((byte*)resultData,resultLen);
   }
+  if(resultData) {
+    free(resultData);
+  }
 }
 
 void HKConnection::processNotifiableCharacteristics() {
