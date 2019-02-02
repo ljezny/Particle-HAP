@@ -29,33 +29,17 @@ void HKServer::setPaired(bool p) {
   Serial.printf("Bonjour paired %d, r: %d\n", paired,r);
 }
 
-TCPClient client;
-HKConnection *connection = NULL;
 void HKServer::handle() {
   bonjour.run();
 
   //Serial.println(WiFi.localIP());
 
-  if(!connection) {
-    TCPClient newClient = server.available();
-    if(newClient) {
-      Serial.println("Client connected.");
-      //clients.insert(clients.begin(),new HKConnection(this,newClient));
-      connection = new HKConnection(this,newClient);
-    }
-
-  }
-  if(connection) {
-    if(connection->isConnected()) {
-      connection->handleConnection();
-    } else {
-      //connection.close();
-      free(connection);
-      connection = NULL;
-    }
+  TCPClient newClient = server.available();
+  if(newClient) {
+    Serial.println("Client connected.");
+    clients.insert(clients.begin(),new HKConnection(this,newClient));
   }
 
-  /*
   int i = clients.size() - 1;
   while(i >= 0) {
     HKConnection *conn = clients.at(i);
@@ -69,7 +53,6 @@ void HKServer::handle() {
 
     i--;
   }
-  */
 
 
 }
