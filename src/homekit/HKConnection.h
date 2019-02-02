@@ -27,6 +27,8 @@ extern "C" {
 class HKServer;
 class characteristics;
 
+
+
 class HKConnection {
 
 private:
@@ -68,6 +70,7 @@ private:
   void handleAccessoryRequest(const char *buffer,size_t size);
   void processPostedCharacteristics();
 
+  char *c_ID;
 public:
   HKServer *server;
   bool relay = false;
@@ -81,6 +84,11 @@ public:
   bool isConnected(){
     return client.connected();
   }
+
+  char* clientID(){
+    return c_ID;
+  }
+
   void close(){
     client.stop();
   }
