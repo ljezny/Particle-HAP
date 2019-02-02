@@ -181,7 +181,7 @@ void HKConnection::handleConnection() {
   readData(inputBuffer,&len);
   //Serial.printf("Request Message read length: %d \n", len);
 
-  if (len > 0) {
+  while (len > 0) {
       lastKeepAliveMs = millis();
       HKNetworkMessage msg((const char *)inputBuffer);
       if (!strcmp(msg.directory, "pair-setup")){
@@ -202,10 +202,13 @@ void HKConnection::handleConnection() {
         handleAccessoryRequest((const char *)inputBuffer, len);
         Serial.printf("AFTER ACCESSORY MEM: %d\n",System.freeMemory() );
       }
+      delay(100);
+      readData(inputBuffer,&len);
   }
   processPostedCharacteristics();
 
   free(inputBuffer);
+
 }
 
 void HKConnection::announce(char* desc){
