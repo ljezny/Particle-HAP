@@ -2,6 +2,8 @@
 #include "HKServer.h"
 #include "HKAccessory.h"
 
+int connectionID = 0;
+
 void generateAccessoryKey(ed25519_key *key) {
   int r = wc_ed25519_init(key);
   Serial.printf("wc_ed25519_init key: r:%d\n",r);
@@ -15,6 +17,12 @@ HKConnection::HKConnection(HKServer *s,TCPClient c) {
   client =  c;
   server = s;
   //generateAccessoryKey(&accessoryKey);
+  c_ID = new char[32];
+  memset(c_ID,0,32);
+  snprintf(c_ID,32,"%d/%d.%d.%d.%d",connectionID,client.remoteIP()[0],client.remoteIP()[1],client.remoteIP()[2],client.remoteIP()[3]);
+
+  connectionID++;
+
 }
 
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
@@ -161,7 +169,6 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
   Serial.println("END: writeData");
 }
 
-
 void HKConnection::handleConnection() {
   /*if (!isConnected()) {
       return;
@@ -206,10 +213,10 @@ void HKConnection::announce(char* desc){
   memset(reply,0,4096);
   int len = snprintf(reply, 4096, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
 
-  Serial.println("--------BEGIN ANNOUNCE--------");
-  Serial.printf("%s\n",reply);
-  Serial.println("--------END ANNOUNCE--------");
-
+  //Serial.printf("--------BEGIN ANNOUNCE: %s--------\n",clientID());
+  //Serial.printf("%s\n",reply);
+  //Serial.printf("--------END ANNOUNCE: %s--------\n",clientID());
+  Serial.printf("--------ANNOUNCE: %s--------\n",clientID());
   writeData((byte*)reply,len);
   free(reply);
 }
@@ -676,15 +683,18 @@ void HKConnection::handlePairSetup(const char *buffer) {
 
 void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
   char *resultData = 0; unsigned int resultLen = 0;
-  Serial.println("--------BEGIN REQUEST--------");
-  Serial.printf("%s\n",buffer);
-  Serial.println("--------END REQUEST--------");
+  Serial.printf("--------REQUEST %s--------\n",clientID());
+  //Serial.printf("--------BEGIN REQUEST: %s--------\n",clientID());
+  //Serial.printf("%s\n",buffer);
+  //Serial.printf("--------BEGIN REQUEST: %s--------\n",clientID());
   handleAccessory(buffer, size, &resultData, &resultLen, this);
   if(resultLen > 0) {
-    Serial.println("--------BEGIN RESPONSE--------");
-    Serial.printf("%s\n",resultData);
-    Serial.println("--------END RESPONSE--------");
+    //Serial.printf("--------BEGIN RESPONSE: %s--------\n",clientID());
+    //Serial.printf("%s\n",resultData);
+    //Serial.printf("--------END RESPONSE: %s--------\n",clientID());
+
     writeData((byte*)resultData,resultLen);
+    Serial.printf("--------RESPONSE %s--------\n",clientID());
   }
   if(resultData) {
     free(resultData);
