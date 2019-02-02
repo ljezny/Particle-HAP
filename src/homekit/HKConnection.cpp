@@ -187,6 +187,7 @@ void HKConnection::handleConnection() {
         if(handlePairVerify((const char *)inputBuffer)){
           Serial.printf("AFTER Handle Pair Verify MEM: %d\n",System.freeMemory() );
           isEncrypted = true;
+          server->setPaired(true);
         }
       } else if (!strcmp(msg.directory, "identify")){
         client.stop();

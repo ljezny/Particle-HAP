@@ -22,40 +22,43 @@ void HKServer::setup () {
 void HKServer::setPaired(bool p) {
   paired = p;
   bonjour.removeAllServiceRecords();
-  int r = bonjour.addServiceRecord(deviceName "._hap",
-                          TCP_SERVER_PORT,
-                          MDNSServiceTCP,
-                          "\x4sf=1\x14id=" deviceIdentity "\x6pv=1.0\x04\c#=1\x04s#=1\x04\ff=1\x0Bmd=" deviceName "\x4\ci=5"); //ci=5-lightbulb, ci=2 bridge
+  int r = 0;
+  if(p){
+    bonjour.addServiceRecord(deviceName "._hap",
+                            TCP_SERVER_PORT,
+                            MDNSServiceTCP,
+                            "\x4sf=0\x14id=" deviceIdentity "\x6pv=1.0\x04\c#=1\x04s#=1\x04\ff=1\x0Bmd=" deviceName "\x4\ci=5"); //ci=5-lightbulb, ci=2 bridge
+  } else {
+    bonjour.addServiceRecord(deviceName "._hap",
+                            TCP_SERVER_PORT,
+                            MDNSServiceTCP,
+                            "\x4sf=1\x14id=" deviceIdentity "\x6pv=1.0\x04\c#=1\x04s#=1\x04\ff=1\x0Bmd=" deviceName "\x4\ci=5"); //ci=5-lightbulb, ci=2 bridge
+  }
+
   Serial.printf("Bonjour paired %d, r: %d\n", paired,r);
 }
 
-TCPClient client;
-HKConnection *connection = NULL;
+
 void HKServer::handle() {
   bonjour.run();
 
   //Serial.println(WiFi.localIP());
 
-  if(!connection) {
-    TCPClient newClient = server.available();
-    if(newClient) {
-      Serial.println("Client connected.");
-      //clients.insert(clients.begin(),new HKConnection(this,newClient));
-      connection = new HKConnection(this,newClient);
-    }
 
-  }
-  if(connection) {
-    if(connection->isConnected()) {
-      connection->handleConnection();
-    } else {
-      //connection.close();
-      free(connection);
-      connection = NULL;
-    }
+  TCPClient newClient = server.available();
+  if(newClient) {
+    Serial.println("Client connected.");
+    clients.insert(clients.begin(),new HKConnection(this,newClient));
   }
 
-  /*
+
+  /*if(clients.size() == 0) {
+      Serial.println("Restarting server.");
+      server.stop();
+      delay(1000);
+      server.begin();
+  }*/
+
   int i = clients.size() - 1;
   while(i >= 0) {
     HKConnection *conn = clients.at(i);
@@ -69,7 +72,5 @@ void HKServer::handle() {
 
     i--;
   }
-  */
-
 
 }
