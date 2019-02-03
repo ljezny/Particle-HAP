@@ -156,6 +156,9 @@ public:
     void begin(){
         
     }
+    void stop(){
+        
+    }
 };
 
 class RGBClass {

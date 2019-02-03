@@ -8,7 +8,6 @@
 #include "homekit/HKServer.h"
 #include "homekit/Accessory.h"
 
-
 HKServer hkServer;
 
 // setup() runs once, when the device is first turned on.

@@ -10,10 +10,12 @@
 //if you are using EEPROM, you can set offset for Homekit to store pairings
 #define EEPROM_STORAGE_ADDRESS_OFFSET 512
 
+#define MAX_CONNECTIONS 2 //It seems that Particle has limit of simoultanious connections. 2 connections seem to be save.
+
 //ID of device, must be unique per device
-#define deviceIdentity "5D:C6:5E:50:AC:48"
+#define deviceIdentity "5D:C6:5E:50:AB:A9"
 //Device name, which will be visible during pairing. Should be unique per device, so user can distinguish devices.
-#define hapName "particl5"
+#define hapName "particle"
 //Pairing code, should be unique per device
 #define devicePassword "523-12-643"
 
