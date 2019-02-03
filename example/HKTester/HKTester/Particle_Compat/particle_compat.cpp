@@ -17,11 +17,26 @@ EEPROMClass EEPROM;
 SerialLink Serial;
 RGBClass RGB;
 
-void EEPROMClass::get(int address, HKStorage storage){
+HKStorage EEPROMClass::get(int address, HKStorage storage){
+    char file[256];
+    strcat(strcpy(file, getenv("HOME")), "/particle_hap_storage");
     
+    FILE* f = fopen(file, "r");
+    if(f){
+        fread(&storage, sizeof(HKStorage), 1, f);
+        fclose(f);
+    }
+    return storage;
 }
 void EEPROMClass::put(int address, HKStorage storage){
+    char file[256];
+    strcat(strcpy(file, getenv("HOME")), "/particle_hap_storage");
     
+    FILE* f = fopen(file, "w");
+    if(f){
+        fwrite(&storage, sizeof(HKStorage), 1, f);
+        fclose(f);
+    }
 }
 
 void delay(int ms) {

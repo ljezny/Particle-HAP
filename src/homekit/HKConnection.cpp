@@ -144,7 +144,6 @@ void HKConnection::readData(uint8_t* buffer,size_t *size) {
     int len = client.read(tempBuffer,tempBufferSize);
     memcpy((buffer+total), tempBuffer,len);
     total += len;
-    //delay(500);
   }
 
   *size = total;
@@ -190,9 +189,7 @@ void HKConnection::handleConnection() {
       }
       else if (!strcmp(msg.directory, "pair-verify")){
         Serial.printf("Handling Pair Varify...\n");
-        //Serial.printf("BEFORE Handle Pair Verify MEM: %d\n",System.freeMemory() );
         if(handlePairVerify((const char *)inputBuffer)){
-          //Serial.printf("AFTER Handle Pair Verify MEM: %d\n",System.freeMemory() );
           isEncrypted = true;
           server->setPaired(true);
         }
@@ -201,9 +198,7 @@ void HKConnection::handleConnection() {
       } else if(isEncrypted) { //connection is secured
         Serial.printf("Handling message request: %s\n",msg.directory);
         handleAccessoryRequest((const char *)inputBuffer, len);
-        //Serial.printf("AFTER ACCESSORY MEM: %d\n",System.freeMemory() );
       }
-      delay(100);
       readData(inputBuffer,&len);
   }
   processPostedCharacteristics();
@@ -548,7 +543,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
             const char *encryptedPackage = NULL;int packageLen = 0;
             encryptedPackage = msg.data.dataPtrForIndex(5);
             packageLen = msg.data.lengthForIndex(5);
-            char *encryptedData = new char[packageLen];
+            char encryptedData[packageLen];
             memcpy(encryptedData,encryptedPackage, packageLen-16);
             char mac[16];
             memcpy(mac,&encryptedPackage[packageLen-16], 16);
@@ -557,7 +552,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
             const char info1[] = "Pair-Setup-Encrypt-Info";
             uint8_t sharedKey[100];
             int r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt1, strlen(salt1),(const byte*) info1, strlen(info1),sharedKey, CHACHA20_POLY1305_AEAD_KEYSIZE);
-            uint8_t *decryptedData =  new uint8_t[packageLen-16];
+            uint8_t decryptedData[packageLen-16];
             bzero(decryptedData, packageLen-16);
             r= wc_ChaCha20Poly1305_Decrypt(
                 (const byte *)sharedKey,
@@ -637,15 +632,15 @@ void HKConnection::handlePairSetup(const char *buffer) {
               publicKeyRecord.data = new char[accessoryPubKeySize];
               memcpy(publicKeyRecord.data,accessoryPubKey,accessoryPubKeySize);
               returnTLV8->addRecord(publicKeyRecord);
-
-              const char *tlv8Data;unsigned short tlv8Len;
-              returnTLV8->rawData(&tlv8Data, &tlv8Len);
+              char *tlv8Data;unsigned short tlv8Len;
+              returnTLV8->rawData((const char **) &tlv8Data, &tlv8Len);
 
               HKNetworkMessageDataRecord tlv8Record;
               tlv8Record.data = new char[tlv8Len+16];
               tlv8Record.length = tlv8Len+16;
               bzero(tlv8Record.data, tlv8Record.length);
 
+              
               r = wc_ChaCha20Poly1305_Encrypt(
                   (const byte *)sharedKey,
                   (const byte *)"\x0\x0\x0\x0PS-Msg06",
@@ -654,7 +649,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                   (byte*) tlv8Record.data,
                   (byte*) (tlv8Record.data + tlv8Len)
               );
-
+                
               tlv8Record.activate = true;
               tlv8Record.index = 5;//5
 
@@ -662,6 +657,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
               mResponse.data.addRecord(tlv8Record);
               completed = true;
               delete returnTLV8;
+              free(tlv8Data);
             }
 
             delete subTLV8;
@@ -687,18 +683,18 @@ void HKConnection::handlePairSetup(const char *buffer) {
 
 void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
   char *resultData = 0; unsigned int resultLen = 0;
-  Serial.printf("--------REQUEST %s--------\n",clientID());
-  //Serial.printf("--------BEGIN REQUEST: %s--------\n",clientID());
-  //Serial.printf("%s\n",buffer);
-  //Serial.printf("--------BEGIN REQUEST: %s--------\n",clientID());
+  //Serial.printf("--------REQUEST %s--------\n",clientID());
+  Serial.printf("--------BEGIN REQUEST: %s--------\n",clientID());
+  Serial.printf("%s\n",buffer);
+  Serial.printf("--------BEGIN REQUEST: %s--------\n",clientID());
   handleAccessory(buffer, size, &resultData, &resultLen, this);
   if(resultLen > 0) {
-    //Serial.printf("--------BEGIN RESPONSE: %s--------\n",clientID());
-    //Serial.printf("%s\n",resultData);
-    //Serial.printf("--------END RESPONSE: %s--------\n",clientID());
+    Serial.printf("--------BEGIN RESPONSE: %s--------\n",clientID());
+    Serial.printf("%s\n",resultData);
+    Serial.printf("--------END RESPONSE: %s--------\n",clientID());
 
     writeData((byte*)resultData,resultLen);
-    Serial.printf("--------RESPONSE %s--------\n",clientID());
+    //Serial.printf("--------RESPONSE %s--------\n",clientID());
   }
   if(resultData) {
     free(resultData);

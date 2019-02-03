@@ -17,27 +17,20 @@ void HKServer::setup () {
   server.begin();
 
   bonjour.setUDP( &udp );
-  bonjour.begin(deviceName);
+  bonjour.begin(hapName);
   setPaired(false);
 }
 
 void HKServer::setPaired(bool p) {
-  paired = p;
-  bonjour.removeAllServiceRecords();
-  int r = 0;
-  if(p){
-    bonjour.addServiceRecord(deviceName "._hap",
-                            TCP_SERVER_PORT,
-                            MDNSServiceTCP,
-                            "\x4sf=0\x14id=" deviceIdentity "\x6pv=1.0\x04\c#=1\x04s#=1\x04\ff=1\x0Bmd=" deviceName "\x4\ci=5"); //ci=5-lightbulb, ci=2 bridge
-  } else {
-    bonjour.addServiceRecord(deviceName "._hap",
-                            TCP_SERVER_PORT,
-                            MDNSServiceTCP,
-                            "\x4sf=1\x14id=" deviceIdentity "\x6pv=1.0\x04\c#=1\x04s#=1\x04\ff=1\x0Bmd=" deviceName "\x4\ci=5"); //ci=5-lightbulb, ci=2 bridge
-  }
-
-  Serial.printf("Bonjour paired %d, r: %d\n", paired,r);
+    paired = p;
+    bonjour.removeAllServiceRecords();
+    char recordTxt[512];
+    memset(recordTxt, 0, 512);
+    sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=1%cs#=1%cs#=1%cff=0%cmd=%s%cci=%d",4,(char)strlen(deviceIdentity)+3,deviceIdentity,6,4,4,4,4,(char)(strlen(hapName) + 3),hapName,4,5);
+    bonjour.addServiceRecord(hapName "._hap",
+                             TCP_SERVER_PORT,
+                             MDNSServiceTCP,
+                             recordTxt); //ci=5-lightbulb, ci=2 bridge
 }
 
 void HKServer::handle() {

@@ -6,8 +6,8 @@ HKNetworkMessageData & HKNetworkMessageData::operator=(const HKNetworkMessageDat
     for (int i = 0; i < 10; i++) {
         if (data.records[i].length) {
             records[i] = data.records[i];
-            records[i].data = new char[records[i].length];
-            bcopy(data.records[i].data, records[i].data, data.records[i].length);
+            //records[i].data = new char[records[i].length];
+            //bcopy(data.records[i].data, records[i].data, data.records[i].length);
         }
     }
     return *this;

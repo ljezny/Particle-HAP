@@ -19,17 +19,13 @@ struct HKKeyRecord {
 };
 
 struct HKStorage {
-    unsigned char pairingsCount;
     HKKeyRecord pairings[MAX_PAIRINGS];
 };
 
 class HKPersistor {
 private:
-  HKStorage *storage = new HKStorage();
+  HKStorage storage = HKStorage();
 public:
-  bool hasPairings() {
-    return storage->pairingsCount > 0;
-  }
   void resetPersistor();
   bool addKey(HKKeyRecord record);
   void removeKey(HKKeyRecord record);

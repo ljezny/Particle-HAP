@@ -20,62 +20,37 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <netdb.h>
+#include <stdarg.h>
+#include <fcntl.h>
 using namespace std;
 
 struct HKStorage;
 
 class UDP {
 private:
-    int server_socket;
-    struct sockaddr_in servaddr, cliaddr;
-    uint8_t int_buffer[4096];
-    size_t buffer_offset = 0;
 public:
     void begin(int port){
-        // Creating socket file descriptor
-        if ( (server_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
-            perror("socket creation failed");
-        }
-        
-        memset(&servaddr, 0, sizeof(servaddr));
-        memset(&cliaddr, 0, sizeof(cliaddr));
-        
-        // Filling server information
-        servaddr.sin_family    = AF_INET; // IPv4
-        servaddr.sin_addr.s_addr = INADDR_ANY;
-        servaddr.sin_port = htons(port);
-        //int    bind(int, const struct sockaddr *, socklen_t) __DARWIN_ALIAS(bind);
-        // Bind the socket with the server address
-        bind(server_socket, (const struct sockaddr *)&servaddr, sizeof(servaddr));
-        
-
     }
     
     int beginPacket(const uint8_t host[4], uint16_t port){
-        cliaddr.sin_family = AF_INET;
-        
-        cliaddr.sin_port = htons(port);
-        cliaddr.sin_addr.s_addr = INADDR_ALLMDNS_GROUP;
-        buffer_offset = 0;
         return 0;
     }
     size_t write(const uint8_t *buffer, size_t size){
-        memcpy(int_buffer + buffer_offset, buffer, size);
-        buffer_offset += size;
-        return size;
+        return 0;
     }
     size_t read(const uint8_t *buffer, size_t size){
         return 0;
     }
+    
     void setBuffer(size_t size, const uint8_t *buffer){
-       
     }
+    
     int parsePacket() {
         return 0;
     }
     
     void flush() {
-        
     }
     int remotePort() {
         return 0;
@@ -84,14 +59,10 @@ public:
         return 0;
     }
     int endPacket() {
-        size_t len = sendto(server_socket, int_buffer, buffer_offset,
-               0, (const struct sockaddr *) &cliaddr,
-               sizeof(cliaddr));
-        return len;
+        return 0;
     }
     
     void stop(){
-        
     }
     
 };
@@ -100,7 +71,21 @@ public:
 class TCPClient {
 private:
     int socket = 0;
+    uint8_t read_buffer[4096];
+    size_t read_buffer_offset = 0;
 public:
+    TCPClient(){
+        socket = -1;
+    }
+    
+    TCPClient(int s){
+        socket = s;
+        struct timeval read_timeout;
+        read_timeout.tv_sec = 0;
+        read_timeout.tv_usec = 10;
+        setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
+    }
+    
     void stop(){
         
     }
@@ -109,12 +94,17 @@ public:
     }
     
     bool available(){
-        return false;
+        read_buffer_offset = 0;
+        int l = recv(socket,read_buffer,4096,0);
+        if(l>0){
+            read_buffer_offset += l;
+        }
+        return read_buffer_offset > 0;
     }
     
     operator bool()
     {
-        return socket != 0;
+        return socket != -1;
     }
     
     char* remoteIP() {
@@ -122,21 +112,46 @@ public:
     }
     //int len = client.read(tempBuffer,tempBufferSize);
     int read(unsigned char *buffer, size_t size) {
-        return 0;
+        memcpy(buffer, read_buffer, read_buffer_offset);
+        return read_buffer_offset;
     }
     void write(unsigned char *buffer, size_t len) {
-
+        send(socket, buffer, len, 0);
     }
     
 };
 
 class TCPServer {
+private:
+    int server_socket;
+    struct sockaddr_in servaddr, cliaddr;
 public:
     TCPServer(int port){
+        if ( (server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
+            perror("socket creation failed");
+        }
         
+        memset(&servaddr, 0, sizeof(servaddr));
+        //memset(&cliaddr, 0, sizeof(cliaddr));
+        
+        // Filling server information
+        servaddr.sin_family    = AF_INET; // IPv4
+        servaddr.sin_addr.s_addr = INADDR_ANY;
+        servaddr.sin_port = htons(port);
+        
+        bind(server_socket, (const struct sockaddr *)&servaddr, sizeof(servaddr));
+        if ((listen(server_socket, 0)) != 0) {
+            perror("Listen failed...\n");
+        }
+        
+        fcntl(server_socket, F_SETFL, O_NONBLOCK);
     }
     TCPClient available(){
-        return TCPClient();
+        struct sockaddr cli;
+        socklen_t len;
+        int conn = accept(server_socket,(struct sockaddr *) &cli, &len);
+        
+        return TCPClient(conn);
     }
     void begin(){
         
@@ -156,16 +171,23 @@ public:
 class SerialLink {
 public:
     int printf(const char *format, ...){
+        va_list argptr;
+        va_start(argptr, format);
+        vfprintf(stdout, format, argptr);
+        va_end(argptr);
         return 0;
     }
     int println(const char *value) {
+        fprintf(stdout, value);
+        fprintf(stdout, "\n");
+        //vfprintf(stdout, value);
         return 0;
     }
 };
 
 class EEPROMClass {
 public:
-    void get(int address, HKStorage storage);
+    HKStorage get(int address, HKStorage storage);
     void put(int address, HKStorage storage);
     
 };
@@ -178,7 +200,7 @@ public:
     IPAddress() {
     }
     
-    IPAddress(unsigned char address[4]) {
+    void load(unsigned char *address) {
         memcpy(buffer,address,4);
     }
     unsigned char const& operator[](int index) const
@@ -190,7 +212,26 @@ public:
 class EthernetClass {
 public:
     IPAddress localIP(){
-        return IPAddress();
+        //int socket_local4(int s,char ip[4],uint16 *port)
+        char hostbuffer[256];
+        char *IPbuffer;
+        struct hostent *host_entry;
+        int hostname;
+        
+        // To retrieve hostname
+        hostname = gethostname(hostbuffer, sizeof(hostbuffer));
+        
+        // To retrieve host information
+        host_entry = gethostbyname(hostbuffer);
+        
+        // To convert an Internet network
+        // address into ASCII string
+       // IPbuffer = inet_ntoa(*((struct in_addr*)
+         //                      host_entry->h_addr_list[0]));
+        unsigned char* address =( unsigned char*) host_entry->h_addr_list[0];
+        IPAddress a = IPAddress();
+        a.load(address);;
+        return a;
     }
 };
 

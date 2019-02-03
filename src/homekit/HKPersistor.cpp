@@ -2,20 +2,20 @@
 #include "HKStringUtils.h"
 void HKPersistor::loadRecordStorage() {
   Serial.println("Persistor: load");
-  EEPROM.get(EEPROM_STORAGE_ADDRESS_OFFSET, *storage);
-  if(storage->pairingsCount == 0xFF) {
+  storage = EEPROM.get(EEPROM_STORAGE_ADDRESS_OFFSET, storage);
+  if(storage.pairings[0].controllerID[0] == 0xFF) { //particle eeprom default value
     resetPersistor();
   }
 }
 
 void HKPersistor::saveSaveStorage(){
   Serial.println("Persistor: save");
-  EEPROM.put(EEPROM_STORAGE_ADDRESS_OFFSET, *storage);
+  EEPROM.put(EEPROM_STORAGE_ADDRESS_OFFSET, storage);
 }
 
 void HKPersistor::resetPersistor() {
   Serial.println("Persistor: reset");
-  memset(storage,0,sizeof(HKStorage));
+  memset(&storage,0,sizeof(HKStorage));
   saveSaveStorage();
 }
 
@@ -24,9 +24,8 @@ bool HKPersistor::addKey(HKKeyRecord record) {
     memset(emptyRecord,0,32);
     Serial.println("Persistor: adding key");
     for(int i = 0; i<MAX_PAIRINGS; i++) { //find first empty slot
-      if (bcmp(storage->pairings[i].controllerID, emptyRecord, 32) == 0) {
-        memcpy(&storage->pairings[i],&record,sizeof(HKKeyRecord));
-        storage->pairingsCount += 1;
+      if (bcmp(storage.pairings[i].controllerID, emptyRecord, 32) == 0) {
+        memcpy(&storage.pairings[i],&record,sizeof(HKKeyRecord));
         saveSaveStorage();
         Serial.println("Persistor: key added");
         return true;
@@ -38,7 +37,7 @@ bool HKPersistor::addKey(HKKeyRecord record) {
 void HKPersistor::removeKey(HKKeyRecord record) {
     int index = keyIndex(record);
     if (index != -1) {
-        memset(&storage->pairings[index],0,sizeof(HKKeyRecord));
+        memset(&storage.pairings[index],0,sizeof(HKKeyRecord));
         saveSaveStorage();
     }
 }
@@ -46,7 +45,7 @@ void HKPersistor::removeKey(HKKeyRecord record) {
 int HKPersistor::keyIndex(HKKeyRecord record) {
   Serial.println("Persistor: key exists");
   for (unsigned char i = 0; i < MAX_PAIRINGS; i++) {
-    if (bcmp(storage->pairings[i].controllerID, record.controllerID, 32) == 0) {
+    if (bcmp(storage.pairings[i].controllerID, record.controllerID, 32) == 0) {
       Serial.println("Persistor: key found");
       return i;
     }
@@ -58,9 +57,9 @@ int HKPersistor::keyIndex(HKKeyRecord record) {
 HKKeyRecord HKPersistor::getKey(char controllerID[32]) {
   Serial.println("Persistor: key get");
   for (unsigned char i = 0; i < MAX_PAIRINGS; i++) {
-    if (bcmp(storage->pairings[i].controllerID, controllerID, 32) == 0) {
+    if (bcmp(storage.pairings[i].controllerID, controllerID, 32) == 0) {
       Serial.println("Persistor: key found");
-      return storage->pairings[i];
+      return storage.pairings[i];
     }
   }
   Serial.println("Persistor: key not found");

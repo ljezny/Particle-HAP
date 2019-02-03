@@ -41,6 +41,8 @@
 		56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A112206F24600DCFA13 /* HKBonjour.cpp */; };
 		56125A332206F24600DCFA13 /* HKPersistor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A132206F24600DCFA13 /* HKPersistor.cpp */; };
 		56125A3522070D9B00DCFA13 /* particle_compat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3422070D9B00DCFA13 /* particle_compat.cpp */; };
+		56125A382207490000DCFA13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A372207490000DCFA13 /* Foundation.framework */; };
+		56125A3A22074AFC00DCFA13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A3922074AFC00DCFA13 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,7 +59,7 @@
 
 /* Begin PBXFileReference section */
 		561259B42206E95600DCFA13 /* HKTester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HKTester; sourceTree = BUILT_PRODUCTS_DIR; };
-		561259B72206E95600DCFA13 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		561259B72206E95600DCFA13 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = main.cpp; sourceTree = "<group>"; };
 		561259C02206EA0600DCFA13 /* particle_compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = particle_compat.h; sourceTree = "<group>"; };
 		561259C42206F24500DCFA13 /* HKDeviceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKDeviceInterface.h; sourceTree = "<group>"; };
 		561259C62206F24500DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
@@ -139,6 +141,8 @@
 		56125A122206F24600DCFA13 /* HKStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKStringUtils.h; sourceTree = "<group>"; };
 		56125A132206F24600DCFA13 /* HKPersistor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKPersistor.cpp; sourceTree = "<group>"; };
 		56125A3422070D9B00DCFA13 /* particle_compat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = particle_compat.cpp; sourceTree = "<group>"; };
+		56125A372207490000DCFA13 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		56125A3922074AFC00DCFA13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +150,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56125A3A22074AFC00DCFA13 /* CoreFoundation.framework in Frameworks */,
+				56125A382207490000DCFA13 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +164,7 @@
 				561259C32206F24500DCFA13 /* homekit */,
 				561259B62206E95600DCFA13 /* HKTester */,
 				561259B52206E95600DCFA13 /* Products */,
+				56125A362207490000DCFA13 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -280,6 +287,15 @@
 				561259F92206F24500DCFA13 /* ge_operations.cpp2 */,
 			);
 			path = crypto;
+			sourceTree = "<group>";
+		};
+		56125A362207490000DCFA13 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				56125A3922074AFC00DCFA13 /* CoreFoundation.framework */,
+				56125A372207490000DCFA13 /* Foundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
