@@ -1,11 +1,17 @@
 #ifndef  HKBonjour_H
 #define HKBonjour_H
 
-#include <Particle.h>
+#ifdef PARTICLE_COMPAT
+    #include "../../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
+#else
+    #include <Particle.h>
+    extern "C" {
+        #include <inttypes.h>
+    }
+#endif
 
-extern "C" {
-   #include <inttypes.h>
-}
+
+
 
 extern uint16_t ethutil_htons(unsigned short hostshort);
 extern uint32_t ethutil_htonl(unsigned long hostlong);
@@ -144,7 +150,7 @@ public:
    int flush();
    int remotePort();
    int remoteIP();
-   unsigned long localIP();
+   //unsigned long localIP();
 
 };
 

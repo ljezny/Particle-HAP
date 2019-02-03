@@ -5,7 +5,14 @@
 #include "HKNetworkMessage.h"
 #include "HKNetworkMessageData.h"
 #include "HKPersistor.h"
+#include "HKConfig.h"
+
+#ifdef PARTICLE_COMPAT
+#include "../../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
+#else
 #include <Particle.h>
+#endif
+
 #include <vector>
 
 class HKConnection;

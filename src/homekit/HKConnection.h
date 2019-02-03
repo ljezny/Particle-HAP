@@ -9,7 +9,13 @@
 #include "HKConsts.h"
 #include "HKNetworkResponse.h"
 #include "HKPersistor.h"
+
+#ifdef PARTICLE_COMPAT
+#include "../../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
+#else
 #include <Particle.h>
+#endif
+
 #include <vector>
 
 
@@ -41,10 +47,10 @@ private:
 
   ed25519_key *accessoryKey = (ed25519_key*) ACESSORY_KEY;
 
-  size_t publicKeyLength = 4096;
+  word32 publicKeyLength = 4096;
   char* publicKey = new char[publicKeyLength];
 
-  size_t responseLength = 128;
+  word32 responseLength = 128;
   char* response = new char[responseLength];
 
   char* *secretKey = NULL;

@@ -1,10 +1,12 @@
 #include "HKServer.h"
 #include "HKConnection.h"
 
+#ifndef PARTICLE_COMPAT
 #include "spark_wiring_tcpclient.h"
 #include "spark_wiring_tcpserver.h"
 #include "spark_wiring_network.h"
 #include "spark_wiring_thread.h"
+#endif
 
 HKServer::HKServer() {
   persistor = new HKPersistor();

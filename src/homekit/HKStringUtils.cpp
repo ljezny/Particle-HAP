@@ -1,5 +1,12 @@
 #include "HKStringUtils.h"
 
+#include <stdio.h>
+#ifdef PARTICLE_COMPAT
+#include "../../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
+#else
+#include <Particle.h>
+#endif
+
 const char *copyLine(const char *rawData, char *destination) {
     int i;
     for (i = 0; rawData[i] != '\r' && rawData[i] != 0; i++) {

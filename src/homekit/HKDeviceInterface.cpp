@@ -8,8 +8,6 @@
 
 #include "HKDeviceInterface.h"
 #include <stdio.h>
-#include <Particle.h>
-
 
 
 void setupPort() {

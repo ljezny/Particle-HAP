@@ -40,7 +40,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
       size_t chunk_size = size - payload_offset;
       if (chunk_size > 1024)
           chunk_size = 1024;
-      byte aead[2] = {chunk_size % 256, chunk_size / 256};
+      byte aead[2] = {(byte) (chunk_size % 256), (byte)(chunk_size / 256)};
 
       memcpy(outputBuffer + output_offset, aead, 2);
 
@@ -190,9 +190,9 @@ void HKConnection::handleConnection() {
       }
       else if (!strcmp(msg.directory, "pair-verify")){
         Serial.printf("Handling Pair Varify...\n");
-        Serial.printf("BEFORE Handle Pair Verify MEM: %d\n",System.freeMemory() );
+        //Serial.printf("BEFORE Handle Pair Verify MEM: %d\n",System.freeMemory() );
         if(handlePairVerify((const char *)inputBuffer)){
-          Serial.printf("AFTER Handle Pair Verify MEM: %d\n",System.freeMemory() );
+          //Serial.printf("AFTER Handle Pair Verify MEM: %d\n",System.freeMemory() );
           isEncrypted = true;
         }
       } else if (!strcmp(msg.directory, "identify")){
@@ -200,7 +200,7 @@ void HKConnection::handleConnection() {
       } else if(isEncrypted) { //connection is secured
         Serial.printf("Handling message request: %s\n",msg.directory);
         handleAccessoryRequest((const char *)inputBuffer, len);
-        Serial.printf("AFTER ACCESSORY MEM: %d\n",System.freeMemory() );
+        //Serial.printf("AFTER ACCESSORY MEM: %d\n",System.freeMemory() );
       }
       delay(100);
       readData(inputBuffer,&len);
@@ -282,10 +282,10 @@ bool HKConnection::handlePairVerify(const char *buffer) {
           WC_RNG rng;
           wc_curve25519_make_key(&rng,CURVE25519_KEYSIZE,&secretKey);
 
-          size_t publicSecretKeySize = CURVE25519_KEYSIZE;
+          word32 publicSecretKeySize = CURVE25519_KEYSIZE;
           r = wc_curve25519_export_public_ex(&secretKey, publicSecretKeyData, &publicSecretKeySize,EC25519_LITTLE_ENDIAN);
 
-          size_t sharedKeySize = CURVE25519_KEYSIZE;
+          word32 sharedKeySize = CURVE25519_KEYSIZE;
 
 
           r = wc_curve25519_shared_secret_ex(&secretKey,&controllerKey,sharedKey,&sharedKeySize,EC25519_LITTLE_ENDIAN);
@@ -297,7 +297,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
           memcpy(&accessoryInfo[CURVE25519_KEYSIZE],deviceIdentity, strlen(deviceIdentity));
           memcpy(&accessoryInfo[CURVE25519_KEYSIZE+strlen(deviceIdentity)],msg.data.dataPtrForIndex(3), CURVE25519_KEYSIZE);
 
-          size_t accessorySignSize = ED25519_SIG_SIZE;
+          word32 accessorySignSize = ED25519_SIG_SIZE;
           byte accesorySign[accessorySignSize];
           r = wc_ed25519_sign_msg(accessoryInfo, accessoryInfoSize, accesorySign, &accessorySignSize,accessoryKey);
 
@@ -611,12 +611,12 @@ void HKConnection::handlePairSetup(const char *buffer) {
               uint8_t output[outputSize];
               r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt3, strlen(salt3),(const byte*) info3, strlen(info3),(byte*)output, CHACHA20_POLY1305_AEAD_KEYSIZE);
 
-              size_t accessoryPubKeySize = ED25519_PUB_KEY_SIZE;
+              word32 accessoryPubKeySize = ED25519_PUB_KEY_SIZE;
               uint8_t accessoryPubKey[accessoryPubKeySize];
               r = wc_ed25519_export_public(accessoryKey, accessoryPubKey, &accessoryPubKeySize);
               memcpy(&output[32],deviceIdentity,strlen(deviceIdentity));
               memcpy(&output[32+strlen(deviceIdentity)],accessoryPubKey,accessoryPubKeySize);
-              size_t signatureSize = 64;
+              word32 signatureSize = 64;
               uint8_t signature[signatureSize];
 
               r = wc_ed25519_sign_msg(output,outputSize,signature,&signatureSize,accessoryKey);

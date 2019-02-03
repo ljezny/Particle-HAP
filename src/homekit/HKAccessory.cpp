@@ -446,7 +446,7 @@ string AccessorySet::describe(HKConnection *sender) {
     result = dictionaryWrap(&key, &result, 1);
     return result;
 }
-
+/*
 void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value) {
     c->setValue(value);
     char *broadcastTemp = new char[1024];
@@ -456,7 +456,7 @@ void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value
     info->desc = broadcastTemp;
     announce(info);
 }
-
+*/
 void handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender) {
     int index = 5;
     char method[5];

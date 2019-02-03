@@ -1,11 +1,11 @@
 #ifndef  HKNetworkMessageData_H
 #define HKNetworkMessageData_H
 
-#include <Particle.h>
 
 #include "HKConfig.h"
 #include "HKNetworkMessageDataRecord.h"
 
+#include <string>
 
 using std::string;
 

@@ -26,8 +26,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "application.h"
-#include <Particle.h>
+
 #include "HKBonjour.h"
 
 #define  MDNS_DEFAULT_NAME       "arduino"
@@ -130,7 +129,6 @@ HKBonjour::~HKBonjour()
 	this->stop();
 }
 
-#if defined(PARTICLE)
 
 int HKBonjour::setUDP( UDP * localUDP )
 {
@@ -150,7 +148,7 @@ int HKBonjour::beginMulticast(uint8_t *IPAddr, uint16_t port)
     UDP *udp = this->_localUDP;
 
 	udp->begin(5353);    // was... 4097
-	udp->beginPacket({ 224, 0, 0, 251 }, 5353);
+	udp->beginPacket(IPAddr, 5353);
 
       return 0;
 }
@@ -211,13 +209,12 @@ int HKBonjour::remoteIP()
 
     return udp->remoteIP();
 }
-unsigned long HKBonjour::localIP()
+/*unsigned long HKBonjour::localIP()
 {
   IPAddress localIP = WiFi.localIP();
 
   return (unsigned long)localIP;
-}
-#endif
+}*/
 
 // return values:
 // 1 on success

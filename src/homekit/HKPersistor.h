@@ -1,7 +1,11 @@
 #ifndef HKPersistor_H
 #define HKPersistor_H
 
+#ifdef PARTICLE_COMPAT
+#include "../../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
+#else
 #include <Particle.h>
+#endif
 
 #include "HKConfig.h"
 #include "HKNetworkMessageDataRecord.h"

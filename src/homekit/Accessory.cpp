@@ -10,7 +10,12 @@
 
 
 #include <set>
+
+#ifdef PARTICLE_COMPAT
+#include "../../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
+#else
 #include <Particle.h>
+#endif
 
 //set <string> trackingUserList;
 //set <HKConnection*> activeUsers;
