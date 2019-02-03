@@ -36,8 +36,6 @@ void HKServer::setPaired(bool p) {
 void HKServer::handle() {
   bonjour.run();
 
-  //Serial.println(WiFi.localIP());
-
   if(clients.size() < MAX_CONNECTIONS) {
     TCPClient newClient = server.available();
     if(newClient) {
@@ -45,7 +43,6 @@ void HKServer::handle() {
       clients.insert(clients.begin(),new HKConnection(this,newClient));
     }
   }
-
 
   int i = clients.size() - 1;
   while(i >= 0) {

@@ -24,19 +24,21 @@ intCharacteristics *occupyState;
 
 #define userListAddr "./userList"
 
+int bright = 100;
 
 void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
   RGB.control(true);
   if(!newValue){
     RGB.color(0, 0, 0);
   } else {
-    RGB.color(0xFF, 0xFF, 0xFF);
+      RGB.color((byte) ((bright * 255) / 100) , ((bright * 255) / 100), ((bright * 255) / 100));
   }
 }
 
 void brightTrackable (int oldValue, int newValue, HKConnection *sender) {
   RGB.control(true);
-  RGB.color((byte) newValue*2, (byte) newValue*2, (byte) newValue*2);
+  bright = newValue;
+    RGB.color((byte) ((bright * 255) / 100) , ((bright * 255) / 100), ((bright * 255) / 100));
 }
 
 int lightStength = 0;
