@@ -27,6 +27,9 @@ class HKPersistor {
 private:
   HKStorage *storage = new HKStorage();
 public:
+  bool hasPairings() {
+    return storage->pairingsCount > 0;
+  }
   void resetPersistor();
   bool addKey(HKKeyRecord record);
   void removeKey(HKKeyRecord record);

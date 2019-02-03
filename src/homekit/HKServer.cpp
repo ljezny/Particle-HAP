@@ -24,10 +24,19 @@ void HKServer::setup () {
 void HKServer::setPaired(bool p) {
   paired = p;
   bonjour.removeAllServiceRecords();
-  int r = bonjour.addServiceRecord(deviceName "._hap",
-                          TCP_SERVER_PORT,
-                          MDNSServiceTCP,
-                          "\x4sf=1\x14id=" deviceIdentity "\x6pv=1.0\x04\c#=1\x04s#=1\x04\ff=1\x0Bmd=" deviceName "\x4\ci=5"); //ci=5-lightbulb, ci=2 bridge
+  int r = 0;
+  if(p){
+    bonjour.addServiceRecord(deviceName "._hap",
+                            TCP_SERVER_PORT,
+                            MDNSServiceTCP,
+                            "\x4sf=0\x14id=" deviceIdentity "\x6pv=1.0\x04\c#=1\x04s#=1\x04\ff=1\x0Bmd=" deviceName "\x4\ci=5"); //ci=5-lightbulb, ci=2 bridge
+  } else {
+    bonjour.addServiceRecord(deviceName "._hap",
+                            TCP_SERVER_PORT,
+                            MDNSServiceTCP,
+                            "\x4sf=1\x14id=" deviceIdentity "\x6pv=1.0\x04\c#=1\x04s#=1\x04\ff=1\x0Bmd=" deviceName "\x4\ci=5"); //ci=5-lightbulb, ci=2 bridge
+  }
+
   Serial.printf("Bonjour paired %d, r: %d\n", paired,r);
 }
 
