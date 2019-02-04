@@ -39,6 +39,8 @@ extern "C" {
     #define NO_SHA256
     #define NO_ASN
     #define WC_NO_HASHDRBG
+    #define ED25519_SMALL
+    #define CURVED25519_SMALL
     
     #define WOLFSSL_SHA512
     #define WOLFCRYPT_HAVE_SRP

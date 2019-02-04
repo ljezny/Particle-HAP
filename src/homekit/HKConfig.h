@@ -13,9 +13,9 @@
 #define MAX_CONNECTIONS 8 //It seems that Particle has limit of simoultanious connections. 2 connections seem to be save.
 
 //ID of device, must be unique per device
-#define deviceIdentity "5D:C6:5E:50:AB:A9"
+#define deviceIdentity "5D:C6:5E:50:AA:A9"
 //Device name, which will be visible during pairing. Should be unique per device, so user can distinguish devices.
-#define hapName "particle"
+#define hapName "particlx"
 //Pairing code, should be unique per device
 #define devicePassword "523-12-643"
 
