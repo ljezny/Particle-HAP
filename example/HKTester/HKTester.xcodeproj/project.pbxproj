@@ -20,7 +20,6 @@
 		56125A1D2206F24600DCFA13 /* sha512.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259DE2206F24500DCFA13 /* sha512.cpp */; };
 		56125A1E2206F24600DCFA13 /* poly1305.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E02206F24500DCFA13 /* poly1305.cpp */; };
 		56125A1F2206F24600DCFA13 /* hmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E22206F24500DCFA13 /* hmac.cpp */; };
-		56125A202206F24600DCFA13 /* sha256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E52206F24500DCFA13 /* sha256.cpp */; };
 		56125A212206F24600DCFA13 /* srp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E72206F24500DCFA13 /* srp.cpp */; };
 		56125A222206F24600DCFA13 /* wc_port.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E82206F24500DCFA13 /* wc_port.cpp */; };
 		56125A232206F24600DCFA13 /* curve25519.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259EA2206F24500DCFA13 /* curve25519.cpp */; };
@@ -63,7 +62,6 @@
 		561259C62206F24500DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
 		561259C82206F24500DCFA13 /* memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
 		561259C92206F24500DCFA13 /* fe_operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fe_operations.h; sourceTree = "<group>"; };
-		561259CA2206F24500DCFA13 /* asn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn.h; sourceTree = "<group>"; };
 		561259CB2206F24500DCFA13 /* logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logging.cpp; sourceTree = "<group>"; };
 		561259CC2206F24500DCFA13 /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
 		561259CD2206F24500DCFA13 /* chacha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chacha.h; sourceTree = "<group>"; };
@@ -77,7 +75,6 @@
 		561259D52206F24500DCFA13 /* chacha20_poly1305.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = chacha20_poly1305.cpp; sourceTree = "<group>"; };
 		561259D62206F24500DCFA13 /* arc4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arc4.h; sourceTree = "<group>"; };
 		561259D72206F24500DCFA13 /* wolfmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wolfmath.h; sourceTree = "<group>"; };
-		561259D82206F24500DCFA13 /* sha256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha256.h; sourceTree = "<group>"; };
 		561259D92206F24500DCFA13 /* ed25519.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ed25519.cpp; sourceTree = "<group>"; };
 		561259DA2206F24500DCFA13 /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
 		561259DB2206F24500DCFA13 /* logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logging.h; sourceTree = "<group>"; };
@@ -90,8 +87,6 @@
 		561259E22206F24500DCFA13 /* hmac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hmac.cpp; sourceTree = "<group>"; };
 		561259E32206F24500DCFA13 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
 		561259E42206F24500DCFA13 /* wc_port.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wc_port.h; sourceTree = "<group>"; };
-		561259E52206F24500DCFA13 /* sha256.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sha256.cpp; sourceTree = "<group>"; };
-		561259E62206F24500DCFA13 /* asn_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn_public.h; sourceTree = "<group>"; };
 		561259E72206F24500DCFA13 /* srp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = srp.cpp; sourceTree = "<group>"; };
 		561259E82206F24500DCFA13 /* wc_port.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wc_port.cpp; sourceTree = "<group>"; };
 		561259E92206F24500DCFA13 /* chacha20_poly1305.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chacha20_poly1305.h; sourceTree = "<group>"; };
@@ -99,7 +94,6 @@
 		561259EB2206F24500DCFA13 /* memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memory.h; sourceTree = "<group>"; };
 		561259EC2206F24500DCFA13 /* ed25519.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ed25519.h; sourceTree = "<group>"; };
 		561259ED2206F24500DCFA13 /* integer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = integer.cpp; sourceTree = "<group>"; };
-		561259EE2206F24500DCFA13 /* rsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rsa.h; sourceTree = "<group>"; };
 		561259EF2206F24500DCFA13 /* hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hash.cpp; sourceTree = "<group>"; };
 		561259F02206F24500DCFA13 /* curve25519.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curve25519.h; sourceTree = "<group>"; };
 		561259F12206F24500DCFA13 /* visibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = visibility.h; sourceTree = "<group>"; };
@@ -109,8 +103,6 @@
 		561259F52206F24500DCFA13 /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
 		561259F62206F24500DCFA13 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = random.h; sourceTree = "<group>"; };
 		561259F72206F24500DCFA13 /* mpi_superclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mpi_superclass.h; sourceTree = "<group>"; };
-		561259F82206F24500DCFA13 /* ge_operations.cpppp.0 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ge_operations.cpppp.0; sourceTree = "<group>"; };
-		561259F92206F24500DCFA13 /* ge_operations.cpp2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ge_operations.cpp2; sourceTree = "<group>"; };
 		561259FA2206F24600DCFA13 /* HKAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKAccessory.cpp; sourceTree = "<group>"; };
 		561259FB2206F24600DCFA13 /* HKAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKAccessory.h; sourceTree = "<group>"; };
 		561259FC2206F24600DCFA13 /* HKConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConsts.h; sourceTree = "<group>"; };
@@ -227,57 +219,50 @@
 		561259C52206F24500DCFA13 /* crypto */ = {
 			isa = PBXGroup;
 			children = (
-				561259C62206F24500DCFA13 /* ge_operations.cpp */,
-				561259C82206F24500DCFA13 /* memory.cpp */,
-				561259C92206F24500DCFA13 /* fe_operations.h */,
-				561259CA2206F24500DCFA13 /* asn.h */,
-				561259CB2206F24500DCFA13 /* logging.cpp */,
-				561259CC2206F24500DCFA13 /* sha.h */,
-				561259CD2206F24500DCFA13 /* chacha.h */,
-				561259CE2206F24500DCFA13 /* settings.h */,
-				561259CF2206F24500DCFA13 /* types.h */,
-				561259D02206F24500DCFA13 /* misc.cpp */,
-				561259D12206F24500DCFA13 /* misc.h */,
-				561259D22206F24500DCFA13 /* random.cpp */,
-				561259D32206F24500DCFA13 /* mpi_class.h */,
-				561259D42206F24500DCFA13 /* poly1305.h */,
-				561259D52206F24500DCFA13 /* chacha20_poly1305.cpp */,
 				561259D62206F24500DCFA13 /* arc4.h */,
-				561259D72206F24500DCFA13 /* wolfmath.h */,
-				561259D82206F24500DCFA13 /* sha256.h */,
-				561259D92206F24500DCFA13 /* ed25519.cpp */,
-				561259DA2206F24500DCFA13 /* fe_operations.cpp */,
-				561259DB2206F24500DCFA13 /* logging.h */,
-				561259DC2206F24500DCFA13 /* sha.cpp */,
-				561259DD2206F24500DCFA13 /* error-crypt.h */,
-				561259DE2206F24500DCFA13 /* sha512.cpp */,
-				561259DF2206F24500DCFA13 /* sha512.h */,
-				561259E02206F24500DCFA13 /* poly1305.cpp */,
-				561259E12206F24500DCFA13 /* srp.h */,
-				561259E22206F24500DCFA13 /* hmac.cpp */,
-				561259E32206F24500DCFA13 /* hmac.h */,
-				561259E42206F24500DCFA13 /* wc_port.h */,
-				561259E52206F24500DCFA13 /* sha256.cpp */,
-				561259E62206F24500DCFA13 /* asn_public.h */,
-				561259E72206F24500DCFA13 /* srp.cpp */,
-				561259E82206F24500DCFA13 /* wc_port.cpp */,
+				561259F32206F24500DCFA13 /* chacha.cpp */,
+				561259CD2206F24500DCFA13 /* chacha.h */,
+				561259D52206F24500DCFA13 /* chacha20_poly1305.cpp */,
 				561259E92206F24500DCFA13 /* chacha20_poly1305.h */,
 				561259EA2206F24500DCFA13 /* curve25519.cpp */,
-				561259EB2206F24500DCFA13 /* memory.h */,
-				561259EC2206F24500DCFA13 /* ed25519.h */,
-				561259ED2206F24500DCFA13 /* integer.cpp */,
-				561259EE2206F24500DCFA13 /* rsa.h */,
-				561259EF2206F24500DCFA13 /* hash.cpp */,
 				561259F02206F24500DCFA13 /* curve25519.h */,
-				561259F12206F24500DCFA13 /* visibility.h */,
-				561259F22206F24500DCFA13 /* integer.h */,
-				561259F32206F24500DCFA13 /* chacha.cpp */,
+				561259D92206F24500DCFA13 /* ed25519.cpp */,
+				561259EC2206F24500DCFA13 /* ed25519.h */,
+				561259DD2206F24500DCFA13 /* error-crypt.h */,
+				561259DA2206F24500DCFA13 /* fe_operations.cpp */,
+				561259C92206F24500DCFA13 /* fe_operations.h */,
+				561259C62206F24500DCFA13 /* ge_operations.cpp */,
 				561259F42206F24500DCFA13 /* ge_operations.h */,
+				561259EF2206F24500DCFA13 /* hash.cpp */,
 				561259F52206F24500DCFA13 /* hash.h */,
-				561259F62206F24500DCFA13 /* random.h */,
+				561259E22206F24500DCFA13 /* hmac.cpp */,
+				561259E32206F24500DCFA13 /* hmac.h */,
+				561259ED2206F24500DCFA13 /* integer.cpp */,
+				561259F22206F24500DCFA13 /* integer.h */,
+				561259CB2206F24500DCFA13 /* logging.cpp */,
+				561259DB2206F24500DCFA13 /* logging.h */,
+				561259C82206F24500DCFA13 /* memory.cpp */,
+				561259EB2206F24500DCFA13 /* memory.h */,
+				561259D02206F24500DCFA13 /* misc.cpp */,
+				561259D12206F24500DCFA13 /* misc.h */,
+				561259D32206F24500DCFA13 /* mpi_class.h */,
 				561259F72206F24500DCFA13 /* mpi_superclass.h */,
-				561259F82206F24500DCFA13 /* ge_operations.cpppp.0 */,
-				561259F92206F24500DCFA13 /* ge_operations.cpp2 */,
+				561259E02206F24500DCFA13 /* poly1305.cpp */,
+				561259D42206F24500DCFA13 /* poly1305.h */,
+				561259D22206F24500DCFA13 /* random.cpp */,
+				561259F62206F24500DCFA13 /* random.h */,
+				561259CE2206F24500DCFA13 /* settings.h */,
+				561259DC2206F24500DCFA13 /* sha.cpp */,
+				561259CC2206F24500DCFA13 /* sha.h */,
+				561259DE2206F24500DCFA13 /* sha512.cpp */,
+				561259DF2206F24500DCFA13 /* sha512.h */,
+				561259E72206F24500DCFA13 /* srp.cpp */,
+				561259E12206F24500DCFA13 /* srp.h */,
+				561259CF2206F24500DCFA13 /* types.h */,
+				561259F12206F24500DCFA13 /* visibility.h */,
+				561259E82206F24500DCFA13 /* wc_port.cpp */,
+				561259E42206F24500DCFA13 /* wc_port.h */,
+				561259D72206F24500DCFA13 /* wolfmath.h */,
 			);
 			path = crypto;
 			sourceTree = "<group>";
@@ -358,7 +343,6 @@
 				56125A1F2206F24600DCFA13 /* hmac.cpp in Sources */,
 				56125A2A2206F24600DCFA13 /* HKNetworkMessage.cpp in Sources */,
 				56125A292206F24600DCFA13 /* HKNetworkResponse.cpp in Sources */,
-				56125A202206F24600DCFA13 /* sha256.cpp in Sources */,
 				56125A182206F24600DCFA13 /* random.cpp in Sources */,
 				56125A1A2206F24600DCFA13 /* ed25519.cpp in Sources */,
 				56125A3D2208C29A00DCFA13 /* Accessory.cpp in Sources */,

@@ -86,7 +86,7 @@ int wc_RNG_HealthTest(int reseed,
 #ifndef WC_NO_RNG /* if not FIPS and RNG is disabled then do not compile */
 
 #include "error-crypt.h"
-#include "sha256.h"
+//#include "sha256.h"
 
 #ifdef NO_INLINE
 #include <wolfssl/wolfcrypt/misc.h>

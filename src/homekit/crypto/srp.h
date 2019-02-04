@@ -27,7 +27,7 @@
 
 #include "types.h"
 #include "sha.h"
-#include "sha256.h"
+//#include "sha256.h"
 #include "sha512.h"
 #include "integer.h"
 

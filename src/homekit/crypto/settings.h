@@ -36,6 +36,8 @@ extern "C" {
     #define NO_OLD_TLS
     #define NO_DSA
     #define NO_SHA
+    #define NO_SHA256
+    #define NO_ASN
     #define WC_NO_HASHDRBG
     
     #define WOLFSSL_SHA512
