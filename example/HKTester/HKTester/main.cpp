@@ -35,7 +35,7 @@ void *handle(void *vargp) {
 
 int main(int argc, const char * argv[]) {
     
-    nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@hapName port:5556];
+    nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@hapName port:TCP_SERVER_PORT];
     
     NSDictionary *txtDict = @{
         @"pv": [@"1.0" dataUsingEncoding:NSUTF8StringEncoding], // state

@@ -86,7 +86,7 @@ int socket_accept(int server_socket){
     struct sockaddr cli;
     socklen_t len;
     int s = accept(server_socket,(struct sockaddr *) &cli, &len);
-    if(s != -1){
+    if(socket_handle_valid(s)){
         struct timeval read_timeout;
         read_timeout.tv_sec = 0;
         read_timeout.tv_usec = 10;
