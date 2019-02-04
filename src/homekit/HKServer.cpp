@@ -19,6 +19,8 @@ void HKServer::setup () {
   bonjour.setUDP( &udp );
   bonjour.begin(hapName);
   setPaired(false);
+
+  Serial.println(WiFi.localIP());
 }
 
 void HKServer::setPaired(bool p) {
