@@ -6,7 +6,7 @@
  */
 
 #include "homekit/HKServer.h"
-#include "homekit/Accessory.h"
+#include "Accessory.h"
 
 HKServer hkServer;
 

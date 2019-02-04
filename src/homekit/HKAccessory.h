@@ -14,8 +14,6 @@
 
 #include "HKPersistor.h"
 
-#include "HKDeviceInterface.h"
-
 #include <vector>
 
 #include "HKConnection.h"
