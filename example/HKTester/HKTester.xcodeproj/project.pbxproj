@@ -34,15 +34,14 @@
 		56125A2B2206F24600DCFA13 /* HKNetworkMessageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A062206F24600DCFA13 /* HKNetworkMessageData.cpp */; };
 		56125A2C2206F24600DCFA13 /* HKServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A072206F24600DCFA13 /* HKServer.cpp */; };
 		56125A2D2206F24600DCFA13 /* HKConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A082206F24600DCFA13 /* HKConnection.cpp */; };
-		56125A2E2206F24600DCFA13 /* HKDeviceInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A0A2206F24600DCFA13 /* HKDeviceInterface.cpp */; };
 		56125A2F2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A0C2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp */; };
-		56125A302206F24600DCFA13 /* Accessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A0E2206F24600DCFA13 /* Accessory.cpp */; };
 		56125A312206F24600DCFA13 /* HKConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A0F2206F24600DCFA13 /* HKConfig.cpp */; };
 		56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A112206F24600DCFA13 /* HKBonjour.cpp */; };
 		56125A332206F24600DCFA13 /* HKPersistor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A132206F24600DCFA13 /* HKPersistor.cpp */; };
 		56125A3522070D9B00DCFA13 /* particle_compat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3422070D9B00DCFA13 /* particle_compat.cpp */; };
 		56125A382207490000DCFA13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A372207490000DCFA13 /* Foundation.framework */; };
 		56125A3A22074AFC00DCFA13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A3922074AFC00DCFA13 /* CoreFoundation.framework */; };
+		56125A3D2208C29A00DCFA13 /* Accessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3C2208C29A00DCFA13 /* Accessory.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,9 +60,7 @@
 		561259B42206E95600DCFA13 /* HKTester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HKTester; sourceTree = BUILT_PRODUCTS_DIR; };
 		561259B72206E95600DCFA13 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = main.cpp; sourceTree = "<group>"; };
 		561259C02206EA0600DCFA13 /* particle_compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = particle_compat.h; sourceTree = "<group>"; };
-		561259C42206F24500DCFA13 /* HKDeviceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKDeviceInterface.h; sourceTree = "<group>"; };
 		561259C62206F24500DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
-		561259C72206F24500DCFA13 /* misc.c.0 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = misc.c.0; sourceTree = "<group>"; };
 		561259C82206F24500DCFA13 /* memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
 		561259C92206F24500DCFA13 /* fe_operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fe_operations.h; sourceTree = "<group>"; };
 		561259CA2206F24500DCFA13 /* asn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn.h; sourceTree = "<group>"; };
@@ -119,7 +116,6 @@
 		561259FC2206F24600DCFA13 /* HKConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConsts.h; sourceTree = "<group>"; };
 		561259FD2206F24600DCFA13 /* HKBonjour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKBonjour.h; sourceTree = "<group>"; };
 		561259FE2206F24600DCFA13 /* HKStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKStringUtils.cpp; sourceTree = "<group>"; };
-		561259FF2206F24600DCFA13 /* Accessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accessory.h; sourceTree = "<group>"; };
 		56125A002206F24600DCFA13 /* HKNetworkMessageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessageData.h; sourceTree = "<group>"; };
 		56125A012206F24600DCFA13 /* HKNetworkResponse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkResponse.cpp; sourceTree = "<group>"; };
 		56125A022206F24600DCFA13 /* HKNetworkMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkMessage.cpp; sourceTree = "<group>"; };
@@ -130,11 +126,9 @@
 		56125A072206F24600DCFA13 /* HKServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKServer.cpp; sourceTree = "<group>"; };
 		56125A082206F24600DCFA13 /* HKConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKConnection.cpp; sourceTree = "<group>"; };
 		56125A092206F24600DCFA13 /* HKNetworkResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkResponse.h; sourceTree = "<group>"; };
-		56125A0A2206F24600DCFA13 /* HKDeviceInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKDeviceInterface.cpp; sourceTree = "<group>"; };
 		56125A0B2206F24600DCFA13 /* HKNetworkMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessage.h; sourceTree = "<group>"; };
 		56125A0C2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkMessageDataRecord.cpp; sourceTree = "<group>"; };
 		56125A0D2206F24600DCFA13 /* HKConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConfig.h; sourceTree = "<group>"; };
-		56125A0E2206F24600DCFA13 /* Accessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Accessory.cpp; sourceTree = "<group>"; };
 		56125A0F2206F24600DCFA13 /* HKConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKConfig.cpp; sourceTree = "<group>"; };
 		56125A102206F24600DCFA13 /* HKNetworkMessageDataRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessageDataRecord.h; sourceTree = "<group>"; };
 		56125A112206F24600DCFA13 /* HKBonjour.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKBonjour.cpp; sourceTree = "<group>"; };
@@ -143,6 +137,8 @@
 		56125A3422070D9B00DCFA13 /* particle_compat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = particle_compat.cpp; sourceTree = "<group>"; };
 		56125A372207490000DCFA13 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		56125A3922074AFC00DCFA13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		56125A3B2208C29900DCFA13 /* Accessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Accessory.h; path = ../../../src/Accessory.h; sourceTree = "<group>"; };
+		56125A3C2208C29A00DCFA13 /* Accessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Accessory.cpp; path = ../../../src/Accessory.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +175,8 @@
 		561259B62206E95600DCFA13 /* HKTester */ = {
 			isa = PBXGroup;
 			children = (
+				56125A3C2208C29A00DCFA13 /* Accessory.cpp */,
+				56125A3B2208C29900DCFA13 /* Accessory.h */,
 				561259BF2206E9E100DCFA13 /* Particle_Compat */,
 				561259B72206E95600DCFA13 /* main.cpp */,
 			);
@@ -197,8 +195,6 @@
 		561259C32206F24500DCFA13 /* homekit */ = {
 			isa = PBXGroup;
 			children = (
-				56125A0E2206F24600DCFA13 /* Accessory.cpp */,
-				561259FF2206F24600DCFA13 /* Accessory.h */,
 				561259C52206F24500DCFA13 /* crypto */,
 				561259FA2206F24600DCFA13 /* HKAccessory.cpp */,
 				561259FB2206F24600DCFA13 /* HKAccessory.h */,
@@ -209,8 +205,6 @@
 				56125A082206F24600DCFA13 /* HKConnection.cpp */,
 				56125A032206F24600DCFA13 /* HKConnection.h */,
 				561259FC2206F24600DCFA13 /* HKConsts.h */,
-				56125A0A2206F24600DCFA13 /* HKDeviceInterface.cpp */,
-				561259C42206F24500DCFA13 /* HKDeviceInterface.h */,
 				56125A022206F24600DCFA13 /* HKNetworkMessage.cpp */,
 				56125A0B2206F24600DCFA13 /* HKNetworkMessage.h */,
 				56125A062206F24600DCFA13 /* HKNetworkMessageData.cpp */,
@@ -234,7 +228,6 @@
 			isa = PBXGroup;
 			children = (
 				561259C62206F24500DCFA13 /* ge_operations.cpp */,
-				561259C72206F24500DCFA13 /* misc.c.0 */,
 				561259C82206F24500DCFA13 /* memory.cpp */,
 				561259C92206F24500DCFA13 /* fe_operations.h */,
 				561259CA2206F24500DCFA13 /* asn.h */,
@@ -356,9 +349,7 @@
 			files = (
 				56125A212206F24600DCFA13 /* srp.cpp in Sources */,
 				56125A282206F24600DCFA13 /* HKStringUtils.cpp in Sources */,
-				56125A302206F24600DCFA13 /* Accessory.cpp in Sources */,
 				56125A332206F24600DCFA13 /* HKPersistor.cpp in Sources */,
-				56125A2E2206F24600DCFA13 /* HKDeviceInterface.cpp in Sources */,
 				56125A1C2206F24600DCFA13 /* sha.cpp in Sources */,
 				561259B82206E95600DCFA13 /* main.cpp in Sources */,
 				56125A142206F24600DCFA13 /* ge_operations.cpp in Sources */,
@@ -370,6 +361,7 @@
 				56125A202206F24600DCFA13 /* sha256.cpp in Sources */,
 				56125A182206F24600DCFA13 /* random.cpp in Sources */,
 				56125A1A2206F24600DCFA13 /* ed25519.cpp in Sources */,
+				56125A3D2208C29A00DCFA13 /* Accessory.cpp in Sources */,
 				56125A1B2206F24600DCFA13 /* fe_operations.cpp in Sources */,
 				56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */,
 				56125A232206F24600DCFA13 /* curve25519.cpp in Sources */,

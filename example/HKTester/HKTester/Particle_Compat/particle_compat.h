@@ -92,7 +92,9 @@ public:
     bool connected(){
         return true;
     }
-    
+    int status() {
+        return 1;
+    }
     bool available(){
         read_buffer_offset = 0;
         int l = recv(socket,read_buffer,4096,0);
@@ -159,6 +161,7 @@ public:
     void stop(){
         
     }
+    
 };
 
 class RGBClass {

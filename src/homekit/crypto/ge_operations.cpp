@@ -767,7 +767,7 @@ static void cmov(ge_precomp *t,ge_precomp *u,unsigned char b)
 
 
 /* base[i][j] = (j+1)*256^i*B */
- static ge_precomp base[32][8]; = {
+ static ge_precomp base[32][8] = {
 {
  {
   { 25967493,-14356035,29566456,3660896,-12694345,4014787,27544626,-11754271,-6079156,2047605 },

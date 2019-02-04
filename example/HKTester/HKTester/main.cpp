@@ -18,7 +18,7 @@
 
 #include <pthread.h>
 #include <stdio.h>
-#include "../../../src/homekit/Accessory.h"
+#include "../../../src/Accessory.h"
 
 NSNetService *nsService;
 
