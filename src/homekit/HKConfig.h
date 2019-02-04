@@ -4,7 +4,7 @@
 #include "HKConsts.h"
 
 //TCP for handling server port
-#define TCP_SERVER_PORT 5556
+#define TCP_SERVER_PORT 5560
 //Maximum pairings available. Apple recommends 16. But be aware, one pairings needs (36+32)B of your EEPROM
 #define MAX_PAIRINGS 16
 //if you are using EEPROM, you can set offset for Homekit to store pairings
@@ -13,9 +13,9 @@
 #define MAX_CONNECTIONS 2 //It seems that Particle has limit of simoultanious connections. 2 connections seem to be save.
 
 //ID of device, must be unique per device
-#define deviceIdentity "5D:C6:5E:50:AB:A9"
+#define deviceIdentity "5D:C6:5E:38:AB:61"
 //Device name, which will be visible during pairing. Should be unique per device, so user can distinguish devices.
-#define hapName "particle"
+#define hapName "xyz"
 //Pairing code, should be unique per device
 #define devicePassword "523-12-643"
 

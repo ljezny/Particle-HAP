@@ -104,7 +104,7 @@ void initAccessorySet() {
 
     //Add Light
     accSet = &AccessorySet::getInstance();
-    addInfoServiceToAccessory(lightAcc1, "Tubes", "DaliborFarny", "Nixie Clock v1", "12345678", &lightIdentify);
+    addInfoServiceToAccessory(lightAcc1, "XXf", "DaliborFarny", "Nixie Clock v1", "12345678", &lightIdentify);
     accSet->addAccessory(lightAcc1);
 
     Service *lightService1 = new Service(serviceType_lightBulb);

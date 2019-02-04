@@ -68,98 +68,15 @@ public:
 };
 
 
-class TCPClient {
-private:
-    int socket = 0;
-    uint8_t read_buffer[4096];
-    size_t read_buffer_offset = 0;
-public:
-    TCPClient(){
-        socket = -1;
-    }
-    
-    TCPClient(int s){
-        socket = s;
-        struct timeval read_timeout;
-        read_timeout.tv_sec = 0;
-        read_timeout.tv_usec = 10;
-        setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
-    }
-    
-    void stop(){
-        
-    }
-    bool connected(){
-        return true;
-    }
-    
-    bool available(){
-        read_buffer_offset = 0;
-        int l = recv(socket,read_buffer,4096,0);
-        if(l>0){
-            read_buffer_offset += l;
-        }
-        return read_buffer_offset > 0;
-    }
-    
-    operator bool()
-    {
-        return socket != -1;
-    }
-    
-    char* remoteIP() {
-        return "1.1.1.1";
-    }
-    //int len = client.read(tempBuffer,tempBufferSize);
-    int read(unsigned char *buffer, size_t size) {
-        memcpy(buffer, read_buffer, read_buffer_offset);
-        return read_buffer_offset;
-    }
-    void write(unsigned char *buffer, size_t len) {
-        send(socket, buffer, len, 0);
-    }
-    
-};
-
-class TCPServer {
-private:
-    int server_socket;
-    struct sockaddr_in servaddr, cliaddr;
-public:
-    TCPServer(int port){
-        if ( (server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
-            perror("socket creation failed");
-        }
-        
-        memset(&servaddr, 0, sizeof(servaddr));
-        //memset(&cliaddr, 0, sizeof(cliaddr));
-        
-        // Filling server information
-        servaddr.sin_family    = AF_INET; // IPv4
-        servaddr.sin_addr.s_addr = INADDR_ANY;
-        servaddr.sin_port = htons(port);
-        
-        bind(server_socket, (const struct sockaddr *)&servaddr, sizeof(servaddr));
-        if ((listen(server_socket, 0)) != 0) {
-            perror("Listen failed...\n");
-        }
-        
-        fcntl(server_socket, F_SETFL, O_NONBLOCK);
-    }
-    TCPClient available(){
-        struct sockaddr cli;
-        socklen_t len;
-        int conn = accept(server_socket,(struct sockaddr *) &cli, &len);
-        
-        return TCPClient(conn);
-    }
-    void begin(){
-        
-    }
-    void stop(){
-        
-    }
-};
+typedef int sock_result_t;
+typedef int network_interface_t;
+int socket_handle_invalid();
+int socket_handle_valid(int socket);
+int socket_create_tcp_server(int port, int nif);
+int socket_accept(int server_socket);
+int socket_close(int socket);
+int socket_receive(int socket, uint8_t *buffer,size_t size, int timeout);
+int socket_send(int socket,uint8_t *buffer,size_t size);
 
 class RGBClass {
 public:

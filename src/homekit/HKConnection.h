@@ -38,7 +38,7 @@ class characteristics;
 class HKConnection {
 
 private:
-  TCPClient client;
+  int socket_client;
   Srp srp;
 
   byte controllerKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
@@ -77,18 +77,22 @@ private:
   void processPostedCharacteristics();
 
   char *c_ID;
+
+  void socketRead(uint8_t* buffer,size_t *size);
+  void socketWrite(uint8_t* buffer,size_t size);
+
 public:
   HKServer *server;
   bool relay = false;
 
-  HKConnection(HKServer *s,TCPClient c);
+  HKConnection(HKServer *s,int c);
   void handleConnection();
   void keepAlive();
   void announce(char* buffer);
   void writeData(uint8_t* buffer,size_t size);
 
   bool isConnected(){
-    return client.connected();
+    return true;
   }
 
   char* clientID(){
@@ -96,7 +100,8 @@ public:
   }
 
   void close(){
-    client.stop();
+    sock_result_t r = socket_close(socket_client);
+    Serial.printf("socket close %d\n", r);
   }
   void postCharacteristicsValue(characteristics *c);
 };
