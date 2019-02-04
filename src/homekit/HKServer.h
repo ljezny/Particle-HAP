@@ -19,14 +19,11 @@ class HKConnection;
 
 class HKServer {
 private:
+  TCPServer server = TCPServer(TCP_SERVER_PORT);
   HKBonjour bonjour;
   UDP udp;
   bool paired = false;
   std::vector<HKConnection*> clients;
-
-  sock_result_t server_socket_handle = socket_handle_invalid();
-  network_interface_t _nif = 0;
-
 public:
   HKPersistor *persistor;
   HKServer();

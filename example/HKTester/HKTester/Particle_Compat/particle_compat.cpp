@@ -55,6 +55,7 @@ long int start = timestamp();
 long int millis() {
     return timestamp() - start;
 }
+<<<<<<< HEAD
 
 int socket_handle_invalid() {
     return -1;
@@ -113,3 +114,5 @@ int socket_receive(int socket, uint8_t *buffer,size_t size, int timeout) {
 int socket_send(int socket,uint8_t *buffer,size_t size){
     return send(socket, buffer, size, 0);
 }
+=======
+>>>>>>> parent of 4444428... - low level sockets used

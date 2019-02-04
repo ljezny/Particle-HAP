@@ -13,36 +13,16 @@ void generateAccessoryKey(ed25519_key *key) {
   print_hex_memory(key,sizeof(ed25519_key));
 }
 
-HKConnection::HKConnection(HKServer *s,int socket) {
-  socket_client = socket;
+HKConnection::HKConnection(HKServer *s,TCPClient c) {
+  client =  c;
   server = s;
   //generateAccessoryKey(&accessoryKey);
   c_ID = new char[32];
   memset(c_ID,0,32);
-  //snprintf(c_ID,32,"%d/%d.%d.%d.%d",connectionID,client.remoteIP()[0],client.remoteIP()[1],client.remoteIP()[2],client.remoteIP()[3]);
-  snprintf(c_ID,32,"[ID:%d]",connectionID);
+  snprintf(c_ID,32,"%d/%d.%d.%d.%d",connectionID,client.remoteIP()[0],client.remoteIP()[1],client.remoteIP()[2],client.remoteIP()[3]);
+
   connectionID++;
-}
 
-void HKConnection::socketRead(uint8_t* buffer,size_t *buffer_size){
-  int total = 0;
-  int result = 0;
-
-  while ((result = socket_receive(socket_client, buffer + total, *buffer_size - total, 0)) > 0)   {
-    total += result;
-  }
-  /*if(!isConnected()) {
-    Serial.println("socketRead: read some bytes from closed socket !!!");
-    *buffer_size = 0;
-  }*/
-    
-    *buffer_size = total;
-}
-
-void HKConnection::socketWrite(uint8_t* buffer,size_t size){
-  if(isConnected()) {
-    socket_send(socket_client,buffer, size);
-  }
 }
 
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
@@ -80,7 +60,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
       );
       if (r) {
           Serial.printf("Failed to chacha encrypt payload (code %d)\n", r);
-          close();
+          client.stop();
           return;
       }
       payload_offset += chunk_size;
@@ -89,7 +69,9 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
       part++;
   }
 
-  socketWrite(outputBuffer,output_offset);
+  if(isConnected()){
+    client.write(outputBuffer,output_offset);
+  }
   Serial.println("END: writeEncryptedData");
 }
 
@@ -155,11 +137,22 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
 }
 
 void HKConnection::readData(uint8_t* buffer,size_t *size) {
-  socketRead(buffer,size);
+  int total = 0;
+  int tempBufferSize = 4096;
+  uint8_t *tempBuffer =(uint8_t *) malloc(tempBufferSize * sizeof(uint8_t));
+  while(client.available()) {
+    int len = client.read(tempBuffer,tempBufferSize);
+    memcpy((buffer+total), tempBuffer,len);
+    total += len;
+  }
 
-  if(isEncrypted && *size > 0) {
+  *size = total;
+
+  if(isEncrypted && total > 0) {
     decryptData(buffer,size);
   }
+
+  free(tempBuffer);
 }
 
 void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
@@ -169,13 +162,17 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
     if(isEncrypted) {
       writeEncryptedData((uint8_t *)responseBuffer,responseLen);
     } else {
-      socketWrite((uint8_t *)responseBuffer, (size_t)responseLen);
-    }
+        client.write((uint8_t *)responseBuffer, (size_t)responseLen);
+      }
   }
   Serial.println("END: writeData");
 }
 
 void HKConnection::handleConnection() {
+  /*if (!isConnected()) {
+      return;
+  }*/
+
   int input_buffer_size = 4096;
   uint8_t *inputBuffer =(uint8_t *) malloc(input_buffer_size * sizeof(uint8_t));
   memset(inputBuffer,0,input_buffer_size);
@@ -197,7 +194,7 @@ void HKConnection::handleConnection() {
           server->setPaired(true);
         }
       } else if (!strcmp(msg.directory, "identify")){
-        close();
+        client.stop();
       } else if(isEncrypted) { //connection is secured
         Serial.printf("Handling message request: %s\n",msg.directory);
         handleAccessoryRequest((const char *)inputBuffer, len);
@@ -643,7 +640,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
               tlv8Record.length = tlv8Len+16;
               bzero(tlv8Record.data, tlv8Record.length);
 
-
+              
               r = wc_ChaCha20Poly1305_Encrypt(
                   (const byte *)sharedKey,
                   (const byte *)"\x0\x0\x0\x0PS-Msg06",
@@ -652,7 +649,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                   (byte*) tlv8Record.data,
                   (byte*) (tlv8Record.data + tlv8Len)
               );
-
+                
               tlv8Record.activate = true;
               tlv8Record.index = 5;//5
 
@@ -677,6 +674,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
     }
     if(completed){
       server->setPaired(1);
+      //client.stop();
       Serial.println("Pairing completed.");
       wc_SrpTerm(&srp);
     }
