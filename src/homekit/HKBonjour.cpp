@@ -35,7 +35,7 @@
 #define  MDNS_SERVER_PORT        5353
 #define  MDNS_NQUERY_RESEND_TIME 1000   // 1 second, name query resend timeout
 #define  MDNS_SQUERY_RESEND_TIME 1000  // 10 seconds, service query resend timeout
-#define  MDNS_RESPONSE_TTL       120    //120 two minutes (in seconds)
+#define  MDNS_RESPONSE_TTL       10    //120 two minutes (in seconds)
 
 #define  MDNS_MAX_SERVICES_PER_PACKET  6
 
@@ -172,7 +172,7 @@ int HKBonjour::read(uint8_t *buf, int size)
 int HKBonjour::beginPacket(uint8_t * IPAddr, uint16_t port)
 {
     UDP *udp = this->_localUDP;
-
+    udp->beginPacket(IPAddr, 5353);
     return 0;
 }
 int HKBonjour::endPacket()
