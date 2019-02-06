@@ -19,7 +19,7 @@ struct HKKeyRecord {
 };
 
 struct HKStorage {
-    u_int8_t deviceId[6];
+    unsigned char deviceId[6];
     HKKeyRecord pairings[MAX_PAIRINGS];
 };
 
@@ -38,7 +38,7 @@ public:
     void loadRecordStorage();
     void saveSaveStorage();
     
-    const uint8_t* getDeviceId() {
+    const unsigned char* getDeviceId() {
         return storage.deviceId;
     }
     

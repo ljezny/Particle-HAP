@@ -16,7 +16,7 @@ HKServer::HKServer(const char* hapName,const char *passcode) {
     persistor = new HKPersistor();
     
     char *deviceIdentity = new char[12+5];
-    const uint8_t *deviceId = persistor->getDeviceId();
+    const unsigned char *deviceId = persistor->getDeviceId();
     sprintf(deviceIdentity, "%02X:%02X:%02X:%02X:%02X:%02X",deviceId[0],deviceId[1],deviceId[2],deviceId[3],deviceId[4],deviceId[5]);
     this->deviceIdentity = deviceIdentity;
 }
