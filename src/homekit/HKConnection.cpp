@@ -7,10 +7,10 @@ int connectionID = 0;
 
 void generateAccessoryKey(ed25519_key *key) {
     int r = wc_ed25519_init(key);
-    Logger.printf("wc_ed25519_init key: r:%d\n",r);
+    HKLogger.printf("wc_ed25519_init key: r:%d\n",r);
     WC_RNG rng;
     r = wc_ed25519_make_key(&rng, ED25519_KEY_SIZE, key);
-    Logger.printf("wc_ed25519_make_key key: r:%d\n",r);
+    HKLogger.printf("wc_ed25519_make_key key: r:%d\n",r);
     print_hex_memory(key,sizeof(ed25519_key));
 }
 
@@ -27,7 +27,7 @@ HKConnection::HKConnection(HKServer *s,TCPClient c) {
 }
 
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
-    Logger.println("BEGIN: writeEncryptedData");
+    HKLogger.println("BEGIN: writeEncryptedData");
     byte nonce[12];
     memset(nonce, 0, sizeof(nonce));
     
@@ -60,7 +60,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
                                             (byte *) (outputBuffer + output_offset + chunk_size + 2)
                                             );
         if (r) {
-            Logger.printf("Failed to chacha encrypt payload (code %d)\n", r);
+            HKLogger.printf("Failed to chacha encrypt payload (code %d)\n", r);
             client.stop();
             return;
         }
@@ -73,11 +73,11 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     if(isConnected()){
         client.write(outputBuffer,output_offset);
     }
-    Logger.println("END: writeEncryptedData");
+    HKLogger.println("END: writeEncryptedData");
 }
 
 void HKConnection::decryptData(uint8_t* payload,size_t *size) {
-    Logger.println("BEGIN: decryptData");
+    HKLogger.println("BEGIN: decryptData");
     uint8_t *decryptedData =(uint8_t *) malloc((*size) * sizeof(uint8_t));
     size_t decryptedTotalSize = 0;
     size_t payload_size = *size;
@@ -120,7 +120,7 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
                                            (const byte *)payload+payload_offset+2 + chunk_size, decryptedData + decrypted_offset
                                            );
         if (r) {
-            Logger.printf("Failed to chacha decrypt payload (code %d)\n", r);
+            HKLogger.printf("Failed to chacha decrypt payload (code %d)\n", r);
             //Once session security has been established, if the accessory encounters a decryption failure then it must immediately close the connection used for the session.
             //client.stop();
             *size = 0;
@@ -134,7 +134,7 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
     memcpy(payload,decryptedData,decryptedTotalSize);
     *size = decryptedTotalSize;
     free(decryptedData);
-    Logger.println("END: decryptData");
+    HKLogger.println("END: decryptData");
 }
 
 void HKConnection::readData(uint8_t* buffer,size_t *size) {
@@ -157,8 +157,8 @@ void HKConnection::readData(uint8_t* buffer,size_t *size) {
 }
 
 void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
-    Logger.println("BEGIN: writeData");
-    Logger.printf("writeData responseLen = %d\n", responseLen);
+    HKLogger.println("BEGIN: writeData");
+    HKLogger.printf("writeData responseLen = %d\n", responseLen);
     if(isConnected()){
         if(isEncrypted) {
             writeEncryptedData((uint8_t *)responseBuffer,responseLen);
@@ -166,7 +166,7 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
             client.write((uint8_t *)responseBuffer, (size_t)responseLen);
         }
     }
-    Logger.println("END: writeData");
+    HKLogger.println("END: writeData");
 }
 
 void HKConnection::handleConnection() {
@@ -179,17 +179,17 @@ void HKConnection::handleConnection() {
     memset(inputBuffer,0,input_buffer_size);
     size_t len = 0;
     readData(inputBuffer,&len);
-    Logger.printf("Request Message read length: %d \n", len);
+    HKLogger.printf("Request Message read length: %d \n", len);
     
     while (len > 0) {
         lastKeepAliveMs = millis();
         HKNetworkMessage msg((const char *)inputBuffer);
         if (!strcmp(msg.directory, "pair-setup")){
-            Logger.printf("Handling Pair Setup...\n");
+            HKLogger.printf("Handling Pair Setup...\n");
             handlePairSetup((const char *)inputBuffer);
         }
         else if (!strcmp(msg.directory, "pair-verify")){
-            Logger.printf("Handling Pair Varify...\n");
+            HKLogger.printf("Handling Pair Varify...\n");
             if(handlePairVerify((const char *)inputBuffer)){
                 isEncrypted = true;
                 server->setPaired(true);
@@ -197,7 +197,7 @@ void HKConnection::handleConnection() {
         } else if (!strcmp(msg.directory, "identify")){
             client.stop();
         } else if(isEncrypted) { //connection is secured
-            Logger.printf("Handling message request: %s\n",msg.directory);
+            HKLogger.printf("Handling message request: %s\n",msg.directory);
             handleAccessoryRequest((const char *)inputBuffer, len);
         }
         readData(inputBuffer,&len);
@@ -213,10 +213,10 @@ void HKConnection::announce(char* desc){
     memset(reply,0,4096);
     int len = snprintf(reply, 4096, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
     
-    Logger.printf("--------BEGIN ANNOUNCE: %s--------\n",clientID());
-    Logger.printf("%s\n",reply);
-    Logger.printf("--------END ANNOUNCE: %s--------\n",clientID());
-    Logger.printf("--------ANNOUNCE: %s--------\n",clientID());
+    HKLogger.printf("--------BEGIN ANNOUNCE: %s--------\n",clientID());
+    HKLogger.printf("%s\n",reply);
+    HKLogger.printf("--------END ANNOUNCE: %s--------\n",clientID());
+    HKLogger.printf("--------ANNOUNCE: %s--------\n",clientID());
     writeData((byte*)reply,len);
     free(reply);
 }
@@ -226,7 +226,7 @@ void HKConnection::keepAlive() {
         lastKeepAliveMs = millis();
         if(isConnected()) {
             if(isEncrypted && readsCount > 0) {
-                Logger.printf("Keeping alive..\n");
+                HKLogger.printf("Keeping alive..\n");
                 
                 char *aliveMsg = new char[32];
                 memset(aliveMsg,0,32);
@@ -268,29 +268,29 @@ bool HKConnection::handlePairVerify(const char *buffer) {
     
     switch (state) {
         case State_Pair_Verify_M1: {
-            Logger.printf("Pair Verify M1\n");
+            HKLogger.printf("Pair Verify M1\n");
             curve25519_key controllerKey;
             int r = wc_curve25519_init(&controllerKey);
-            Logger.printf("wc_curve25519_init key: r:%d\n",r);
+            HKLogger.printf("wc_curve25519_init key: r:%d\n",r);
             r = wc_curve25519_import_public_ex((const byte *) msg.data.dataPtrForIndex(3) , 32, &controllerKey,EC25519_LITTLE_ENDIAN);
-            Logger.printf("wc_curve25519_import_public_ex: r:%d\n",r);
+            HKLogger.printf("wc_curve25519_import_public_ex: r:%d\n",r);
             memcpy(&controllerKeyData,msg.data.dataPtrForIndex(3) , 32);
             
             curve25519_key secretKey;
             r = wc_curve25519_init(&secretKey);
-            Logger.printf("wc_curve25519_init: r:%d\n",r);
+            HKLogger.printf("wc_curve25519_init: r:%d\n",r);
             WC_RNG rng;
             wc_curve25519_make_key(&rng,CURVE25519_KEYSIZE,&secretKey);
-            Logger.printf("wc_curve25519_make_key: r:%d\n",r);
+            HKLogger.printf("wc_curve25519_make_key: r:%d\n",r);
             
             word32 publicSecretKeySize = CURVE25519_KEYSIZE;
             r = wc_curve25519_export_public_ex(&secretKey, publicSecretKeyData, &publicSecretKeySize,EC25519_LITTLE_ENDIAN);
-            Logger.printf("wc_curve25519_export_public_ex: r:%d\n",r);
+            HKLogger.printf("wc_curve25519_export_public_ex: r:%d\n",r);
             word32 sharedKeySize = CURVE25519_KEYSIZE;
             
             
             r = wc_curve25519_shared_secret_ex(&secretKey,&controllerKey,sharedKey,&sharedKeySize,EC25519_LITTLE_ENDIAN);
-            Logger.printf("crypto_curve25519_shared_secret: %d\n", r);
+            HKLogger.printf("crypto_curve25519_shared_secret: %d\n", r);
             
             int accessoryInfoSize = CURVE25519_KEYSIZE+CURVE25519_KEYSIZE+strlen(deviceIdentity);
             byte accessoryInfo[accessoryInfoSize];
@@ -301,7 +301,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             word32 accessorySignSize = ED25519_SIG_SIZE;
             byte accesorySign[accessorySignSize];
             r = wc_ed25519_sign_msg(accessoryInfo, accessoryInfoSize, accesorySign, &accessorySignSize,accessoryKey);
-            Logger.printf("wc_ed25519_sign_msg: r:%d\n",r);
+            HKLogger.printf("wc_ed25519_sign_msg: r:%d\n",r);
             
             HKNetworkMessageDataRecord signRecord;
             signRecord.activate = true;
@@ -325,7 +325,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             char info[] = "Pair-Verify-Encrypt-Info";
             size_t sessionKeySize = CHACHA20_POLY1305_AEAD_KEYSIZE;
             r = wc_HKDF(SHA512,(const byte*) sharedKey, sharedKeySize,(const byte*) salt, strlen(salt),(const byte*) info, strlen(info),sessionKeyData, CHACHA20_POLY1305_AEAD_KEYSIZE);
-            Logger.printf("wc_HKDF: r:%d\n",r);
+            HKLogger.printf("wc_HKDF: r:%d\n",r);
             
             const char *plainMsg = 0;   unsigned short msgLen = 0;
             data.rawData(&plainMsg, &msgLen);
@@ -340,7 +340,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
                                             (byte *) encryptMsg,
                                             (byte *) (encryptMsg+msgLen)
                                             );
-            Logger.printf("wc_ChaCha20Poly1305_Encrypt: r:%d\n",r);
+            HKLogger.printf("wc_ChaCha20Poly1305_Encrypt: r:%d\n",r);
             HKNetworkMessageDataRecord stage;
             stage.activate = true;
             stage.data = new char;
@@ -371,7 +371,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
         }
             break;
         case State_Pair_Verify_M3: {
-            Logger.printf("Pair Verify M3\n");
+            HKLogger.printf("Pair Verify M3\n");
             char *encryptedData = msg.data.dataPtrForIndex(5);
             short packageLen = msg.data.lengthForIndex(5);
             byte decryptedData[packageLen-16];
@@ -382,7 +382,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
                                                (const byte *)encryptedData, packageLen-16,
                                                (const byte *)encryptedData+packageLen-16, decryptedData
                                                );
-            Logger.printf("wc_ChaCha20Poly1305_Decrypt: r:%d\n",r);
+            HKLogger.printf("wc_ChaCha20Poly1305_Decrypt: r:%d\n",r);
             HKNetworkMessageData subData = HKNetworkMessageData((char *)decryptedData, packageLen-16);
             HKKeyRecord rec = server->persistor->getKey(subData.dataPtrForIndex(1));
             
@@ -394,12 +394,12 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             
             ed25519_key clKey;
             r = wc_ed25519_init(&clKey);
-            Logger.printf("wc_ed25519_init: r:%d\n",r);
+            HKLogger.printf("wc_ed25519_init: r:%d\n",r);
             r = wc_ed25519_import_public((const byte*) rec.publicKey, ED25519_PUB_KEY_SIZE, &clKey);
-            Logger.printf("wc_ed25519_import_public: r:%d\n",r);
+            HKLogger.printf("wc_ed25519_import_public: r:%d\n",r);
             int verified = 0;
             r = wc_ed25519_verify_msg((byte*) subData.dataPtrForIndex(10), subData.lengthForIndex(10),(const byte*)  controllerInfo,controllerInfoSize, &verified, &clKey);
-            Logger.printf("wc_ed25519_verify_msg: r:%d\n",r);
+            HKLogger.printf("wc_ed25519_verify_msg: r:%d\n",r);
             if(verified) {
                 completed = true;
                 
@@ -416,10 +416,10 @@ bool HKConnection::handlePairVerify(const char *buffer) {
                 const char read_info[] = "Control-Read-Encryption-Key";
                 const char write_info[] = "Control-Write-Encryption-Key";
                 r = wc_HKDF(SHA512,(const byte*) sharedKey, CHACHA20_POLY1305_AEAD_KEYSIZE,(const byte*) salt, strlen(salt),(const byte*) read_info, strlen(read_info),readKey, CHACHA20_POLY1305_AEAD_KEYSIZE);
-                Logger.printf("wc_HKDF: r:%d\n",r);
+                HKLogger.printf("wc_HKDF: r:%d\n",r);
                 r = wc_HKDF(SHA512,(const byte*) sharedKey, CHACHA20_POLY1305_AEAD_KEYSIZE,(const byte*) salt, strlen(salt),(const byte*) write_info, strlen(write_info),writeKey, CHACHA20_POLY1305_AEAD_KEYSIZE);
-                Logger.printf("wc_HKDF: r:%d\n",r);
-                Logger.println("Pair verified, secure connection established");
+                HKLogger.printf("wc_HKDF: r:%d\n",r);
+                HKLogger.println("Pair verified, secure connection established");
             }
             else{
                 HKNetworkMessageDataRecord error;
@@ -429,7 +429,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
                 error.index = 7;
                 error.length = 1;
                 response.data.addRecord(error);
-                Logger.println("Pair NOT verified.");
+                HKLogger.println("Pair NOT verified.");
             }
         }
     }
@@ -442,7 +442,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
         delete [] responseBuffer;
         
     } else {
-        Logger.printf("Why empty response\n");
+        HKLogger.printf("Why empty response\n");
     }
     return completed;
 }
@@ -465,11 +465,11 @@ void HKConnection::handlePairSetup(const char *buffer) {
     
     
     state = (PairSetupState_t)(*msg.data.dataPtrForIndex(6));
-    Logger.printf("State: %d\n", state);
+    HKLogger.printf("State: %d\n", state);
     *stateRecord.data = (char)state+1;
     switch (state) {
         case State_M1_SRPStartRequest: {
-            Logger.println("State_M1_SRPStartRequest");
+            HKLogger.println("State_M1_SRPStartRequest");
             stateRecord.data[0] = State_M2_SRPStartRespond;
             HKNetworkMessageDataRecord saltRec;
             HKNetworkMessageDataRecord publicKeyRec;
@@ -482,18 +482,18 @@ void HKConnection::handlePairSetup(const char *buffer) {
             int r = wc_SrpInit(&srp,SRP_TYPE_SHA512,SRP_CLIENT_SIDE);
             srp.keyGenFunc_cb = wc_SrpSetKeyH;
             if (!r) r = wc_SrpSetUsername(&srp,(const byte *)"Pair-Setup",strlen("Pair-Setup"));
-            Logger.printf("wc_SrpSetUsername: r:%d\n",r);
+            HKLogger.printf("wc_SrpSetUsername: r:%d\n",r);
             if (!r) r = wc_SrpSetParams(&srp,(const byte *)N, sizeof(N),(const byte *)generator, 1,salt,16);
-            Logger.printf("wc_SrpSetParams: r:%d\n",r);
+            HKLogger.printf("wc_SrpSetParams: r:%d\n",r);
             if (!r) r = wc_SrpSetPassword(&srp,(const byte *)devicePassword,strlen(devicePassword));
-            Logger.printf("wc_SrpSetPassword: r:%d\n",r);
+            HKLogger.printf("wc_SrpSetPassword: r:%d\n",r);
             if (!r) r = wc_SrpGetVerifier(&srp, (byte *)publicKey, &publicKeyLength); //use publicKey to store v
-            Logger.printf("wc_SrpGetVerifier: r:%d\n",r);
+            HKLogger.printf("wc_SrpGetVerifier: r:%d\n",r);
             srp.side=SRP_SERVER_SIDE; //switch to server mode
             if (!r) r = wc_SrpSetVerifier(&srp, (byte *)publicKey, publicKeyLength);
-            Logger.printf("wc_SrpSetVerifier: r:%d\n",r);
+            HKLogger.printf("wc_SrpSetVerifier: r:%d\n",r);
             if (!r) r = wc_SrpGetPublic(&srp, (byte *)publicKey, &publicKeyLength);
-            Logger.printf("wc_SrpGetPublic: r:%d\n",r);
+            HKLogger.printf("wc_SrpGetPublic: r:%d\n",r);
             saltRec.index = 2;
             saltRec.activate = true;
             saltRec.length = sizeof(salt);
@@ -513,7 +513,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
             break;
             
         case State_M3_SRPVerifyRequest: {
-            Logger.println("State_M3_SRPVerifyRequest");
+            HKLogger.println("State_M3_SRPVerifyRequest");
             stateRecord.data[0] = State_M4_SRPVerifyRespond;
             const char *keyStr = 0;
             int keyLen = 0;
@@ -526,12 +526,12 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 proofStr = temp;
                 proofLen = msg.data.lengthForIndex(4);
             } else {
-                Logger.println("no proof sent!");
+                HKLogger.println("no proof sent!");
             }
             int r = wc_SrpComputeKey(&srp,(byte*) keyStr,keyLen,(byte*) publicKey,publicKeyLength);
-            Logger.printf("wc_SrpComputeKey: r:%d\n",r);
+            HKLogger.printf("wc_SrpComputeKey: r:%d\n",r);
             r = wc_SrpVerifyPeersProof(&srp, (byte*) proofStr, proofLen);
-            Logger.printf("wc_SrpVerifyPeersProof: r:%d\n",r);
+            HKLogger.printf("wc_SrpVerifyPeersProof: r:%d\n",r);
             if (r != 0) { //failed
                 HKNetworkMessageDataRecord responseRecord;
                 responseRecord.activate = true;
@@ -542,7 +542,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 mResponse.data.addRecord(stateRecord);
                 mResponse.data.addRecord(responseRecord);
                 
-                Logger.println("INCORRECT PASSWORD");
+                HKLogger.println("INCORRECT PASSWORD");
             } else { //success
                 wc_SrpGetProof(&srp, (byte *)response,&responseLength);
                 //SRP_respond(srp, &response);
@@ -555,12 +555,12 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 
                 mResponse.data.addRecord(stateRecord);
                 mResponse.data.addRecord(responseRecord);
-                Logger.println("PASSWORD OK");
+                HKLogger.println("PASSWORD OK");
             }
         }
             break;
         case State_M5_ExchangeRequest: {
-            Logger.println("State_M5_ExchangeRequest");
+            HKLogger.println("State_M5_ExchangeRequest");
             stateRecord.data[0] = State_M6_ExchangeRespond;
             const char *encryptedPackage = NULL;int packageLen = 0;
             encryptedPackage = msg.data.dataPtrForIndex(5);
@@ -574,7 +574,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
             const char info1[] = "Pair-Setup-Encrypt-Info";
             uint8_t sharedKey[100];
             int r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt1, strlen(salt1),(const byte*) info1, strlen(info1),sharedKey, CHACHA20_POLY1305_AEAD_KEYSIZE);
-            Logger.printf("wc_HKDF: r:%d\n",r);
+            HKLogger.printf("wc_HKDF: r:%d\n",r);
             uint8_t decryptedData[packageLen-16];
             bzero(decryptedData, packageLen-16);
             r= wc_ChaCha20Poly1305_Decrypt(
@@ -584,7 +584,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                                            (const byte *)encryptedData, packageLen-16,
                                            (const byte *)mac, decryptedData
                                            );
-            Logger.printf("wc_ChaCha20Poly1305_Decrypt: r:%d\n",r);
+            HKLogger.printf("wc_ChaCha20Poly1305_Decrypt: r:%d\n",r);
             HKNetworkMessageData *subTLV8 = new HKNetworkMessageData((char *)decryptedData, packageLen-16);
             char *controllerIdentifier = subTLV8->dataPtrForIndex(1);
             char *controllerPublicKey = subTLV8->dataPtrForIndex(3);
@@ -604,18 +604,18 @@ void HKConnection::handlePairSetup(const char *buffer) {
             const char salt2[] = "Pair-Setup-Controller-Sign-Salt";
             const char info2[] = "Pair-Setup-Controller-Sign-Info";
             r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt2, strlen(salt2),(const byte*) info2, strlen(info2),(byte*)controllerHash, CHACHA20_POLY1305_AEAD_KEYSIZE);
-            Logger.printf("wc_HKDF: r:%d\n",r);
+            HKLogger.printf("wc_HKDF: r:%d\n",r);
             memcpy(&controllerHash[32],controllerIdentifier, 36);
             memcpy(&controllerHash[68],controllerPublicKey, 32);
             
             ed25519_key clKey;
             r = wc_ed25519_init(&clKey);
-            Logger.printf("wc_ed25519_init: r:%d\n",r);
+            HKLogger.printf("wc_ed25519_init: r:%d\n",r);
             r = wc_ed25519_import_public((const byte*) controllerPublicKey, controllerPublicKeySize, &clKey);
-            Logger.printf("wc_ed25519_import_public: r:%d\n",r);
+            HKLogger.printf("wc_ed25519_import_public: r:%d\n",r);
             int verified = 0;
             r = wc_ed25519_verify_msg((byte*) controllerSignature, controllerSignatureSize,(const byte*)  controllerHash,100, &verified, &clKey);
-            Logger.printf("wc_ed25519_verify_msg: r:%d\n",r);
+            HKLogger.printf("wc_ed25519_verify_msg: r:%d\n",r);
             if(verified) {
                 HKNetworkMessageData *returnTLV8 = new HKNetworkMessageData();
                 
@@ -633,7 +633,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 size_t outputSize = 64+strlen(deviceIdentity);
                 uint8_t output[outputSize];
                 r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt3, strlen(salt3),(const byte*) info3, strlen(info3),(byte*)output, CHACHA20_POLY1305_AEAD_KEYSIZE);
-                Logger.printf("wc_HKDF: r:%d\n",r);
+                HKLogger.printf("wc_HKDF: r:%d\n",r);
                 word32 accessoryPubKeySize = ED25519_PUB_KEY_SIZE;
                 uint8_t accessoryPubKey[accessoryPubKeySize];
                 r = wc_ed25519_export_public(accessoryKey, accessoryPubKey, &accessoryPubKeySize);
@@ -643,7 +643,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 uint8_t signature[signatureSize];
                 
                 r = wc_ed25519_sign_msg(output,outputSize,signature,&signatureSize,accessoryKey);
-                Logger.printf("wc_ed25519_sign_msg: r:%d\n",r);
+                HKLogger.printf("wc_ed25519_sign_msg: r:%d\n",r);
                 
                 HKNetworkMessageDataRecord signatureRecord;
                 signatureRecord.activate = true;
@@ -677,7 +677,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                                                 (byte*) tlv8Record.data,
                                                 (byte*) (tlv8Record.data + tlv8Len)
                                                 );
-                Logger.printf("wc_ChaCha20Poly1305_Encrypt: r:%d\n",r);
+                HKLogger.printf("wc_ChaCha20Poly1305_Encrypt: r:%d\n",r);
                 
                 tlv8Record.activate = true;
                 tlv8Record.index = 5;//5
@@ -699,12 +699,12 @@ void HKConnection::handlePairSetup(const char *buffer) {
         
         delete [] responseBuffer;
     } else {
-        Logger.printf("Why empty response\n");
+        HKLogger.printf("Why empty response\n");
     }
     if(completed){
         server->setPaired(1);
         //client.stop();
-        Logger.println("Pairing completed.");
+        HKLogger.println("Pairing completed.");
         wc_SrpTerm(&srp);
     }
     
@@ -712,18 +712,18 @@ void HKConnection::handlePairSetup(const char *buffer) {
 
 void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
     char *resultData = 0; unsigned int resultLen = 0;
-    Logger.printf("--------REQUEST %s--------\n",clientID());
-    Logger.printf("--------BEGIN REQUEST: %s--------\n",clientID());
-    Logger.printf("%s\n",buffer);
-    Logger.printf("--------BEGIN REQUEST: %s--------\n",clientID());
+    HKLogger.printf("--------REQUEST %s--------\n",clientID());
+    HKLogger.printf("--------BEGIN REQUEST: %s--------\n",clientID());
+    HKLogger.printf("%s\n",buffer);
+    HKLogger.printf("--------BEGIN REQUEST: %s--------\n",clientID());
     handleAccessory(buffer, size, &resultData, &resultLen, this);
     if(resultLen > 0) {
-        Logger.printf("--------BEGIN RESPONSE: %s--------\n",clientID());
-        Logger.printf("%s\n",resultData);
-        Logger.printf("--------END RESPONSE: %s--------\n",clientID());
+        HKLogger.printf("--------BEGIN RESPONSE: %s--------\n",clientID());
+        HKLogger.printf("%s\n",resultData);
+        HKLogger.printf("--------END RESPONSE: %s--------\n",clientID());
         
         writeData((byte*)resultData,resultLen);
-        Logger.printf("--------RESPONSE %s--------\n",clientID());
+        HKLogger.printf("--------RESPONSE %s--------\n",clientID());
     }
     if(resultData) {
         free(resultData);
