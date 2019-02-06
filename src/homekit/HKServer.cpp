@@ -1,5 +1,6 @@
 #include "HKServer.h"
 #include "HKConnection.h"
+#include "HKLog.h"
 
 #ifndef PARTICLE_COMPAT
 #include "spark_wiring_tcpclient.h"
@@ -9,16 +10,20 @@
 #endif
 
 HKServer::HKServer() {
-  persistor = new HKPersistor();
-
+    persistor = new HKPersistor();
+    
 }
 void HKServer::setup () {
-  persistor->loadRecordStorage();
-  server.begin();
-
-  bonjour.setUDP( &udp );
-  bonjour.begin(hapName);
-  setPaired(false);
+    persistor->loadRecordStorage();
+    server.begin();
+    HKLogger.printf("Server started at port %d", TCP_SERVER_PORT);
+    
+    
+    bonjour.setUDP( &udp );
+    bonjour.begin(hapName);
+    setPaired(false);
+    
+    
 }
 
 void HKServer::setPaired(bool p) {
@@ -31,32 +36,34 @@ void HKServer::setPaired(bool p) {
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
                              recordTxt); //ci=5-lightbulb, ci=2 bridge
+    
+    
 }
 
 void HKServer::handle() {
-  bonjour.run();
-
-  if(clients.size() < MAX_CONNECTIONS) {
-    TCPClient newClient = server.available();
-    if(newClient) {
-      Serial.println("Client connected.");
-      clients.insert(clients.begin(),new HKConnection(this,newClient));
+    bonjour.run();
+    
+    if(clients.size() < MAX_CONNECTIONS) {
+        TCPClient newClient = server.available();
+        if(newClient) {
+            Serial.println("Client connected.");
+            clients.insert(clients.begin(),new HKConnection(this,newClient));
+        }
     }
-  }
-
-  int i = clients.size() - 1;
-  while(i >= 0) {
-    HKConnection *conn = clients.at(i);
-
-    conn->handleConnection();
-    if(!conn->isConnected()) {
-      conn->close();
-      Serial.println("Client removed.");
-      clients.erase(clients.begin() + i);
+    
+    int i = clients.size() - 1;
+    while(i >= 0) {
+        HKConnection *conn = clients.at(i);
+        
+        conn->handleConnection();
+        if(!conn->isConnected()) {
+            conn->close();
+            Serial.println("Client removed.");
+            clients.erase(clients.begin() + i);
+        }
+        
+        i--;
     }
-
-    i--;
-  }
-
-
+    
+    
 }
