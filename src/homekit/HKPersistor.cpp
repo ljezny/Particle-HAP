@@ -3,7 +3,7 @@
 void HKPersistor::loadRecordStorage() {
     Serial.println("Persistor: load");
     storage = EEPROM.get(EEPROM_STORAGE_ADDRESS_OFFSET, storage);
-    if(storage.pairings[0].controllerID[0] == 0xFF) { //particle eeprom default value
+    if(storage.deviceId[0] == 0xFF) { //particle eeprom default value
         resetAll();
     }
 }
@@ -26,7 +26,6 @@ void HKPersistor::resetPairings() {
     for(int i = 0; i<MAX_PAIRINGS; i++) { //find first empty slot
        memset(&storage.pairings[i],0,sizeof(HKKeyRecord));
     }
-    memset(&storage,0,sizeof(HKStorage));
     saveSaveStorage();
 }
 
