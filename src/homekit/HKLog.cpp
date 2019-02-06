@@ -8,7 +8,7 @@
 
 #include "HKLog.h"
 
-HKLog Log;
+HKLog Logger;
 
 int HKLog::printf(const char *format, ...){
     va_list argptr;

@@ -22,5 +22,5 @@ public:
     int printf(const char *format, ...);
     int println(const char *value);
 };
-extern HKLog Log;
+extern HKLog Logger;
 #endif /* HKLog_hpp */
