@@ -12,7 +12,7 @@
 HKServer::HKServer(const char* hapName,const  char* deviceIdentity,const char *passcode) {
     this->hapName = hapName;
     this->deviceIdentity = deviceIdentity;
-    
+    this->passcode = passcode;
     persistor = new HKPersistor();
     
 }
