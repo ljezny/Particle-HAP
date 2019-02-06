@@ -139,7 +139,7 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
 
 void HKConnection::readData(uint8_t* buffer,size_t *size) {
     int total = 0;
-    int tempBufferSize = 4096;
+    int tempBufferSize = 1024;
     uint8_t *tempBuffer =(uint8_t *) malloc(tempBufferSize * sizeof(uint8_t));
     while(isConnected() && client.available()) {
         int len = client.read(tempBuffer,tempBufferSize);
@@ -174,14 +174,14 @@ void HKConnection::handleConnection() {
      return;
      }*/
     
-    int input_buffer_size = 4096;
+    int input_buffer_size = 1024;
     uint8_t *inputBuffer =(uint8_t *) malloc(input_buffer_size * sizeof(uint8_t));
     memset(inputBuffer,0,input_buffer_size);
     size_t len = 0;
     readData(inputBuffer,&len);
-    HKLogger.printf("Request Message read length: %d \n", len);
     
     while (len > 0) {
+        HKLogger.printf("Request Message read length: %d \n", len);
         lastKeepAliveMs = millis();
         HKNetworkMessage msg((const char *)inputBuffer);
         if (!strcmp(msg.directory, "pair-setup")){
@@ -209,13 +209,10 @@ void HKConnection::handleConnection() {
 }
 
 void HKConnection::announce(char* desc){
-    char *reply = (char*)malloc(4096);
-    memset(reply,0,4096);
-    int len = snprintf(reply, 4096, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    char *reply = (char*)malloc(1024);
+    memset(reply,0,1024);
+    int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
     
-    HKLogger.printf("--------BEGIN ANNOUNCE: %s--------\n",clientID());
-    HKLogger.printf("%s\n",reply);
-    HKLogger.printf("--------END ANNOUNCE: %s--------\n",clientID());
     HKLogger.printf("--------ANNOUNCE: %s--------\n",clientID());
     writeData((byte*)reply,len);
     free(reply);
@@ -292,11 +289,11 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             r = wc_curve25519_shared_secret_ex(&secretKey,&controllerKey,sharedKey,&sharedKeySize,EC25519_LITTLE_ENDIAN);
             HKLogger.printf("crypto_curve25519_shared_secret: %d\n", r);
             
-            int accessoryInfoSize = CURVE25519_KEYSIZE+CURVE25519_KEYSIZE+strlen(deviceIdentity);
+            int accessoryInfoSize = CURVE25519_KEYSIZE+CURVE25519_KEYSIZE+strlen(server->getDeviceIdentity());
             byte accessoryInfo[accessoryInfoSize];
             memcpy(accessoryInfo,publicSecretKeyData, CURVE25519_KEYSIZE);
-            memcpy(&accessoryInfo[CURVE25519_KEYSIZE],deviceIdentity, strlen(deviceIdentity));
-            memcpy(&accessoryInfo[CURVE25519_KEYSIZE+strlen(deviceIdentity)],msg.data.dataPtrForIndex(3), CURVE25519_KEYSIZE);
+            memcpy(&accessoryInfo[CURVE25519_KEYSIZE],server->getDeviceIdentity(), strlen(server->getDeviceIdentity()));
+            memcpy(&accessoryInfo[CURVE25519_KEYSIZE+strlen(server->getDeviceIdentity())],msg.data.dataPtrForIndex(3), CURVE25519_KEYSIZE);
             
             word32 accessorySignSize = ED25519_SIG_SIZE;
             byte accesorySign[accessorySignSize];
@@ -313,9 +310,9 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             HKNetworkMessageDataRecord idRecord;
             idRecord.index = 1;
             idRecord.activate = true;
-            idRecord.length = strlen(deviceIdentity);
+            idRecord.length = strlen(server->getDeviceIdentity());
             idRecord.data = new char[idRecord.length];
-            memcpy(idRecord.data,deviceIdentity, idRecord.length);
+            memcpy(idRecord.data,server->getDeviceIdentity(), idRecord.length);
             
             HKNetworkMessageData data;
             data.addRecord(signRecord);
@@ -622,23 +619,23 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 HKNetworkMessageDataRecord usernameRecord;
                 usernameRecord.activate = true;
                 usernameRecord.index = 1;
-                usernameRecord.length = strlen(deviceIdentity);
+                usernameRecord.length = strlen(server->getDeviceIdentity());
                 usernameRecord.data = new char[usernameRecord.length];
-                memcpy(usernameRecord.data,deviceIdentity,usernameRecord.length);
+                memcpy(usernameRecord.data,server->getDeviceIdentity(),usernameRecord.length);
                 returnTLV8->addRecord(usernameRecord);
                 
                 // Generate Signature
                 const char salt3[] = "Pair-Setup-Accessory-Sign-Salt";
                 const char info3[] = "Pair-Setup-Accessory-Sign-Info";
-                size_t outputSize = 64+strlen(deviceIdentity);
+                size_t outputSize = 64+strlen(server->getDeviceIdentity());
                 uint8_t output[outputSize];
                 r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt3, strlen(salt3),(const byte*) info3, strlen(info3),(byte*)output, CHACHA20_POLY1305_AEAD_KEYSIZE);
                 HKLogger.printf("wc_HKDF: r:%d\n",r);
                 word32 accessoryPubKeySize = ED25519_PUB_KEY_SIZE;
                 uint8_t accessoryPubKey[accessoryPubKeySize];
                 r = wc_ed25519_export_public(accessoryKey, accessoryPubKey, &accessoryPubKeySize);
-                memcpy(&output[32],deviceIdentity,strlen(deviceIdentity));
-                memcpy(&output[32+strlen(deviceIdentity)],accessoryPubKey,accessoryPubKeySize);
+                memcpy(&output[32],server->getDeviceIdentity(),strlen(server->getDeviceIdentity()));
+                memcpy(&output[32+strlen(server->getDeviceIdentity())],accessoryPubKey,accessoryPubKeySize);
                 word32 signatureSize = 64;
                 uint8_t signature[signatureSize];
                 
@@ -713,15 +710,8 @@ void HKConnection::handlePairSetup(const char *buffer) {
 void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
     char *resultData = 0; unsigned int resultLen = 0;
     HKLogger.printf("--------REQUEST %s--------\n",clientID());
-    HKLogger.printf("--------BEGIN REQUEST: %s--------\n",clientID());
-    HKLogger.printf("%s\n",buffer);
-    HKLogger.printf("--------BEGIN REQUEST: %s--------\n",clientID());
     handleAccessory(buffer, size, &resultData, &resultLen, this);
     if(resultLen > 0) {
-        HKLogger.printf("--------BEGIN RESPONSE: %s--------\n",clientID());
-        HKLogger.printf("%s\n",resultData);
-        HKLogger.printf("--------END RESPONSE: %s--------\n",clientID());
-        
         writeData((byte*)resultData,resultLen);
         HKLogger.printf("--------RESPONSE %s--------\n",clientID());
     }

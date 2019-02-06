@@ -19,16 +19,21 @@ class HKConnection;
 
 class HKServer {
 private:
-  TCPServer server = TCPServer(TCP_SERVER_PORT);
-  HKBonjour bonjour;
-  UDP udp;
-  bool paired = false;
-  std::vector<HKConnection*> clients;
+    TCPServer server = TCPServer(TCP_SERVER_PORT);
+    HKBonjour bonjour;
+    UDP udp;
+    bool paired = false;
+    std::vector<HKConnection*> clients;
+    const char *hapName;
+    const char *deviceIdentity;
 public:
-  HKPersistor *persistor;
-  HKServer();
-  void setup ();
-  void setPaired(bool paired);
-  void handle();
+    HKPersistor *persistor;
+    HKServer(const char* hapName, const char* deviceIdentity);
+    void setup ();
+    void setPaired(bool paired);
+    void handle();
+    const char* getDeviceIdentity() {
+        return deviceIdentity;
+    }
 };
 #endif /* end of include guard: HKServer */

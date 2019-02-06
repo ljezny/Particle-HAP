@@ -21,20 +21,23 @@
 
 NSNetService *nsService;
 
-HKServer server = HKServer();
+
 
 int main(int argc, const char * argv[]) {
+    NSString *hapName = @"HKTester";
+    NSString *deviceIdentity = @"6A:AC:47:A9:B7:23";
+    HKServer server = HKServer([hapName cString],[deviceIdentity cString]);
     
-    nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@hapName port:TCP_SERVER_PORT];
+    nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@"HKTester" port:TCP_SERVER_PORT];
     
     NSDictionary *txtDict = @{
         @"pv": [@"1.0" dataUsingEncoding:NSUTF8StringEncoding], // state
-        @"id": [@deviceIdentity dataUsingEncoding:NSUTF8StringEncoding], // identifier
+        @"id": [deviceIdentity dataUsingEncoding:NSUTF8StringEncoding], // identifier
         @"c#": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // version
         @"s#": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // state
         @"sf": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // discoverable
         @"ff": [@"0" dataUsingEncoding:NSUTF8StringEncoding], // mfi compliant
-        @"md": [@hapName dataUsingEncoding:NSUTF8StringEncoding], // name
+        @"md": [hapName dataUsingEncoding:NSUTF8StringEncoding], // name
         @"ci": [@"5" dataUsingEncoding:NSUTF8StringEncoding] // category identifier
     };
     

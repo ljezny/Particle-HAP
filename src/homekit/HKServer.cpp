@@ -9,7 +9,10 @@
 #include "spark_wiring_thread.h"
 #endif
 
-HKServer::HKServer() {
+HKServer::HKServer(const char* hapName,const  char* deviceIdentity) {
+    this->hapName = hapName;
+    this->deviceIdentity = deviceIdentity;
+    
     persistor = new HKPersistor();
     
 }
@@ -32,7 +35,10 @@ void HKServer::setPaired(bool p) {
     char recordTxt[512];
     memset(recordTxt, 0, 512);
     sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=1%cs#=1%cs#=1%cff=0%cmd=%s%cci=%d",4,(char)strlen(deviceIdentity)+3,deviceIdentity,6,4,4,4,4,(char)(strlen(hapName) + 3),hapName,4,5);
-    bonjour.addServiceRecord(hapName "._hap",
+    char bonjourName[128];
+    memset(bonjourName, 0, 512);
+    sprintf(recordTxt, "%s._hap",hapName);
+    bonjour.addServiceRecord(bonjourName,
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
                              recordTxt); //ci=5-lightbulb, ci=2 bridge
