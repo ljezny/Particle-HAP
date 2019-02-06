@@ -247,6 +247,7 @@ public:
 
 void delay(int ms);
 long int millis();
+int random(int max);
 
 extern EthernetClass Ethernet;
 extern UDP udp;

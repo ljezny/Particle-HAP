@@ -55,3 +55,6 @@ long int start = timestamp();
 long int millis() {
     return timestamp() - start;
 }
+int random(int max) {
+    return random() % max;
+}

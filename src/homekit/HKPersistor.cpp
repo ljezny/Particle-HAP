@@ -16,7 +16,7 @@ void HKPersistor::saveSaveStorage(){
 void HKPersistor::resetAll() {
     Serial.println("Persistor: resetAll");
     for(int i = 0; i < 6; i++){
-        storage.deviceId[i] = rand() % 256;
+        storage.deviceId[i] = random(256);
     }
     resetPairings();
 }
