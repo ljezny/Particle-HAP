@@ -12,10 +12,6 @@
 
 #define MAX_CONNECTIONS 8
 
-//Pairing code, should be unique per device
-#define devicePassword "523-12-643"
-
-
 #define CUSTOM_RAND_GENERATE_BLOCK customRngFunc
 extern int customRngFunc(byte* output, word32 sz);
 

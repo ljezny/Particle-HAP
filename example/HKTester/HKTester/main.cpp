@@ -26,7 +26,8 @@ NSNetService *nsService;
 int main(int argc, const char * argv[]) {
     NSString *hapName = @"HKTester";
     NSString *deviceIdentity = @"6A:AC:47:A9:B7:23";
-    HKServer server = HKServer([hapName cString],[deviceIdentity cString]);
+    NSString *passscode = @"523-12-643";
+    HKServer server = HKServer([hapName cString],[deviceIdentity cString],[passscode cString]);
     
     nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@"HKTester" port:TCP_SERVER_PORT];
     

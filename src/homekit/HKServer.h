@@ -26,14 +26,18 @@ private:
     std::vector<HKConnection*> clients;
     const char *hapName;
     const char *deviceIdentity;
+    const char *passcode;
 public:
     HKPersistor *persistor;
-    HKServer(const char* hapName, const char* deviceIdentity);
+    HKServer(const char* hapName, const char* deviceIdentity,const char *passcode);
     void setup ();
     void setPaired(bool paired);
     void handle();
     const char* getDeviceIdentity() {
         return deviceIdentity;
+    }
+    const char* getPasscode() {
+        return passcode;
     }
 };
 #endif /* end of include guard: HKServer */

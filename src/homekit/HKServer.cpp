@@ -9,7 +9,7 @@
 #include "spark_wiring_thread.h"
 #endif
 
-HKServer::HKServer(const char* hapName,const  char* deviceIdentity) {
+HKServer::HKServer(const char* hapName,const  char* deviceIdentity,const char *passcode) {
     this->hapName = hapName;
     this->deviceIdentity = deviceIdentity;
     
@@ -25,7 +25,6 @@ void HKServer::setup () {
     bonjour.setUDP( &udp );
     bonjour.begin(hapName);
     setPaired(false);
-    
     
 }
 

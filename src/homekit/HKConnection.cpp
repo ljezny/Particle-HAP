@@ -481,7 +481,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
             HKLogger.printf("wc_SrpSetUsername: r:%d\n",r);
             if (!r) r = wc_SrpSetParams(&srp,(const byte *)N, sizeof(N),(const byte *)generator, 1,salt,16);
             HKLogger.printf("wc_SrpSetParams: r:%d\n",r);
-            if (!r) r = wc_SrpSetPassword(&srp,(const byte *)devicePassword,strlen(devicePassword));
+            if (!r) r = wc_SrpSetPassword(&srp,(const byte *)server->getPasscode(),strlen(server->getPasscode()));
             HKLogger.printf("wc_SrpSetPassword: r:%d\n",r);
             if (!r) r = wc_SrpGetVerifier(&srp, (byte *)publicKey, &publicKeyLength); //use publicKey to store v
             HKLogger.printf("wc_SrpGetVerifier: r:%d\n",r);
