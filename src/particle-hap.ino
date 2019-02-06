@@ -8,7 +8,7 @@
 #include "homekit/HKServer.h"
 #include "Accessory.h"
 
-HKServer hkServer;
+HKServer hkServer = HKServer("ParticleTester","6A:AB:47:A9:B7:24","523-12-643");
 
 // setup() runs once, when the device is first turned on.
 void setup() {
