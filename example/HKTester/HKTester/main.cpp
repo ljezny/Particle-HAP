@@ -16,22 +16,12 @@
 
 #import <Foundation/Foundation.h>
 
-#include <pthread.h>
 #include <stdio.h>
 #include "../../../src/Accessory.h"
 
 NSNetService *nsService;
 
 HKServer server = HKServer();
-
-void *handle(void *vargp) {
-    server.setup();
-    for(;;) {
-        server.handle();
-        usleep(10000);
-    }
-    
-}
 
 int main(int argc, const char * argv[]) {
     
@@ -57,9 +47,10 @@ int main(int argc, const char * argv[]) {
     
     initAccessorySet();
     
-    pthread_t workthread;
-   
-    pthread_create(&workthread,NULL, &handle, NULL);
-    pthread_join(workthread, NULL);
+    server.setup();
+    for(;;) {
+        server.handle();
+        usleep(10000);
+    }
     return 0;
 }

@@ -42,6 +42,7 @@
 		56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A432208D06300DCFA13 /* fe_low_mem.cpp */; };
 		56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A462208D0FE00DCFA13 /* ge_operations.cpp */; };
 		56125A492208D0FE00DCFA13 /* fe_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A472208D0FE00DCFA13 /* fe_operations.cpp */; };
+		56947C8C220AEFF300767C5A /* HKLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56947C8A220AEFF300767C5A /* HKLog.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -132,6 +133,8 @@
 		56125A432208D06300DCFA13 /* fe_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_low_mem.cpp; sourceTree = "<group>"; };
 		56125A462208D0FE00DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
 		56125A472208D0FE00DCFA13 /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
+		56947C8A220AEFF300767C5A /* HKLog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HKLog.cpp; sourceTree = "<group>"; };
+		56947C8B220AEFF300767C5A /* HKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKLog.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +215,8 @@
 				56125A042206F24600DCFA13 /* HKServer.h */,
 				561259FE2206F24600DCFA13 /* HKStringUtils.cpp */,
 				56125A122206F24600DCFA13 /* HKStringUtils.h */,
+				56947C8A220AEFF300767C5A /* HKLog.cpp */,
+				56947C8B220AEFF300767C5A /* HKLog.h */,
 			);
 			name = homekit;
 			path = ../../src/homekit;
@@ -360,6 +365,7 @@
 				56125A192206F24600DCFA13 /* chacha20_poly1305.cpp in Sources */,
 				56125A2D2206F24600DCFA13 /* HKConnection.cpp in Sources */,
 				56125A262206F24600DCFA13 /* chacha.cpp in Sources */,
+				56947C8C220AEFF300767C5A /* HKLog.cpp in Sources */,
 				56125A152206F24600DCFA13 /* memory.cpp in Sources */,
 				56125A172206F24600DCFA13 /* misc.cpp in Sources */,
 				56125A162206F24600DCFA13 /* logging.cpp in Sources */,
