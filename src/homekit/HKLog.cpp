@@ -8,6 +8,8 @@
 
 #include "HKLog.h"
 
+HKLog Log;
+
 int HKLog::printf(const char *format, ...){
     va_list argptr;
     va_start(argptr, format);
@@ -20,3 +22,4 @@ int HKLog::println(const char *value) {
     Serial.println(value);
     return 0;
 }
+
