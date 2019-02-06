@@ -9,12 +9,16 @@
 #include "spark_wiring_thread.h"
 #endif
 
-HKServer::HKServer(const char* hapName,const  char* deviceIdentity,const char *passcode) {
+HKServer::HKServer(const char* hapName,const char *passcode) {
     this->hapName = hapName;
-    this->deviceIdentity = deviceIdentity;
+    
     this->passcode = passcode;
     persistor = new HKPersistor();
     
+    char *deviceIdentity = new char[12+5];
+    const uint8_t *deviceId = persistor->getDeviceId();
+    sprintf(deviceIdentity, "%02X:%02X:%02X:%02X:%02X:%02X",deviceId[0],deviceId[1],deviceId[2],deviceId[3],deviceId[4],deviceId[5]);
+    this->deviceIdentity = deviceIdentity;
 }
 void HKServer::setup () {
     persistor->loadRecordStorage();
@@ -33,7 +37,7 @@ void HKServer::setPaired(bool p) {
     bonjour.removeAllServiceRecords();
     char recordTxt[512];
     memset(recordTxt, 0, 512);
-    sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=1%cs#=1%cs#=1%cff=0%cmd=%s%cci=%d",4,(char)strlen(deviceIdentity)+3,deviceIdentity,6,4,4,4,4,(char)(strlen(hapName) + 3),hapName,4,5);
+    sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=2%cs#=1%cs#=1%cff=0%cmd=%s%cci=%d",4,(char)strlen(deviceIdentity)+3,deviceIdentity,6,4,4,4,4,(char)(strlen(hapName) + 3),hapName,4,5);
     char bonjourName[128];
     memset(bonjourName, 0, 128);
     sprintf(bonjourName, "%s._hap",hapName);

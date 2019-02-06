@@ -25,15 +25,14 @@ NSNetService *nsService;
 
 int main(int argc, const char * argv[]) {
     NSString *hapName = @"HKTester1";
-    NSString *deviceIdentity = @"6A:AC:47:A9:B7:24";
     NSString *passscode = @"523-12-643";
-    HKServer server = HKServer([hapName cString],[deviceIdentity cString],[passscode cString]);
+    HKServer server = HKServer([hapName cString],[passscode cString]);
     
     nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@"HKTester" port:TCP_SERVER_PORT];
-    
+
     NSDictionary *txtDict = @{
         @"pv": [@"1.0" dataUsingEncoding:NSUTF8StringEncoding], // state
-        @"id": [deviceIdentity dataUsingEncoding:NSUTF8StringEncoding], // identifier
+        @"id": [[NSString stringWithCString:server.getDeviceIdentity()] dataUsingEncoding:NSUTF8StringEncoding], // identifier
         @"c#": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // version
         @"s#": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // state
         @"sf": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // discoverable

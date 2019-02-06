@@ -173,7 +173,6 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
 }
 
 void HKConnection::handleConnection() {
-    int input_buffer_size = 1024;
     uint8_t *inputBuffer = NULL;
     size_t len = 0;
     readData(&inputBuffer,&len);
@@ -537,6 +536,8 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 mResponse.data.addRecord(responseRecord);
                 
                 HKLogger.println("INCORRECT PASSWORD");
+                
+                wc_SrpTerm(&srp);
             } else { //success
                 wc_SrpGetProof(&srp, (byte *)response,&responseLength);
                 //SRP_respond(srp, &response);
@@ -587,7 +588,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
             size_t controllerSignatureSize = subTLV8->lengthForIndex(10);
             char controllerHash[100];
             
-            server->persistor->resetPersistor();
+            server->persistor->resetPairings();
             
             HKKeyRecord newRecord;
             memcpy(newRecord.controllerID,controllerIdentifier, 36);
@@ -684,6 +685,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
             }
             
             delete subTLV8;
+            wc_SrpTerm(&srp);
         }
             break;
     }
@@ -699,7 +701,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
         server->setPaired(1);
         //client.stop();
         HKLogger.println("Pairing completed.");
-        wc_SrpTerm(&srp);
     }
     
 }

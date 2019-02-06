@@ -12,18 +12,17 @@ HKLog HKLogger;
 
 int HKLog::printf(const char *format, ...){
     char output[512];
-    
+
     va_list argptr;
     va_start(argptr, format);
     vsprintf(output,format,argptr);
     Serial.println(output);
     va_end(argptr);
     return 0;
-    
+
 }
 
 int HKLog::println(const char *value) {
     Serial.println(value);
     return 0;
 }
-

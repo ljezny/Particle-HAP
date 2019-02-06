@@ -47,7 +47,7 @@ private:
 
   ed25519_key *accessoryKey = (ed25519_key*) ACESSORY_KEY;
 
-  word32 publicKeyLength = 4096;
+  word32 publicKeyLength = 384;
   char* publicKey = new char[publicKeyLength];
 
   word32 responseLength = 128;

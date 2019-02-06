@@ -29,7 +29,7 @@ private:
     const char *passcode;
 public:
     HKPersistor *persistor;
-    HKServer(const char* hapName, const char* deviceIdentity,const char *passcode);
+    HKServer(const char* hapName, const char *passcode);
     void setup ();
     void setPaired(bool paired);
     void handle();

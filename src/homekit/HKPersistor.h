@@ -19,20 +19,28 @@ struct HKKeyRecord {
 };
 
 struct HKStorage {
+    u_int8_t deviceId[6];
     HKKeyRecord pairings[MAX_PAIRINGS];
 };
 
 class HKPersistor {
 private:
-  HKStorage storage = HKStorage();
+    HKStorage storage = HKStorage();
 public:
-  void resetPersistor();
-  bool addKey(HKKeyRecord record);
-  void removeKey(HKKeyRecord record);
-  int keyIndex(HKKeyRecord record);
-  HKKeyRecord getKey(char key[32]);
-
-  void loadRecordStorage();
-  void saveSaveStorage();
+    void resetAll();
+    void resetPairings();
+    
+    bool addKey(HKKeyRecord record);
+    void removeKey(HKKeyRecord record);
+    int keyIndex(HKKeyRecord record);
+    HKKeyRecord getKey(char key[32]);
+    
+    void loadRecordStorage();
+    void saveSaveStorage();
+    
+    const uint8_t* getDeviceId() {
+        return storage.deviceId;
+    }
+    
 };
 #endif
