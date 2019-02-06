@@ -36,8 +36,8 @@ void HKServer::setPaired(bool p) {
     memset(recordTxt, 0, 512);
     sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=1%cs#=1%cs#=1%cff=0%cmd=%s%cci=%d",4,(char)strlen(deviceIdentity)+3,deviceIdentity,6,4,4,4,4,(char)(strlen(hapName) + 3),hapName,4,5);
     char bonjourName[128];
-    memset(bonjourName, 0, 512);
-    sprintf(recordTxt, "%s._hap",hapName);
+    memset(bonjourName, 0, 128);
+    sprintf(bonjourName, "%s._hap",hapName);
     bonjour.addServiceRecord(bonjourName,
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
