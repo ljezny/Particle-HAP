@@ -3,7 +3,7 @@
 void HKPersistor::loadRecordStorage() {
     Serial.println("Persistor: load");
     storage = EEPROM.get(EEPROM_STORAGE_ADDRESS_OFFSET, storage);
-    if(storage.deviceId[0] == 0xFF) { //particle eeprom default value
+    if(storage.pairings[0].controllerID[0] == 0xFF) { //particle eeprom default value
         resetAll();
     }
 }

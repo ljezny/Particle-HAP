@@ -14,14 +14,14 @@ HKServer::HKServer(const char* hapName,const char *passcode) {
     
     this->passcode = passcode;
     persistor = new HKPersistor();
-    
+    persistor->loadRecordStorage();
     char *deviceIdentity = new char[12+5];
     const unsigned char *deviceId = persistor->getDeviceId();
     sprintf(deviceIdentity, "%02X:%02X:%02X:%02X:%02X:%02X",deviceId[0],deviceId[1],deviceId[2],deviceId[3],deviceId[4],deviceId[5]);
     this->deviceIdentity = deviceIdentity;
 }
 void HKServer::setup () {
-    persistor->loadRecordStorage();
+    
     server.begin();
     HKLogger.printf("Server started at port %d", TCP_SERVER_PORT);
     
