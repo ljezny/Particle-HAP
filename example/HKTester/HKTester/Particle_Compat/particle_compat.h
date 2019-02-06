@@ -95,13 +95,14 @@ public:
     int status() {
         return 1;
     }
-    bool available(){
+    int available(){
         read_buffer_offset = 0;
         int l = recv(socket,read_buffer,4096,0);
         if(l>0){
             read_buffer_offset += l;
+            return l;
         }
-        return read_buffer_offset > 0;
+        return 0;
     }
     
     operator bool()
@@ -115,7 +116,9 @@ public:
     //int len = client.read(tempBuffer,tempBufferSize);
     int read(unsigned char *buffer, size_t size) {
         memcpy(buffer, read_buffer, read_buffer_offset);
-        return read_buffer_offset;
+        int result = read_buffer_offset;
+        read_buffer_offset = 0;
+        return result;
     }
     void write(unsigned char *buffer, size_t len) {
         send(socket, buffer, len, 0);

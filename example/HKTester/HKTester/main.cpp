@@ -24,8 +24,8 @@ NSNetService *nsService;
 
 
 int main(int argc, const char * argv[]) {
-    NSString *hapName = @"HKTester";
-    NSString *deviceIdentity = @"6A:AC:47:A9:B7:23";
+    NSString *hapName = @"HKTester1";
+    NSString *deviceIdentity = @"6A:AC:47:A9:B7:24";
     NSString *passscode = @"523-12-643";
     HKServer server = HKServer([hapName cString],[deviceIdentity cString],[passscode cString]);
     

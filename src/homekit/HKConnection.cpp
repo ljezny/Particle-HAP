@@ -31,19 +31,18 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     byte nonce[12];
     memset(nonce, 0, sizeof(nonce));
     
-    byte outputBuffer[(size / 1024 + 1) * (1024 + 18)];
+    byte tempBuffer[1024+2+18];
     
-    int output_offset = 0;
     int payload_offset = 0;
     int part = 0;
     while (payload_offset < size) {
-        
+
         size_t chunk_size = size - payload_offset;
         if (chunk_size > 1024)
             chunk_size = 1024;
         byte aead[2] = {(byte) (chunk_size % 256), (byte)(chunk_size / 256)};
         
-        memcpy(outputBuffer + output_offset, aead, 2);
+        memcpy(tempBuffer, aead, 2);
         
         byte i = 4;
         int x = readsCount++;
@@ -56,8 +55,8 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
                                             nonce,
                                             aead, 2,
                                             (const byte *)payload+payload_offset, chunk_size,
-                                            (byte *) outputBuffer + output_offset +2,
-                                            (byte *) (outputBuffer + output_offset + chunk_size + 2)
+                                            (byte *) tempBuffer + 2,
+                                            (byte *) (tempBuffer + chunk_size + 2)
                                             );
         if (r) {
             HKLogger.printf("Failed to chacha encrypt payload (code %d)\n", r);
@@ -65,14 +64,15 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
             return;
         }
         payload_offset += chunk_size;
-        output_offset += chunk_size + 16 + 2;
         
         part++;
+        
+        if(isConnected()){
+            client.write(tempBuffer,chunk_size + 16 + 2);
+        }
     }
     
-    if(isConnected()){
-        client.write(outputBuffer,output_offset);
-    }
+    
     HKLogger.println("END: writeEncryptedData");
 }
 
@@ -137,23 +137,26 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
     HKLogger.println("END: decryptData");
 }
 
-void HKConnection::readData(uint8_t* buffer,size_t *size) {
+void HKConnection::readData(uint8_t** buffer,size_t *size) {
     int total = 0;
-    int tempBufferSize = 1024;
-    uint8_t *tempBuffer =(uint8_t *) malloc(tempBufferSize * sizeof(uint8_t));
-    while(isConnected() && client.available()) {
-        int len = client.read(tempBuffer,tempBufferSize);
-        memcpy((buffer+total), tempBuffer,len);
-        total += len;
+    int bufferSize = 0;
+    
+    *buffer =(uint8_t *) malloc(bufferSize * sizeof(uint8_t));
+    if(isConnected()) {
+        while (int availableBytes = client.available()) {
+            bufferSize += availableBytes;
+            *buffer = (uint8_t *) realloc(*buffer, bufferSize * sizeof(uint8_t));
+            int len = client.read(*buffer + total,availableBytes);
+            total += len;
+        }
     }
     
     *size = total;
     
     if(isEncrypted && total > 0) {
-        decryptData(buffer,size);
+        decryptData(*buffer,size);
     }
     
-    free(tempBuffer);
 }
 
 void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
@@ -170,15 +173,10 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
 }
 
 void HKConnection::handleConnection() {
-    /*if (!isConnected()) {
-     return;
-     }*/
-    
     int input_buffer_size = 1024;
-    uint8_t *inputBuffer =(uint8_t *) malloc(input_buffer_size * sizeof(uint8_t));
-    memset(inputBuffer,0,input_buffer_size);
+    uint8_t *inputBuffer = NULL;
     size_t len = 0;
-    readData(inputBuffer,&len);
+    readData(&inputBuffer,&len);
     
     if (len > 0) {
         HKLogger.printf("Request Message read length: %d \n", len);
