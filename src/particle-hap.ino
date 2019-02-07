@@ -16,7 +16,6 @@ void setup() {
   Serial.begin();
   //while(!Serial.isConnected()) Particle.process();
 
-  Serial.println(macString.c_str());
   hkServer = new HKServer("Particle1","523-12-643");
   hkServer->setup();
   initAccessorySet();
