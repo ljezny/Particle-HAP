@@ -5,10 +5,10 @@
 #include "HKNetworkMessageData.h"
 
 class HKNetworkMessage {
-    char method[5];
-    char type[40];
+    char method[15];
+    char type[64];
 public:
-    char directory[20];
+    char directory[128];
     HKNetworkMessageData data;
     HKNetworkMessage(const char *rawData);
     void getBinaryPtr(char **buffer, int *contentLength);

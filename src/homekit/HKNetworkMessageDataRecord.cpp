@@ -5,12 +5,13 @@ HKNetworkMessageDataRecord & HKNetworkMessageDataRecord::operator=(const HKNetwo
     activate = r.activate;
     length = r.length;
     if (data)
-        delete [] data;
+        free(data);
     data = new char[length];
     bcopy(r.data, data, length);
     return *this;
 }
 
 HKNetworkMessageDataRecord::~HKNetworkMessageDataRecord() {
-    if (length) delete [] data;
+    if (length)
+        free(data);
 }
