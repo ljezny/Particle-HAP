@@ -199,7 +199,7 @@ void HKConnection::handleConnection() {
         }
     }
     processPostedCharacteristics();
-    
+    keepAlive();
     free(inputBuffer);
     
 }
@@ -215,7 +215,7 @@ void HKConnection::announce(char* desc){
 }
 
 void HKConnection::keepAlive() {
-    if((millis() - lastKeepAliveMs) > 2000) {
+    if((millis() - lastKeepAliveMs) > 5000) {
         lastKeepAliveMs = millis();
         if(isConnected()) {
             if(isEncrypted && readsCount > 0) {

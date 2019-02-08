@@ -133,6 +133,7 @@
 		56125A432208D06300DCFA13 /* fe_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_low_mem.cpp; sourceTree = "<group>"; };
 		56125A462208D0FE00DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
 		56125A472208D0FE00DCFA13 /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
+		56125A4A220E189200DCFA13 /* rgb2hsv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rgb2hsv.h; sourceTree = "<group>"; };
 		56947C8A220AEFF300767C5A /* HKLog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HKLog.cpp; sourceTree = "<group>"; };
 		56947C8B220AEFF300767C5A /* HKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKLog.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -171,6 +172,7 @@
 		561259B62206E95600DCFA13 /* HKTester */ = {
 			isa = PBXGroup;
 			children = (
+				56125A4A220E189200DCFA13 /* rgb2hsv.h */,
 				56125A3C2208C29A00DCFA13 /* Accessory.cpp */,
 				56125A3B2208C29900DCFA13 /* Accessory.h */,
 				561259BF2206E9E100DCFA13 /* Particle_Compat */,
