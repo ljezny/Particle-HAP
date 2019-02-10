@@ -15,12 +15,6 @@
 #include <stdlib.h>
 #include "rgb2hsv.h"
 #include <cstdio>
-//set <string> trackingUserList;
-//set <HKConnection*> activeUsers;
-
-intCharacteristics *occupyState;
-
-#define userListAddr "./userList"
 
 RgbColor c;
 
@@ -90,27 +84,15 @@ void setLedSaturation (int oldValue, int newValue, HKConnection *sender) {
     RGB.color(c.r, c.g, c.b);
 }
 
-int lightStength = 0;
-int fanSpeedVal = 0;
-void identity(bool oldValue, bool newValue, HKConnection *sender) {
-    Serial.printf("Identify\n");
-}
-
 void lightIdentify(bool oldValue, bool newValue, HKConnection *sender) {
     Serial.printf("Start Identify Light\n");
 }
 
-void fanIdentify(bool oldValue, bool newValue, HKConnection *sender) {
-    Serial.printf("Start Identify Fan\n");
-}
-
-AccessorySet *accSet;
-
-void initAccessorySet() {
+void LightBulbAccessory::initAccessorySet() {
     Accessory *lightAcc1 = new Accessory();
 
     //Add Light
-    accSet = &AccessorySet::getInstance();
+    AccessorySet *accSet = &AccessorySet::getInstance();
     addInfoServiceToAccessory(lightAcc1, "Bulb name", "Vendor name", "Model name", "1", &lightIdentify);
     accSet->addAccessory(lightAcc1);
 

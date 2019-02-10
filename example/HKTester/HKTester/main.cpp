@@ -20,16 +20,20 @@
 
 
 #include "../../../src/LightBulbAccessory.h"
-
+#include "../../../src/WindowsShutterAccessory.h"
 
 NSNetService *nsService;
 
-
+//HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
+Accessory *acc = new LightBulbAccessory();
 
 int main(int argc, const char * argv[]) {
     NSString *hapName = @"HKTester1";
     NSString *passscode = @"523-12-643";
-    HKServer server = HKServer(HAP_ACCESSORY_TYPE, [hapName cString],[passscode cString]);
+    
+    //HKPersistor().resetAll();
+    
+    HKServer server = HKServer(acc->getDeviceType(), [hapName cString],[passscode cString]);
     
     nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@"HKTester" port:TCP_SERVER_PORT];
 
@@ -41,7 +45,7 @@ int main(int argc, const char * argv[]) {
         @"sf": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // discoverable
         @"ff": [@"0" dataUsingEncoding:NSUTF8StringEncoding], // mfi compliant
         @"md": [hapName dataUsingEncoding:NSUTF8StringEncoding], // name
-        @"ci": [@"5" dataUsingEncoding:NSUTF8StringEncoding] // category identifier
+        @"ci": [NSString stringWithFormat:@"%d",acc->getDeviceType()] // category identifier
     };
     
     NSData *txtData = [NSNetService dataFromTXTRecordDictionary:txtDict]; //NetService.data(fromTXTRecord: record)
@@ -51,7 +55,7 @@ int main(int argc, const char * argv[]) {
     [nsService startMonitoring];
     [nsService publish];
     
-    initAccessorySet();
+    acc->initAccessorySet();
     
     server.setup();
     for(;;) {

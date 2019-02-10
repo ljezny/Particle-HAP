@@ -63,13 +63,11 @@ void loop() {
 There are no library dependencies. All the crypto is based on WolfSSL, but highly customized to work on Photon.
 
 ## Known major issues
-- Homekit lost connection after few minutes (keep alive, dont know...). Simply you can pair a Homekit as Lightbulb, several times you can turn on/off but after 2 minutes it Photon won't read any more bytes. Investigations is about TCP Keep Alive (but not sure).
-- Cannot respond to Homekit with more than 1024B (so more sevices, characteristics, bridge is not available at the moment). I think the issue is related to encryption of 1024B block.
+- no major issues currently known
 
 ## What's planned:
-- need a lot of debugging, currently it's very unstable. Still it proves that it can work and thats important!
-- need lot of code refactorings - very messy code for now.
-- better logging.
+- stability issues - but minor ones
+- more accessory types in examples (programmable switch, sensors)
 
 ## Goal:
 - integration with [Nixie Clocks](https://www.daliborfarny.com) so it will support Non-commercial HAP.
@@ -80,7 +78,7 @@ When you're ready to compile your project, make sure you have the correct Partic
 - Everything in the `/src` folder, including your `.ino` application file
 - The `project.properties` file for your project
 
-#Contribution
+# Contribution
 Any contributions are more than welcomed. I would prefer to create PR instead of just posting an issues.
 
 ## Hire us:

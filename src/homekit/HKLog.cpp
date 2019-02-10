@@ -11,7 +11,7 @@
 HKLog HKLogger;
 
 int HKLog::printf(const char *format, ...){
-    char output[512];
+    char output[1024];
 
     va_list argptr;
     va_start(argptr, format);

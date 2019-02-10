@@ -42,6 +42,7 @@
 		56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A432208D06300DCFA13 /* fe_low_mem.cpp */; };
 		56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A462208D0FE00DCFA13 /* ge_operations.cpp */; };
 		56125A492208D0FE00DCFA13 /* fe_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A472208D0FE00DCFA13 /* fe_operations.cpp */; };
+		56125A4D2210313E00DCFA13 /* WindowsShutterAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A4B2210313E00DCFA13 /* WindowsShutterAccessory.cpp */; };
 		56947C8C220AEFF300767C5A /* HKLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56947C8A220AEFF300767C5A /* HKLog.cpp */; };
 /* End PBXBuildFile section */
 
@@ -134,6 +135,9 @@
 		56125A462208D0FE00DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
 		56125A472208D0FE00DCFA13 /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
 		56125A4A220E189200DCFA13 /* rgb2hsv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rgb2hsv.h; sourceTree = "<group>"; };
+		56125A4B2210313E00DCFA13 /* WindowsShutterAccessory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowsShutterAccessory.cpp; path = ../../../src/WindowsShutterAccessory.cpp; sourceTree = "<group>"; };
+		56125A4C2210313E00DCFA13 /* WindowsShutterAccessory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WindowsShutterAccessory.h; path = ../../../src/WindowsShutterAccessory.h; sourceTree = "<group>"; };
+		56125A4F22103E9900DCFA13 /* HAPAccessoryDescriptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HAPAccessoryDescriptor.h; path = ../../../src/HAPAccessoryDescriptor.h; sourceTree = "<group>"; };
 		56947C8A220AEFF300767C5A /* HKLog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HKLog.cpp; sourceTree = "<group>"; };
 		56947C8B220AEFF300767C5A /* HKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKLog.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -172,11 +176,14 @@
 		561259B62206E95600DCFA13 /* HKTester */ = {
 			isa = PBXGroup;
 			children = (
-				56125A4A220E189200DCFA13 /* rgb2hsv.h */,
+				56125A4F22103E9900DCFA13 /* HAPAccessoryDescriptor.h */,
 				56125A3C2208C29A00DCFA13 /* LightBulbAccessory.cpp */,
 				56125A3B2208C29900DCFA13 /* LightBulbAccessory.h */,
-				561259BF2206E9E100DCFA13 /* Particle_Compat */,
 				561259B72206E95600DCFA13 /* main.cpp */,
+				561259BF2206E9E100DCFA13 /* Particle_Compat */,
+				56125A4A220E189200DCFA13 /* rgb2hsv.h */,
+				56125A4B2210313E00DCFA13 /* WindowsShutterAccessory.cpp */,
+				56125A4C2210313E00DCFA13 /* WindowsShutterAccessory.h */,
 			);
 			path = HKTester;
 			sourceTree = "<group>";
@@ -353,6 +360,7 @@
 				56125A182206F24600DCFA13 /* random.cpp in Sources */,
 				56125A442208D06300DCFA13 /* ge_low_mem.cpp in Sources */,
 				56125A1A2206F24600DCFA13 /* ed25519.cpp in Sources */,
+				56125A4D2210313E00DCFA13 /* WindowsShutterAccessory.cpp in Sources */,
 				56125A3D2208C29A00DCFA13 /* LightBulbAccessory.cpp in Sources */,
 				56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */,
 				56125A232206F24600DCFA13 /* curve25519.cpp in Sources */,

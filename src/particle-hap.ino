@@ -6,19 +6,28 @@
  */
 
 #include "homekit/HKServer.h"
-#include "Accessory.h"
+
+#include "LightBulbAccessory.h"
+#include "WindowsShutterAccessory.h"
 
 HKServer *hkServer = NULL;
+
+//HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
+HAPAccessoryDescriptor *acc = new LightBulbAccessory();
 
 // setup() runs once, when the device is first turned on.
 void setup() {
 	randomSeed(Time.now());//we need to somehow init random seed, so device identity will be unique
   Serial.begin();
   //while(!Serial.isConnected()) Particle.process();
+  acc->initAccessorySet();
 
-  hkServer = new HKServer("Particle1","523-12-643");
+  //HKPersistor().resetAll();
+
+  hkServer = new HKServer(acc->getDeviceType(),"Particlev","523-12-643");
+
+
   hkServer->setup();
-  initAccessorySet();
 
   //hkServer.persistor->resetPersistor();
 }

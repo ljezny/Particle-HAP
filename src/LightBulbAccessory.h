@@ -1,7 +1,13 @@
 #pragma once
 
 #include "homekit/HKAccessory.h"
+#include "HAPAccessoryDescriptor.h"
 
-#define HAP_ACCESSORY_TYPE deviceType_lightBulb
-
-void initAccessorySet();
+class LightBulbAccessory: public HAPAccessoryDescriptor {
+public:
+    virtual void initAccessorySet();
+    
+    virtual int getDeviceType(){
+        return deviceType_lightBulb;
+    }
+};
