@@ -25,7 +25,7 @@
 NSNetService *nsService;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-Accessory *acc = new LightBulbAccessory();
+HAPAccessoryDescriptor *acc = new LightBulbAccessory();
 
 int main(int argc, const char * argv[]) {
     NSString *hapName = @"HKTester1";
