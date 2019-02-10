@@ -11,25 +11,12 @@
 #else
 #include <Particle.h>
 #endif
-#include <string.h>
-#include <stdlib.h>
+
 #include "rgb2hsv.h"
-#include <cstdio>
 
 RgbColor c;
 
-std::string format(const std::string& format, ...)
-{
-    va_list args;
-    va_start (args, format);
-    size_t len = vsnprintf(NULL, 0, format.c_str(), args);
-    va_end (args);
-    std::vector<char> vec(len + 1);
-    va_start (args, format);
-    vsnprintf(&vec[0], len + 1, format.c_str(), args);
-    va_end (args);
-    return &vec[0];
-}
+
 
 void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
     RGB.control(true);
@@ -109,7 +96,7 @@ void LightBulbAccessory::initAccessorySet() {
     lightAcc1->addCharacteristics(lightService1, powerState1);
 
     intCharacteristics *brightnessState1 = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
-    brightnessState1->characteristics::setValue("50");
+    brightnessState1->perUserQuery = &getLedBrightness;
     brightnessState1->valueChangeFunctionCall = &brightTrackable;
     lightAcc1->addCharacteristics(lightService1, brightnessState1);
 

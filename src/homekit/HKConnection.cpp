@@ -199,7 +199,6 @@ void HKConnection::handleConnection() {
         }
     }
     processPostedCharacteristics();
-    keepAlive();
     free(inputBuffer);
 
 }
@@ -708,12 +707,12 @@ void HKConnection::handlePairSetup(const char *buffer) {
 void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
     char *resultData = 0; unsigned int resultLen = 0;
     HKLogger.printf("--------REQUEST %s--------\n",clientID());
-    HKLogger.printf("%s\n",buffer);
+    //HKLogger.printf("%s\n",buffer);
     handleAccessory(buffer, size, &resultData, &resultLen, this);
     if(resultLen > 0) {
         writeData((byte*)resultData,resultLen);
         HKLogger.printf("--------RESPONSE %s--------\n",clientID());
-        HKLogger.printf("%s\n",resultData);
+        //HKLogger.printf("%s\n",resultData);
     }
     if(resultData) {
         free(resultData);

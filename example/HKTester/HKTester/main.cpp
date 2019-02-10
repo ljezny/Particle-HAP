@@ -60,6 +60,7 @@ int main(int argc, const char * argv[]) {
     server.setup();
     for(;;) {
         server.handle();
+        acc->handle();
         usleep(10000);
     }
     return 0;

@@ -12,8 +12,7 @@
 
 HKServer *hkServer = NULL;
 
-//HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
 
 // setup() runs once, when the device is first turned on.
 void setup() {
@@ -35,4 +34,5 @@ void setup() {
 // loop() runs over and over again, as quickly as it can execute.
 void loop() {
   hkServer->handle();
+  acc->handle();
 }

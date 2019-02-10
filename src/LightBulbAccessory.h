@@ -10,4 +10,7 @@ public:
     virtual int getDeviceType(){
         return deviceType_lightBulb;
     }
+    virtual void handle(){
+        
+    }
 };

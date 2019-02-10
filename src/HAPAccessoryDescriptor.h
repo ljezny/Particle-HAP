@@ -16,6 +16,7 @@ private:
 public:
     virtual void initAccessorySet() = 0;
     virtual int getDeviceType() = 0;
+    virtual void handle() = 0;
 };
 
 #endif /* Accessory_hpp */

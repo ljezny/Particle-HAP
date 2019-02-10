@@ -33,3 +33,16 @@ void print_hex_memory(void *mem, int count) {
   }
   Serial.printf("\n");
 }
+
+std::string format(const std::string& format, ...)
+{
+    va_list args;
+    va_start (args, format);
+    size_t len = vsnprintf(NULL, 0, format.c_str(), args);
+    va_end (args);
+    std::vector<char> vec(len + 1);
+    va_start (args, format);
+    vsnprintf(&vec[0], len + 1, format.c_str(), args);
+    va_end (args);
+    return &vec[0];
+}

@@ -20,6 +20,7 @@ public:
     virtual int getDeviceType(){
         return deviceType_windowCover;
     }
+    virtual void handle();
 };
 
 #endif /* WindowsShutterAccessory_hpp */
