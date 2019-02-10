@@ -17,7 +17,10 @@
 #import <Foundation/Foundation.h>
 
 #include <stdio.h>
-#include "../../../src/Accessory.h"
+
+
+#include "../../../src/LightBulbAccessory.h"
+
 
 NSNetService *nsService;
 
@@ -26,7 +29,7 @@ NSNetService *nsService;
 int main(int argc, const char * argv[]) {
     NSString *hapName = @"HKTester1";
     NSString *passscode = @"523-12-643";
-    HKServer server = HKServer([hapName cString],[passscode cString]);
+    HKServer server = HKServer(HAP_ACCESSORY_TYPE, [hapName cString],[passscode cString]);
     
     nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@"HKTester" port:TCP_SERVER_PORT];
 

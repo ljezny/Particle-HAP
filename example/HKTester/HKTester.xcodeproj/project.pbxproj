@@ -37,7 +37,7 @@
 		56125A3522070D9B00DCFA13 /* particle_compat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3422070D9B00DCFA13 /* particle_compat.cpp */; };
 		56125A382207490000DCFA13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A372207490000DCFA13 /* Foundation.framework */; };
 		56125A3A22074AFC00DCFA13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A3922074AFC00DCFA13 /* CoreFoundation.framework */; };
-		56125A3D2208C29A00DCFA13 /* Accessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3C2208C29A00DCFA13 /* Accessory.cpp */; };
+		56125A3D2208C29A00DCFA13 /* LightBulbAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3C2208C29A00DCFA13 /* LightBulbAccessory.cpp */; };
 		56125A442208D06300DCFA13 /* ge_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A422208D06300DCFA13 /* ge_low_mem.cpp */; };
 		56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A432208D06300DCFA13 /* fe_low_mem.cpp */; };
 		56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A462208D0FE00DCFA13 /* ge_operations.cpp */; };
@@ -127,8 +127,8 @@
 		56125A3422070D9B00DCFA13 /* particle_compat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = particle_compat.cpp; sourceTree = "<group>"; };
 		56125A372207490000DCFA13 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		56125A3922074AFC00DCFA13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		56125A3B2208C29900DCFA13 /* Accessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Accessory.h; path = ../../../src/Accessory.h; sourceTree = "<group>"; };
-		56125A3C2208C29A00DCFA13 /* Accessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Accessory.cpp; path = ../../../src/Accessory.cpp; sourceTree = "<group>"; };
+		56125A3B2208C29900DCFA13 /* LightBulbAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightBulbAccessory.h; path = ../../../src/LightBulbAccessory.h; sourceTree = "<group>"; };
+		56125A3C2208C29A00DCFA13 /* LightBulbAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightBulbAccessory.cpp; path = ../../../src/LightBulbAccessory.cpp; sourceTree = "<group>"; };
 		56125A422208D06300DCFA13 /* ge_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_low_mem.cpp; sourceTree = "<group>"; };
 		56125A432208D06300DCFA13 /* fe_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_low_mem.cpp; sourceTree = "<group>"; };
 		56125A462208D0FE00DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
@@ -173,8 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				56125A4A220E189200DCFA13 /* rgb2hsv.h */,
-				56125A3C2208C29A00DCFA13 /* Accessory.cpp */,
-				56125A3B2208C29900DCFA13 /* Accessory.h */,
+				56125A3C2208C29A00DCFA13 /* LightBulbAccessory.cpp */,
+				56125A3B2208C29900DCFA13 /* LightBulbAccessory.h */,
 				561259BF2206E9E100DCFA13 /* Particle_Compat */,
 				561259B72206E95600DCFA13 /* main.cpp */,
 			);
@@ -353,7 +353,7 @@
 				56125A182206F24600DCFA13 /* random.cpp in Sources */,
 				56125A442208D06300DCFA13 /* ge_low_mem.cpp in Sources */,
 				56125A1A2206F24600DCFA13 /* ed25519.cpp in Sources */,
-				56125A3D2208C29A00DCFA13 /* Accessory.cpp in Sources */,
+				56125A3D2208C29A00DCFA13 /* LightBulbAccessory.cpp in Sources */,
 				56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */,
 				56125A232206F24600DCFA13 /* curve25519.cpp in Sources */,
 				56125A3522070D9B00DCFA13 /* particle_compat.cpp in Sources */,

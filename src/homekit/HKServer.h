@@ -24,12 +24,13 @@ private:
     UDP udp;
     bool paired = false;
     std::vector<HKConnection*> clients;
+    int deviceType;
     const char *hapName;
     const char *deviceIdentity;
     const char *passcode;
 public:
     HKPersistor *persistor;
-    HKServer(const char* hapName, const char *passcode);
+    HKServer(int deviceType, const char* hapName, const char *passcode);
     void setup ();
     void setPaired(bool paired);
     void handle();
