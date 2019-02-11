@@ -37,7 +37,7 @@ int targetPosition = position;
 long endMS = LONG_MAX;
 
 void shutterIdentity(bool oldValue, bool newValue, HKConnection *sender) {
-    HKLogger.printf("Shutter identify\n");
+    
 }
 
 void setState(int newState) {
@@ -64,7 +64,7 @@ void WindowsShutterAccessory::handle() {
         if(endMS < millis()) { //expired, stop
             //stop current
             endMS = LONG_MAX;
-            
+
             setState(2);
             setPosition(targetPosition);
             setTilt(targetTilt);
@@ -83,23 +83,23 @@ void setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
     HKLogger.printf("setTargetPosition %d\n",newValue);
     int diff = abs(newValue - position);
     long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
-    
+
     endMS = millis() + time;
     targetPosition = newValue;
     targetTilt = newValue > position ? 0 : -90;
     setState(newValue > position ? 1 : 0);
-    
+
 }
 
 void setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender) {
     HKLogger.printf("setTargetTiltAngle %d\n",newValue);
-    
+
     int diff = abs(newValue - tilt);
     long time = TILT_OPEN_TO_CLOSE_MS / 90 * diff;
-    
+
     endMS = millis() + time;
     targetTilt = newValue;
-    
+
     setState(newValue > tilt ? 1 : 0);
 }
 
@@ -134,7 +134,7 @@ void WindowsShutterAccessory::initAccessorySet() {
     targetHorizontalTiltAngle->characteristics::setValue(format("%d",tilt));
     targetHorizontalTiltAngle->valueChangeFunctionCall = &setTargetTiltAngle;
     shutterAccessory->addCharacteristics(windowsCoverService, targetHorizontalTiltAngle);
-    
+
     currentTiltAngleChar = new intCharacteristics(charType_currentHorizontalTiltAngle, premission_read|premission_notify, -90, 0, 10, unit_arcDegree);
     currentTiltAngleChar->characteristics::setValue(format("%d",tilt));
     shutterAccessory->addCharacteristics(windowsCoverService, currentTiltAngleChar);

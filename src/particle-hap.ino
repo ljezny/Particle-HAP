@@ -12,7 +12,7 @@
 
 HKServer *hkServer = NULL;
 
-HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
 
 // setup() runs once, when the device is first turned on.
 void setup() {
@@ -23,7 +23,7 @@ void setup() {
 
   //HKPersistor().resetAll();
 
-  hkServer = new HKServer(acc->getDeviceType(),"Particlev","523-12-643");
+  hkServer = new HKServer(acc->getDeviceType(),"Particle1","523-12-643");
 
   hkServer->setup();
 }
