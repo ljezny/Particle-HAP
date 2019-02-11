@@ -13,6 +13,7 @@
 #include "HAPAccessoryDescriptor.h"
 
 class WindowsShutterAccessory: public HAPAccessoryDescriptor {
+private:
 public:
     
     virtual void initAccessorySet();
