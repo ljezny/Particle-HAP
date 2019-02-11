@@ -21,9 +21,9 @@ void setup() {
 
   acc->initAccessorySet();
 
-  HKPersistor().resetAll();
+  //HKPersistor().resetAll();
 
-  hkServer = new HKServer(acc->getDeviceType(),"Particle6","523-12-643");
+  hkServer = new HKServer(acc->getDeviceType(),"Particle","523-12-643");
 
   hkServer->setup();
 }
