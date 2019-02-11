@@ -12,7 +12,7 @@
 
 HKServer *hkServer = NULL;
 
-//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+HAPAccessoryDescriptor *acc = new LightBulbAccessory();
 
 // setup() runs once, when the device is first turned on.
 void setup() {
@@ -25,10 +25,7 @@ void setup() {
 
   hkServer = new HKServer(acc->getDeviceType(),"Particlev","523-12-643");
 
-
   hkServer->setup();
-
-  //hkServer.persistor->resetPersistor();
 }
 
 // loop() runs over and over again, as quickly as it can execute.
