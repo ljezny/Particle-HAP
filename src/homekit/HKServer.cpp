@@ -28,13 +28,6 @@ void HKServer::setup () {
 
     bonjour.setUDP( &udp );
     bonjour.begin(hapName);
-    setPaired(false);
-
-}
-
-void HKServer::setPaired(bool p) {
-    paired = p;
-    bonjour.removeAllServiceRecords();
     char deviceTypeStr[6];
     memset(deviceTypeStr, 0, 6);
     sprintf(deviceTypeStr, "%d",deviceType);
@@ -49,7 +42,6 @@ void HKServer::setPaired(bool p) {
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
                              recordTxt);
-
 
 }
 
@@ -73,7 +65,7 @@ void HKServer::handle() {
             conn->close();
             Serial.println("Client removed.");
             clients.erase(clients.begin() + i);
-            
+
             free(conn);
         }
 

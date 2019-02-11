@@ -18,12 +18,12 @@ HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
 void setup() {
 	randomSeed(Time.now());//we need to somehow init random seed, so device identity will be unique
   Serial.begin();
-  //while(!Serial.isConnected()) Particle.process();
+
   acc->initAccessorySet();
 
-  //HKPersistor().resetAll();
+  HKPersistor().resetAll();
 
-  hkServer = new HKServer(acc->getDeviceType(),"Particle1","523-12-643");
+  hkServer = new HKServer(acc->getDeviceType(),"Particle6","523-12-643");
 
   hkServer->setup();
 }
