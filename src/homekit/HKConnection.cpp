@@ -73,7 +73,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     }
 
     free(tempBuffer);
-    
+
     HKLogger.println("END: writeEncryptedData");
 }
 
@@ -724,11 +724,11 @@ void HKConnection::processPostedCharacteristics() {
     for(int i = 0; i < postedCharacteristics.size(); i++) {
         characteristics *c = postedCharacteristics.at(i);
 
-        char broadcastTemp[1024];
+        char* broadcastTemp = new char[1024];
         memset(broadcastTemp,0,1024);
         snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
         announce(broadcastTemp);
-
+        free(broadcastTemp);
     }
     postedCharacteristics.clear();
 
