@@ -35,12 +35,10 @@
 #define  MDNS_SERVER_PORT        5353
 #define  MDNS_NQUERY_RESEND_TIME 1000   // 1 second, name query resend timeout
 #define  MDNS_SQUERY_RESEND_TIME 1000  // 10 seconds, service query resend timeout
-#define  MDNS_RESPONSE_TTL       120    //120 two minutes (in seconds)
+#define  MDNS_RESPONSE_TTL       20    //120 two minutes (in seconds)
 
 #define  MDNS_MAX_SERVICES_PER_PACKET  6
 
-//#define  _BROKEN_MALLOC_   1
-#undef _USE_MALLOC_
 
 static uint8_t mdnsMulticastIPAddr[] = { 224, 0, 0, 251 };
 //static uint8_t mdnsHWAddr[] = { 0x01, 0x00, 0x5e, 0x00, 0x00, 0xfb };
@@ -82,32 +80,6 @@ typedef enum _DNSOpCode_t {
    DNSOpUpdate    = 5
 } DNSOpCode_t;
 
-// for some reason, I get data corruption issues with normal malloc() on arduino 0017
-void* my_malloc(unsigned s)
-{
-#if defined(_BROKEN_MALLOC_)
-   char* b = (char*)malloc(s+2);
-   if (b)
-      b++;
-
-   return (void*)b;
-#else
-   return malloc(s);
-#endif
-}
-
-void my_free(void* ptr)
-{
-#if defined(_BROKEN_MALLOC_)
-   char* b = (char*)ptr;
-   if (b)
-      b--;
-
-   free(b);
-#else
-   free(ptr);
-#endif
-}
 
 HKBonjour::HKBonjour()
 {
@@ -265,7 +237,7 @@ int HKBonjour::_initQuery(uint8_t idx, const char* name, unsigned long timeout)
                                                           MDNSPacketTypeServiceQuery,
                                              0));
    } else
-      my_free((void*)name);
+      free((void*)name);
 
    return statusCode;
 }
@@ -273,7 +245,7 @@ int HKBonjour::_initQuery(uint8_t idx, const char* name, unsigned long timeout)
 void HKBonjour::_cancelQuery(uint8_t idx)
 {
    if (NULL != this->_resolveNames[idx]) {
-      my_free(this->_resolveNames[idx]);
+      free(this->_resolveNames[idx]);
       this->_resolveNames[idx] = NULL;
    }
 }
@@ -285,7 +257,7 @@ int HKBonjour::resolveName(const char* name, unsigned long timeout)
 {
    this->cancelResolveName();
 
-   char* n = (char*)my_malloc(strlen(name) + 7);
+   char* n = (char*)malloc(strlen(name) + 7);
    if (NULL == n)
       return 0;
 
@@ -324,7 +296,7 @@ int HKBonjour::startDiscoveringService(const char* serviceName,
 {
    this->stopDiscoveringService();
 
-   char* n = (char*)my_malloc(strlen(serviceName) + 13);
+   char* n = (char*)malloc(strlen(serviceName) + 13);
    if (NULL == n)
       return 0;
 
@@ -357,23 +329,16 @@ MDNSError_t HKBonjour::_sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int 
 {
    MDNSError_t statusCode = MDNSSuccess;
    uint16_t ptr = 0;
-#if defined(_USE_MALLOC_)
    DNSHeader_t* dnsHeader = NULL;
-#else
-   DNSHeader_t dnsHeaderBuf;
-   DNSHeader_t* dnsHeader = &dnsHeaderBuf;
-#endif
    uint8_t* buf;
 
 
 
-#if defined(_USE_MALLOC_)
-   dnsHeader = (DNSHeader_t*)my_malloc(sizeof(DNSHeader_t));
+   dnsHeader = (DNSHeader_t*)malloc(sizeof(DNSHeader_t));
    if (NULL == dnsHeader) {
       statusCode = MDNSOutOfMemory;
       goto errorReturn;
    }
-#endif
 
    memset(dnsHeader, 0, sizeof(DNSHeader_t));
 
@@ -572,11 +537,10 @@ MDNSError_t HKBonjour::_sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int 
 
 errorReturn:
 
-#if defined(_USE_MALLOC_)
    if (NULL != dnsHeader)
-      my_free(dnsHeader);
-#endif
-    Serial.printf("Bonjour send message status: %d\n", statusCode);
+      free(dnsHeader);
+
+   Serial.printf("Bonjour send message status: %d\n", statusCode);
    return statusCode;
 }
 
@@ -586,12 +550,7 @@ errorReturn:
 MDNSError_t HKBonjour::_processMDNSQuery()
 {
    MDNSError_t statusCode = MDNSSuccess;
-#if defined(_USE_MALLOC_)
    DNSHeader_t* dnsHeader = NULL;
-#else
-   DNSHeader_t dnsHeaderBuf;
-   DNSHeader_t* dnsHeader = &dnsHeaderBuf;
-#endif
    int i, j;
    uint8_t* buf;
    uint32_t xid;
@@ -612,7 +571,7 @@ MDNSError_t HKBonjour::_processMDNSQuery()
       goto errorReturn;
    }
     Serial.println("Processing MNDS Query packet");
-   udpBuffer = (uint8_t*) my_malloc(udp_len);  //allocate memory to hold _remaining UDP packet
+   udpBuffer = (uint8_t*) malloc(udp_len);  //allocate memory to hold _remaining UDP packet
    if (NULL == udpBuffer) {
       this->flush();
       statusCode = MDNSOutOfMemory;
@@ -621,13 +580,11 @@ MDNSError_t HKBonjour::_processMDNSQuery()
    this->read((uint8_t*)udpBuffer, udp_len);//read _remaining UDP packet from W5100/W5200 into memory
    ptr = (uintptr_t)udpBuffer;
 
-#if defined(_USE_MALLOC_)
-   dnsHeader = (DNSHeader_t*)my_malloc(sizeof(DNSHeader_t));
+   dnsHeader = (DNSHeader_t*)malloc(sizeof(DNSHeader_t));
    if (NULL == dnsHeader) {
       statusCode = MDNSOutOfMemory;
       goto errorReturn;
    }
-#endif
 
    buf = (uint8_t*)dnsHeader;
    memcpy((uint8_t*)buf, (uint16_t*)ptr ,sizeof(DNSHeader_t));
@@ -933,7 +890,7 @@ MDNSError_t HKBonjour::_processMDNSQuery()
                               if (k < MDNS_MAX_SERVICES_PER_PACKET) {
                                  int l = dataLen - 2; // -2: data compression of service postfix
 
-                                 uint8_t* ptrName = (uint8_t*)my_malloc(l);
+                                 uint8_t* ptrName = (uint8_t*)malloc(l);
 
                                  if (ptrName) {
 
@@ -1004,7 +961,7 @@ MDNSError_t HKBonjour::_processMDNSQuery()
 
                            // if there's a content to this txt record, save it for delivery
                            if (dataLen > 1 && NULL == servTxt[j]) {
-                              servTxt[j] = (uint8_t*)my_malloc(dataLen+1);
+                              servTxt[j] = (uint8_t*)malloc(dataLen+1);
                               if (NULL != servTxt[j]) {
 
                             	  memcpy((uint8_t*)servTxt[j], (uint16_t*)(ptr+offset) ,dataLen);
@@ -1091,22 +1048,20 @@ MDNSError_t HKBonjour::_processMDNSQuery()
          uint8_t k;
          for (k=0; k<MDNS_MAX_SERVICES_PER_PACKET; k++)
             if (NULL != ptrNames[k]) {
-               my_free(ptrNames[k]);
+               free(ptrNames[k]);
                if (NULL != servTxt[k])
-                  my_free(servTxt[k]);
+                  free(servTxt[k]);
             }
    }
 
 #endif // (defined(HAS_SERVICE_REGISTRATION) && HAS_SERVICE_REGISTRATION) || (defined(HAS_NAME_BROWSING) && HAS_NAME_BROWSING)
 
-   my_free(udpBuffer);
+   free(udpBuffer);
 
 errorReturn:
 
-#if defined(_USE_MALLOC_)
    if (NULL != dnsHeader)
-      my_free(dnsHeader);
-#endif
+      free(dnsHeader);
 
    // now, handle the requests
    for (j=0; j<NumMDNSServiceRecords+2; j++) {
@@ -1170,7 +1125,7 @@ void HKBonjour::run()
             }
 
             if (NULL != this->_resolveNames[i]) {
-               my_free(this->_resolveNames[i]);
+               free(this->_resolveNames[i]);
                this->_resolveNames[i] = NULL;
             }
          }
@@ -1198,9 +1153,9 @@ int HKBonjour::setBonjourName(const char* bonjourName)
       return 0;
 
    if (this->_bonjourName != NULL)
-      my_free(this->_bonjourName);
+      free(this->_bonjourName);
 
-   this->_bonjourName = (uint8_t*)my_malloc(strlen(bonjourName) + 7);
+   this->_bonjourName = (uint8_t*)malloc(strlen(bonjourName) + 7);
    if (NULL == this->_bonjourName)
       return 0;
 
@@ -1235,16 +1190,16 @@ int HKBonjour::addServiceRecord(const char* name, uint16_t port,
    if (NULL != name && 0 != port) {
       for (i=0; i < NumMDNSServiceRecords; i++) {
          if (NULL == this->_serviceRecords[i]) {
-            record = (MDNSServiceRecord_t*)my_malloc(sizeof(MDNSServiceRecord_t));
+            record = (MDNSServiceRecord_t*)malloc(sizeof(MDNSServiceRecord_t));
             if (NULL != record) {
                record->name = record->textContent = NULL;
 
-               record->name = (uint8_t*)my_malloc(strlen((char*)name));
+               record->name = (uint8_t*)malloc(strlen((char*)name));
                if (NULL == record->name)
                   goto errorReturn;
 
                if (NULL != textContent) {
-                  record->textContent = (uint8_t*)my_malloc(strlen((char*)textContent));
+                  record->textContent = (uint8_t*)malloc(strlen((char*)textContent));
                   if (NULL == record->textContent)
                      goto errorReturn;
 
@@ -1256,7 +1211,7 @@ int HKBonjour::addServiceRecord(const char* name, uint16_t port,
                strcpy((char*)record->name, name);
 
                uint8_t* s = this->_findFirstDotFromRight(record->name);
-               record->servName = (uint8_t*)my_malloc(strlen((char*)s) + 12);
+               record->servName = (uint8_t*)malloc(strlen((char*)s) + 12);
                if (record->servName) {
                   strcpy((char*)record->servName, (const char*)s);
 
@@ -1281,13 +1236,13 @@ int HKBonjour::addServiceRecord(const char* name, uint16_t port,
 errorReturn:
    if (NULL != record) {
       if (NULL != record->name)
-         my_free(record->name);
+         free(record->name);
       if (NULL != record->servName)
-         my_free(record->servName);
+         free(record->servName);
       if (NULL != record->textContent)
-         my_free(record->textContent);
+         free(record->textContent);
 
-      my_free(record);
+      free(record);
    }
 
    return 0;
@@ -1299,13 +1254,13 @@ void HKBonjour::_removeServiceRecord(int idx)
       (void)this->_sendMDNSMessage(0, 0, (int)MDNSPacketTypeServiceRecordRelease, idx);
 
       if (NULL != this->_serviceRecords[idx]->textContent)
-         my_free(this->_serviceRecords[idx]->textContent);
+         free(this->_serviceRecords[idx]->textContent);
 
       if (NULL != this->_serviceRecords[idx]->servName)
-         my_free(this->_serviceRecords[idx]->servName);
+         free(this->_serviceRecords[idx]->servName);
 
-      my_free(this->_serviceRecords[idx]->name);
-      my_free(this->_serviceRecords[idx]);
+      free(this->_serviceRecords[idx]->name);
+      free(this->_serviceRecords[idx]);
 
       this->_serviceRecords[idx] = NULL;
    }
@@ -1518,7 +1473,7 @@ void HKBonjour::_finishedResolvingName(char* name, const byte ipAddr[4])
       this->_nameFoundCallback((const char*)name, ipAddr);
    }
 
-   my_free(this->_resolveNames[0]);
+   free(this->_resolveNames[0]);
    this->_resolveNames[0] = NULL;
 }
 
