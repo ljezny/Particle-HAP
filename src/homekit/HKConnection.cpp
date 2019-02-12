@@ -31,7 +31,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     byte nonce[12];
     memset(nonce, 0, sizeof(nonce));
 
-    byte tempBuffer[1024+2+18];
+    byte *tempBuffer = new byte[1024+2+18];
 
     int payload_offset = 0;
     int part = 0;
@@ -72,7 +72,8 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
         }
     }
 
-
+    free(tempBuffer);
+    
     HKLogger.println("END: writeEncryptedData");
 }
 
