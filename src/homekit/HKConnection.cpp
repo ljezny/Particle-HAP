@@ -181,24 +181,23 @@ void HKConnection::handleConnection() {
     if (len > 0) {
         HKLogger.printf("Request Message read length: %d \n", len);
         lastKeepAliveMs = millis();
-        HKNetworkMessage *msg = new HKNetworkMessage((const char *)inputBuffer);
-        if (!strcmp(msg->directory, "pair-setup")){
+        HKNetworkMessage msg((const char *)inputBuffer);
+        if (!strcmp(msg.directory, "pair-setup")){
             HKLogger.printf("Handling Pair Setup...\n");
             handlePairSetup((const char *)inputBuffer);
         }
-        else if (!strcmp(msg->directory, "pair-verify")){
+        else if (!strcmp(msg.directory, "pair-verify")){
             HKLogger.printf("Handling Pair Varify...\n");
             if(handlePairVerify((const char *)inputBuffer)){
                 isEncrypted = true;
                 server->setPaired(true);
             }
-        } else if (!strcmp(msg->directory, "identify")){
+        } else if (!strcmp(msg.directory, "identify")){
             client.stop();
         } else if(isEncrypted) { //connection is secured
-            HKLogger.printf("Handling message request: %s\n",msg->directory);
+            HKLogger.printf("Handling message request: %s\n",msg.directory);
             handleAccessoryRequest((const char *)inputBuffer, len);
         }
-        free(msg);
     }
     processPostedCharacteristics();
     free(inputBuffer);
@@ -454,11 +453,11 @@ void HKConnection::handlePairSetup(const char *buffer) {
 
     char *responseBuffer = 0; int responseLen = 0;
 
-    HKNetworkMessage *msg = new HKNetworkMessage(buffer);
+    HKNetworkMessage msg = HKNetworkMessage(buffer);
     HKNetworkResponse mResponse(200);
 
 
-    state = (PairSetupState_t)(*msg->data.dataPtrForIndex(6));
+    state = (PairSetupState_t)(*msg.data.dataPtrForIndex(6));
     HKLogger.printf("State: %d\n", state);
     *stateRecord.data = (char)state+1;
     switch (state) {
@@ -513,12 +512,12 @@ void HKConnection::handlePairSetup(const char *buffer) {
             int keyLen = 0;
             const char *proofStr;
             int proofLen = 0;
-            keyStr = msg->data.dataPtrForIndex(3);
-            keyLen = msg->data.lengthForIndex(3);
-            char *temp = msg->data.dataPtrForIndex(4);
+            keyStr = msg.data.dataPtrForIndex(3);
+            keyLen = msg.data.lengthForIndex(3);
+            char *temp = msg.data.dataPtrForIndex(4);
             if (temp != NULL) {
                 proofStr = temp;
-                proofLen = msg->data.lengthForIndex(4);
+                proofLen = msg.data.lengthForIndex(4);
             } else {
                 HKLogger.println("no proof sent!");
             }
@@ -559,8 +558,8 @@ void HKConnection::handlePairSetup(const char *buffer) {
             HKLogger.println("State_M5_ExchangeRequest");
             stateRecord.data[0] = State_M6_ExchangeRespond;
             const char *encryptedPackage = NULL;int packageLen = 0;
-            encryptedPackage = msg->data.dataPtrForIndex(5);
-            packageLen = msg->data.lengthForIndex(5);
+            encryptedPackage = msg.data.dataPtrForIndex(5);
+            packageLen = msg.data.lengthForIndex(5);
             char encryptedData[packageLen];
             memcpy(encryptedData,encryptedPackage, packageLen-16);
             char mac[16];
@@ -704,7 +703,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
         HKLogger.println("Pairing completed.");
     }
 
-    free(msg);
 }
 
 void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
