@@ -28,21 +28,45 @@ void HKServer::setup () {
 
     bonjour.setUDP( &udp );
     bonjour.begin(hapName);
-    char deviceTypeStr[6];
+    setPaired(false);
+
+}
+
+void HKServer::setPaired(bool p) {
+    paired = p;
+    //HKLogger.printf("setPaired started: %d\n",p); delay(20);
+    bonjour.removeAllServiceRecords();
+    //HKLogger.printf("setPaired removeAllServiceRecords\n"); delay(20);
+
+    char* deviceTypeStr = new char[6];
     memset(deviceTypeStr, 0, 6);
+    //HKLogger.printf("setPaired memset deviceTypeStr\n"); delay(20);
     sprintf(deviceTypeStr, "%d",deviceType);
 
-    char recordTxt[512];
+    //HKLogger.printf("setPaired sprintf deviceTypeStr\n"); delay(20);
+    char* recordTxt = new char[512];
     memset(recordTxt, 0, 512);
-    sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=2%cs#=1%cs#=1%cff=0%cmd=%s%cci=%s",4,(char)strlen(deviceIdentity)+3,deviceIdentity,6,4,4,4,4,(char)(strlen(hapName) + 3),hapName,3 + strlen(deviceTypeStr),deviceTypeStr);
-    char bonjourName[128];
+    //HKLogger.printf("setPaired memset deviceTypeStr\n"); delay(20);
+
+    int len = sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=2%cs#=1%cs#=1%cff=0%cmd=%s%cci=%s",4,(char)strlen(deviceIdentity)+3,deviceIdentity,6,4,4,4,4,(char)(strlen(hapName) + 3),hapName,3 + strlen(deviceTypeStr),deviceTypeStr);
+    //HKLogger.printf("setPaired sprintf recordTxt, len:%d\n",len);
+
+    char* bonjourName = new char[128];
     memset(bonjourName, 0, 128);
+    //HKLogger.printf("setPaired memset bonjourName\n"); delay(20);
+
     sprintf(bonjourName, "%s._hap",hapName);
+    //HKLogger.printf("setPaired sprintf bonjourName\n"); delay(20);
+
     bonjour.addServiceRecord(bonjourName,
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
                              recordTxt);
+    //HKLogger.printf("setPaired addServiceRecord\n"); delay(20);
 
+    free(deviceTypeStr);
+    free(recordTxt);
+    free(bonjourName);
 }
 
 void HKServer::handle() {
