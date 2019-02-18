@@ -62,14 +62,12 @@ void HKServer::setPaired(bool p) {
 void HKServer::handle() {
     bonjour.run();
 
-    if(clients.size() < MAX_CONNECTIONS) {
-        TCPClient newClient = server.available();
-        if(newClient) {
-            Serial.println("Client connected.");
-            clients.insert(clients.begin(),new HKConnection(this,newClient));
-        }
+    TCPClient newClient = server.available();
+    if(newClient) {
+        Serial.println("Client connected.");
+        clients.insert(clients.begin(),new HKConnection(this,newClient));
     }
-
+  
     int i = clients.size() - 1;
     while(i >= 0) {
         HKConnection *conn = clients.at(i);
