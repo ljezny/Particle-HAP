@@ -9,10 +9,11 @@
 #include "spark_wiring_thread.h"
 #endif
 
-HKServer::HKServer(int deviceType, const char* hapName,const char *passcode) {
+HKServer::HKServer(int deviceType, const char* hapName,const char *passcode,void (*progressPtr)(Progress_t)) {
     this->hapName = hapName;
     this->deviceType = deviceType;
     this->passcode = passcode;
+    this->progressPtr = progressPtr;
     persistor = new HKPersistor();
     persistor->loadRecordStorage();
     char *deviceIdentity = new char[12+5];

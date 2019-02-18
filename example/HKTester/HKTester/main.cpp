@@ -24,8 +24,12 @@
 
 NSNetService *nsService;
 
-//HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
+//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+
+void progress(Progress_t progress) {
+    Serial.printf("PROGRESS: %d\n",progress);
+}
 
 int main(int argc, const char * argv[]) {
     NSString *hapName = @"HKTester1";
@@ -33,7 +37,7 @@ int main(int argc, const char * argv[]) {
     
     //HKPersistor().resetAll();
     
-    HKServer server = HKServer(acc->getDeviceType(), [hapName cString],[passscode cString]);
+    HKServer server = HKServer(acc->getDeviceType(), [hapName cString],[passscode cString],progress);
     
     nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@"HKTester" port:TCP_SERVER_PORT];
 

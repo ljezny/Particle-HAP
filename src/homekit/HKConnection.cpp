@@ -259,6 +259,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
 
     switch (state) {
         case State_Pair_Verify_M1: {
+            server->progressPtr(Progress_Pair_Verify_M1);
             HKLogger.printf("Pair Verify M1\n");
             curve25519_key controllerKey;
             int r = wc_curve25519_init(&controllerKey);
@@ -359,10 +360,12 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             response.data.addRecord(encryptRecord);
 
             delete [] plainMsg;
+            server->progressPtr(Progress_Pair_Verify_M2);
         }
             break;
         case State_Pair_Verify_M3: {
             HKLogger.printf("Pair Verify M3\n");
+            server->progressPtr(Progress_Pair_Verify_M3);
             char *encryptedData = msg.data.dataPtrForIndex(5);
             short packageLen = msg.data.lengthForIndex(5);
             byte decryptedData[packageLen-16];
@@ -411,6 +414,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
                 r = wc_HKDF(SHA512,(const byte*) sharedKey, CHACHA20_POLY1305_AEAD_KEYSIZE,(const byte*) salt, strlen(salt),(const byte*) write_info, strlen(write_info),writeKey, CHACHA20_POLY1305_AEAD_KEYSIZE);
                 HKLogger.printf("wc_HKDF: r:%d\n",r);
                 HKLogger.println("Pair verified, secure connection established");
+                server->progressPtr(Progress_Pair_Verify_M4);
             }
             else{
                 HKNetworkMessageDataRecord error;
@@ -421,6 +425,7 @@ bool HKConnection::handlePairVerify(const char *buffer) {
                 error.length = 1;
                 response.data.addRecord(error);
                 HKLogger.println("Pair NOT verified.");
+                server->progressPtr(Progress_Error);
             }
         }
     }
@@ -460,6 +465,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
     *stateRecord.data = (char)state+1;
     switch (state) {
         case State_M1_SRPStartRequest: {
+            server->progressPtr(Progress_M1_SRPStartRequest);
             HKLogger.println("State_M1_SRPStartRequest");
             stateRecord.data[0] = State_M2_SRPStartRespond;
             HKNetworkMessageDataRecord saltRec;
@@ -499,12 +505,13 @@ void HKConnection::handlePairSetup(const char *buffer) {
             mResponse.data.addRecord(stateRecord);
             mResponse.data.addRecord(publicKeyRec);
             mResponse.data.addRecord(saltRec);
-
+            server->progressPtr(Progress_M2_SRPStartRespond);
         }
             break;
 
         case State_M3_SRPVerifyRequest: {
             HKLogger.println("State_M3_SRPVerifyRequest");
+            server->progressPtr(Progress_M3_SRPVerifyRequest);
             stateRecord.data[0] = State_M4_SRPVerifyRespond;
             const char *keyStr = 0;
             int keyLen = 0;
@@ -536,6 +543,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 HKLogger.println("INCORRECT PASSWORD");
 
                 wc_SrpTerm(&srp);
+                server->progressPtr(Progress_Error);
             } else { //success
                 wc_SrpGetProof(&srp, (byte *)response,&responseLength);
                 //SRP_respond(srp, &response);
@@ -549,11 +557,13 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 mResponse.data.addRecord(stateRecord);
                 mResponse.data.addRecord(responseRecord);
                 HKLogger.println("PASSWORD OK");
+                server->progressPtr(Progress_M4_SRPVerifyRespond);
             }
         }
             break;
         case State_M5_ExchangeRequest: {
             HKLogger.println("State_M5_ExchangeRequest");
+            server->progressPtr(Progress_M5_ExchangeRequest);
             stateRecord.data[0] = State_M6_ExchangeRespond;
             const char *encryptedPackage = NULL;int packageLen = 0;
             encryptedPackage = msg.data.dataPtrForIndex(5);
@@ -680,6 +690,9 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 completed = true;
                 delete returnTLV8;
                 free(tlv8Data);
+                server->progressPtr(Progress_M6_ExchangeRespond);
+            } else{
+                server->progressPtr(Progress_Error);
             }
 
             delete subTLV8;
@@ -705,7 +718,9 @@ void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
     char *resultData = 0; unsigned int resultLen = 0;
     HKLogger.printf("--------REQUEST %s--------\n",clientID());
     //HKLogger.printf("%s\n",buffer);
+    server->progressPtr(Progress_AccessoryRequest);
     handleAccessory(buffer, size, &resultData, &resultLen, this);
+    server->progressPtr(Progress_AccessoryRespond);
     if(resultLen > 0) {
         writeData((byte*)resultData,resultLen);
         HKLogger.printf("--------RESPONSE %s--------\n",clientID());

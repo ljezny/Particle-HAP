@@ -14,6 +14,10 @@ HKServer *hkServer = NULL;
 
 HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
 
+void progress(Progress_t progress) {
+    Serial.printf("PROGRESS: %d\n",progress);
+}
+
 // setup() runs once, when the device is first turned on.
 void setup() {
 	randomSeed(Time.now());//we need to somehow init random seed, so device identity will be unique
@@ -23,7 +27,7 @@ void setup() {
 
   //HKPersistor().resetAll();
 
-  hkServer = new HKServer(acc->getDeviceType(),"Particle","523-12-643");
+  hkServer = new HKServer(acc->getDeviceType(),"Particle","523-12-643",progress);
 
   hkServer->setup();
 }

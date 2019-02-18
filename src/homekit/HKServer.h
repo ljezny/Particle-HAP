@@ -28,9 +28,11 @@ private:
     const char *hapName;
     const char *deviceIdentity;
     const char *passcode;
+    
 public:
     HKPersistor *persistor;
-    HKServer(int deviceType, const char* hapName, const char *passcode);
+    void (*progressPtr)(Progress_t);
+    HKServer(int deviceType, const char* hapName, const char *passcode, void (*progressPtr)(Progress_t));
     void setup ();
     void handle();
     const char* getDeviceIdentity() {

@@ -39,6 +39,23 @@ typedef enum
     State_Pair_Verify_M4          = 4,
 } PairVerifyState_t;
 
+typedef enum
+{
+    Progress_M1_SRPStartRequest      = 1,
+    Progress_M2_SRPStartRespond      = 2,
+    Progress_M3_SRPVerifyRequest     = 3,
+    Progress_M4_SRPVerifyRespond     = 4,
+    Progress_M5_ExchangeRequest      = 5,
+    Progress_M6_ExchangeRespond      = 7,
+    Progress_Pair_Verify_M1          = 8,
+    Progress_Pair_Verify_M2          = 9,
+    Progress_Pair_Verify_M3          = 10,
+    Progress_Pair_Verify_M4          = 11,
+    Progress_AccessoryRequest        = 12,
+    Progress_AccessoryRespond        = 13,
+    Progress_Error                   = 999
+} Progress_t;
+
 const byte ACESSORY_KEY[96] = {0xf1, 0xd9, 0xe1, 0xc3, 0x2c, 0x38, 0x2f, 0x53, 0xf2, 0xfa, 0xb0, 0x67, 0xdf, 0x66, 0x80, 0xcb, 0xbd,
 0x22, 0xf1, 0x00, 0x30, 0xe7, 0xe0, 0x37, 0x4f, 0x46, 0x64, 0x2b, 0x52, 0x52, 0x7b, 0x35, 0x25,
 0xb9, 0x3d, 0x39, 0x00, 0xbf, 0x21, 0xe1, 0x33, 0x6e, 0x1b, 0x0a, 0x3f, 0xa1, 0x62, 0x0b, 0x8b,
