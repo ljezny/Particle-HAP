@@ -31,7 +31,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     byte nonce[12];
     memset(nonce, 0, sizeof(nonce));
 
-    byte tempBuffer[1024+2+18];
+    byte *tempBuffer = new byte[1024+2+18];
 
     int payload_offset = 0;
     int part = 0;
@@ -72,6 +72,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
         }
     }
 
+    free(tempBuffer);
 
     HKLogger.println("END: writeEncryptedData");
 }
@@ -189,6 +190,7 @@ void HKConnection::handleConnection() {
             HKLogger.printf("Handling Pair Varify...\n");
             if(handlePairVerify((const char *)inputBuffer)){
                 isEncrypted = true;
+                server->setPaired(true);
             }
         } else if (!strcmp(msg.directory, "identify")){
             client.stop();
@@ -709,6 +711,8 @@ void HKConnection::handlePairSetup(const char *buffer) {
         HKLogger.printf("Why empty response\n");
     }
     if(completed){
+        server->setPaired(1);
+        //client.stop();
         HKLogger.println("Pairing completed.");
     }
 
@@ -735,11 +739,11 @@ void HKConnection::processPostedCharacteristics() {
     for(int i = 0; i < postedCharacteristics.size(); i++) {
         characteristics *c = postedCharacteristics.at(i);
 
-        char broadcastTemp[1024];
+        char* broadcastTemp = new char[1024];
         memset(broadcastTemp,0,1024);
         snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
         announce(broadcastTemp);
-
+        free(broadcastTemp);
     }
     postedCharacteristics.clear();
 

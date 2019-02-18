@@ -34,6 +34,7 @@ public:
     void (*progressPtr)(Progress_t);
     HKServer(int deviceType, const char* hapName, const char *passcode, void (*progressPtr)(Progress_t));
     void setup ();
+    void setPaired(bool paired);
     void handle();
     const char* getDeviceIdentity() {
         return deviceIdentity;
