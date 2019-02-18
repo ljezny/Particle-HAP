@@ -1133,7 +1133,7 @@ void HKBonjour::run()
    }
 
    // now, should we re-announce our services again?
-   unsigned long announceTimeOut = (((uint32_t)MDNS_RESPONSE_TTL/2)+((uint32_t)MDNS_RESPONSE_TTL/4));
+   unsigned long announceTimeOut = (((uint32_t)MDNS_RESPONSE_TTL/4));
    if ((now - this->_lastAnnounceMillis) > 1000*announceTimeOut) {
       for (i=0; i<NumMDNSServiceRecords; i++) {
          if (NULL != this->_serviceRecords[i])
