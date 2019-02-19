@@ -28,7 +28,7 @@ void setup() {
 
   //HKPersistor().resetAll();
 
-  hkServer = new HKServer(acc->getDeviceType(),"Particle","523-12-643",progress);
+  hkServer = new HKServer(acc->getDeviceType(),"Zen","523-12-643",progress);
 
   hkServer->setup();
 }
