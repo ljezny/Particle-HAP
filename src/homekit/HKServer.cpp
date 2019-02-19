@@ -9,7 +9,7 @@
 #include "spark_wiring_thread.h"
 #endif
 
-HKServer::HKServer(int deviceType, const char* hapName,const char *passcode,void (*progressPtr)(Progress_t)) {
+HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void (*progressPtr)(Progress_t)) {
     this->hapName = hapName;
     this->deviceType = deviceType;
     this->passcode = passcode;
@@ -28,7 +28,7 @@ void HKServer::setup () {
 
 
     bonjour.setUDP( &udp );
-    bonjour.begin(hapName);
+    bonjour.begin(hapName.c_str());
     setPaired(false);
 
 }
@@ -43,12 +43,12 @@ void HKServer::setPaired(bool p) {
 
     char* recordTxt = new char[512];
     memset(recordTxt, 0, 512);
-    int len = sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=2%cs#=1%cff=0%cmd=%s%cci=%s",4,(char)strlen(deviceIdentity)+3,deviceIdentity,6,4,4,4,(char)(strlen(hapName) + 3),hapName,3 + strlen(deviceTypeStr),deviceTypeStr);
+    int len = sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=2%cs#=1%cff=0%cmd=%s%cci=%s",4,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,4,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
 
     char* bonjourName = new char[128];
     memset(bonjourName, 0, 128);
 
-    sprintf(bonjourName, "%s._hap",hapName);
+    sprintf(bonjourName, "%s._hap",hapName.c_str());
 
     bonjour.addServiceRecord(bonjourName,
                              TCP_SERVER_PORT,

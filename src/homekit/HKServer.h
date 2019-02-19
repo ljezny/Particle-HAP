@@ -25,21 +25,21 @@ private:
     bool paired = false;
     std::vector<HKConnection*> clients;
     int deviceType;
-    const char *hapName;
-    const char *deviceIdentity;
-    const char *passcode;
+    std::string hapName;
+    std::string deviceIdentity;
+    std::string passcode;
     
 public:
     HKPersistor *persistor;
     void (*progressPtr)(Progress_t);
-    HKServer(int deviceType, const char* hapName, const char *passcode, void (*progressPtr)(Progress_t));
+    HKServer(int deviceType, std::string hapName, std::string passcode, void (*progressPtr)(Progress_t));
     void setup ();
     void setPaired(bool paired);
     void handle();
-    const char* getDeviceIdentity() {
+    std::string getDeviceIdentity() {
         return deviceIdentity;
     }
-    const char* getPasscode() {
+    std::string getPasscode() {
         return passcode;
     }
 };

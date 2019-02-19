@@ -286,11 +286,11 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             r = wc_curve25519_shared_secret_ex(&secretKey,&controllerKey,sharedKey,&sharedKeySize,EC25519_LITTLE_ENDIAN);
             HKLogger.printf("crypto_curve25519_shared_secret: %d\n", r);
 
-            int accessoryInfoSize = CURVE25519_KEYSIZE+CURVE25519_KEYSIZE+strlen(server->getDeviceIdentity());
+            int accessoryInfoSize = CURVE25519_KEYSIZE+CURVE25519_KEYSIZE+server->getDeviceIdentity().length();
             byte accessoryInfo[accessoryInfoSize];
             memcpy(accessoryInfo,publicSecretKeyData, CURVE25519_KEYSIZE);
-            memcpy(&accessoryInfo[CURVE25519_KEYSIZE],server->getDeviceIdentity(), strlen(server->getDeviceIdentity()));
-            memcpy(&accessoryInfo[CURVE25519_KEYSIZE+strlen(server->getDeviceIdentity())],msg.data.dataPtrForIndex(3), CURVE25519_KEYSIZE);
+            memcpy(&accessoryInfo[CURVE25519_KEYSIZE],server->getDeviceIdentity().c_str(), server->getDeviceIdentity().length());
+            memcpy(&accessoryInfo[CURVE25519_KEYSIZE+server->getDeviceIdentity().length()],msg.data.dataPtrForIndex(3), CURVE25519_KEYSIZE);
 
             word32 accessorySignSize = ED25519_SIG_SIZE;
             byte accesorySign[accessorySignSize];
@@ -307,9 +307,9 @@ bool HKConnection::handlePairVerify(const char *buffer) {
             HKNetworkMessageDataRecord idRecord;
             idRecord.index = 1;
             idRecord.activate = true;
-            idRecord.length = strlen(server->getDeviceIdentity());
+            idRecord.length = server->getDeviceIdentity().length();
             idRecord.data = new char[idRecord.length];
-            memcpy(idRecord.data,server->getDeviceIdentity(), idRecord.length);
+            memcpy(idRecord.data,server->getDeviceIdentity().c_str(), idRecord.length);
 
             HKNetworkMessageData data;
             data.addRecord(signRecord);
@@ -484,7 +484,7 @@ void HKConnection::handlePairSetup(const char *buffer) {
             HKLogger.printf("wc_SrpSetUsername: r:%d\n",r);
             if (!r) r = wc_SrpSetParams(&srp,(const byte *)N, sizeof(N),(const byte *)generator, 1,salt,16);
             HKLogger.printf("wc_SrpSetParams: r:%d\n",r);
-            if (!r) r = wc_SrpSetPassword(&srp,(const byte *)server->getPasscode(),strlen(server->getPasscode()));
+            if (!r) r = wc_SrpSetPassword(&srp,(const byte *)server->getPasscode().c_str(),server->getPasscode().length());
             HKLogger.printf("wc_SrpSetPassword: r:%d\n",r);
             if (!r) r = wc_SrpGetVerifier(&srp, (byte *)publicKey, &publicKeyLength); //use publicKey to store v
             HKLogger.printf("wc_SrpGetVerifier: r:%d\n",r);
@@ -627,23 +627,23 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 HKNetworkMessageDataRecord usernameRecord;
                 usernameRecord.activate = true;
                 usernameRecord.index = 1;
-                usernameRecord.length = strlen(server->getDeviceIdentity());
+                usernameRecord.length = server->getDeviceIdentity().length();
                 usernameRecord.data = new char[usernameRecord.length];
-                memcpy(usernameRecord.data,server->getDeviceIdentity(),usernameRecord.length);
+                memcpy(usernameRecord.data,server->getDeviceIdentity().c_str(),usernameRecord.length);
                 returnTLV8->addRecord(usernameRecord);
 
                 // Generate Signature
                 const char salt3[] = "Pair-Setup-Accessory-Sign-Salt";
                 const char info3[] = "Pair-Setup-Accessory-Sign-Info";
-                size_t outputSize = 64+strlen(server->getDeviceIdentity());
+                size_t outputSize = 64+server->getDeviceIdentity().length();
                 uint8_t output[outputSize];
                 r = wc_HKDF(SHA512,(const byte*) srp.key, srp.keySz,(const byte*) salt3, strlen(salt3),(const byte*) info3, strlen(info3),(byte*)output, CHACHA20_POLY1305_AEAD_KEYSIZE);
                 HKLogger.printf("wc_HKDF: r:%d\n",r);
                 word32 accessoryPubKeySize = ED25519_PUB_KEY_SIZE;
                 uint8_t accessoryPubKey[accessoryPubKeySize];
                 r = wc_ed25519_export_public(accessoryKey, accessoryPubKey, &accessoryPubKeySize);
-                memcpy(&output[32],server->getDeviceIdentity(),strlen(server->getDeviceIdentity()));
-                memcpy(&output[32+strlen(server->getDeviceIdentity())],accessoryPubKey,accessoryPubKeySize);
+                memcpy(&output[32],server->getDeviceIdentity().c_str(),server->getDeviceIdentity().length());
+                memcpy(&output[32+server->getDeviceIdentity().length()],accessoryPubKey,accessoryPubKeySize);
                 word32 signatureSize = 64;
                 uint8_t signature[signatureSize];
 

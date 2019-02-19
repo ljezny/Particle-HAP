@@ -43,7 +43,7 @@ int main(int argc, const char * argv[]) {
 
     NSDictionary *txtDict = @{
         @"pv": [@"1.0" dataUsingEncoding:NSUTF8StringEncoding], // state
-        @"id": [[NSString stringWithCString:server.getDeviceIdentity()] dataUsingEncoding:NSUTF8StringEncoding], // identifier
+        @"id": [[NSString stringWithCString:server.getDeviceIdentity().c_str()] dataUsingEncoding:NSUTF8StringEncoding], // identifier
         @"c#": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // version
         @"s#": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // state
         @"sf": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // discoverable
