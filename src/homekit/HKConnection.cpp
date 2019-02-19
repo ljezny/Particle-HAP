@@ -190,7 +190,6 @@ void HKConnection::handleConnection() {
             HKLogger.printf("Handling Pair Varify...\n");
             if(handlePairVerify((const char *)inputBuffer)){
                 isEncrypted = true;
-                server->setPaired(true);
             }
         } else if (!strcmp(msg.directory, "identify")){
             client.stop();
@@ -711,8 +710,6 @@ void HKConnection::handlePairSetup(const char *buffer) {
         HKLogger.printf("Why empty response\n");
     }
     if(completed){
-        server->setPaired(1);
-        //client.stop();
         HKLogger.println("Pairing completed.");
     }
 

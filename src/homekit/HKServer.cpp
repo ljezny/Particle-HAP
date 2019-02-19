@@ -22,28 +22,21 @@ HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void
     this->deviceIdentity = deviceIdentity;
 }
 void HKServer::setup () {
-
     server.begin();
     HKLogger.printf("Server started at port %d", TCP_SERVER_PORT);
-
-
-    bonjour.setUDP( &udp );
-    bonjour.begin(hapName.c_str());
-    setPaired(false);
-
+    setupBonjour();
 }
 
-void HKServer::setPaired(bool p) {
-    paired = p;
-    bonjour.removeAllServiceRecords();
-
+void HKServer::setupBonjour() {
+    bonjour.setUDP( &udp );
+    bonjour.begin(hapName.c_str());
     char* deviceTypeStr = new char[6];
     memset(deviceTypeStr, 0, 6);
     sprintf(deviceTypeStr, "%d",deviceType);
 
     char* recordTxt = new char[512];
     memset(recordTxt, 0, 512);
-    int len = sprintf(recordTxt, "%csf=%d%cid=%s%cpv=1.0%cc#=2%cs#=1%cff=0%cmd=%s%cci=%s",4, p ? 0 : 1,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,4,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
+    int len = sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=2%cs#=1%cff=0%cmd=%s%cci=%s",4,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,4,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
 
     char* bonjourName = new char[128];
     memset(bonjourName, 0, 128);
