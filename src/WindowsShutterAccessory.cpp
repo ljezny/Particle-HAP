@@ -107,7 +107,7 @@ void WindowsShutterAccessory::initAccessorySet() {
     Accessory *shutterAccessory = new Accessory();
 
     AccessorySet *accSet = &AccessorySet::getInstance();
-    addInfoServiceToAccessory(shutterAccessory, "Shutter name", "Vendor name", "Model  name", "1", &shutterIdentity);
+    addInfoServiceToAccessory(shutterAccessory, "Shutter name", "Vendor name", "Model  name", "1","1.0.0", &shutterIdentity);
     accSet->addAccessory(shutterAccessory);
 
     Service *windowsCoverService = new Service(serviceType_windowCover);

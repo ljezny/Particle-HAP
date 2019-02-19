@@ -12,7 +12,8 @@
 
 HKServer *hkServer = NULL;
 
-HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
+//HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
+HAPAccessoryDescriptor *acc = new LightBulbAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);

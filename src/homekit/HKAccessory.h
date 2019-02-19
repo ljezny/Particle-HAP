@@ -448,7 +448,7 @@ public:
 typedef void (*identifyFunction)(bool oldValue, bool newValue, HKConnection *sender);
 
 //Since Info Service contains only constant, only add method will be provided
-void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber, identifyFunction identifyCallback);
+void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber,string firmware, identifyFunction identifyCallback);
 
 void handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender);
 

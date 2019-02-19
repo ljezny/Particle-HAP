@@ -80,7 +80,7 @@ void LightBulbAccessory::initAccessorySet() {
 
     //Add Light
     AccessorySet *accSet = &AccessorySet::getInstance();
-    addInfoServiceToAccessory(lightAcc1, "Bulb name", "Vendor name", "Model name", "1", &lightIdentify);
+    addInfoServiceToAccessory(lightAcc1, "Bulb name", "Vendor name", "Model name", "1","1.0.0", &lightIdentify);
     accSet->addAccessory(lightAcc1);
 
     Service *lightService1 = new Service(serviceType_lightBulb);

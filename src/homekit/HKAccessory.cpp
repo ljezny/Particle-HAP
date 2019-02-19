@@ -710,7 +710,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
 }
 
-void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber, identifyFunction identifyCallback) {
+void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber,string firmware, identifyFunction identifyCallback) {
     Service *infoService = new Service(serviceType_accessoryInfo);
     acc->addService(infoService);
 
@@ -731,7 +731,7 @@ void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactue
     acc->addCharacteristics(infoService, serialNameCha);
 
     stringCharacteristics *fwNameCha = new stringCharacteristics(charType_firmwareRevision, premission_read, 0);
-    fwNameCha->characteristics::setValue("1.0.0");
+    fwNameCha->characteristics::setValue(firmware);
     acc->addCharacteristics(infoService, fwNameCha);
 
     boolCharacteristics *identify = new boolCharacteristics(charType_identify, premission_write);
