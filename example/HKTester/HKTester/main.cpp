@@ -24,8 +24,8 @@
 
 NSNetService *nsService;
 
-HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+//HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
+HAPAccessoryDescriptor *acc = new LightBulbAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);

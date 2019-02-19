@@ -84,6 +84,9 @@ public:
         read_timeout.tv_sec = 0;
         read_timeout.tv_usec = 10;
         setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
+        
+        int set = 1;
+        setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, (void *)&set, sizeof(int));
     }
     
     void stop(){
