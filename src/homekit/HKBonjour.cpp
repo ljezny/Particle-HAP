@@ -1194,12 +1194,14 @@ int HKBonjour::addServiceRecord(const char* name, uint16_t port,
             if (NULL != record) {
                record->name = record->textContent = NULL;
 
-               record->name = (uint8_t*)malloc(strlen((char*)name));
+               record->name = (uint8_t*)malloc(strlen((char*)name) + 1);
+               memset(record->name, 0, strlen((char*)name) + 1);
                if (NULL == record->name)
                   goto errorReturn;
 
                if (NULL != textContent) {
-                  record->textContent = (uint8_t*)malloc(strlen((char*)textContent));
+                  record->textContent = (uint8_t*)malloc(strlen((char*)textContent) + 1);
+                  memset(record->textContent, 0, strlen((char*)textContent) + 1);
                   if (NULL == record->textContent)
                      goto errorReturn;
 
@@ -1211,7 +1213,8 @@ int HKBonjour::addServiceRecord(const char* name, uint16_t port,
                strcpy((char*)record->name, name);
 
                uint8_t* s = this->_findFirstDotFromRight(record->name);
-               record->servName = (uint8_t*)malloc(strlen((char*)s) + 12);
+               record->servName = (uint8_t*)malloc(strlen((char*)s) + 12 + 1);
+               memset(record->servName, 0, strlen((char*)s) + 12 + 1);
                if (record->servName) {
                   strcpy((char*)record->servName, (const char*)s);
 

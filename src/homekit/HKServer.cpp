@@ -34,12 +34,12 @@ void HKServer::setupBonjour() {
     memset(deviceTypeStr, 0, 6);
     sprintf(deviceTypeStr, "%d",deviceType);
 
-    char* recordTxt = new char[512];
-    memset(recordTxt, 0, 512);
-    int len = sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=2%cs#=1%cff=0%cmd=%s%cci=%s",4,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,4,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
+    char* recordTxt = new char[128];
+    memset(recordTxt, 0, 128);
+    int len = sprintf(recordTxt, "%csf=1%cid=%s%cpv=1.0%cc#=2%cs#=1%cff=0%cmd=%s%cci=%s",4,strlen(deviceIdentity.c_str())+3,deviceIdentity.c_str(),6,4,4,4,strlen(hapName.c_str()) + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
 
-    char* bonjourName = new char[128];
-    memset(bonjourName, 0, 128);
+    char* bonjourName = new char[64];
+    memset(bonjourName, 0, 64);
 
     sprintf(bonjourName, "%s._hap",hapName.c_str());
 
