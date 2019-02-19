@@ -33,9 +33,9 @@ void progress(Progress_t progress) {
 
 int main(int argc, const char * argv[]) {
     NSString *hapName = @"HKTester1";
-    NSString *passscode = @"523-12-643";
     
-    //HKPersistor().resetAll();
+    int passcodeNumber = 52312643;
+    NSString *passscode = [NSString stringWithFormat:@"%d%d%d-%d%d-%d%d%d", (passcodeNumber / 10000000) % 10,(passcodeNumber / 1000000) % 10,(passcodeNumber / 100000) % 10,(passcodeNumber / 10000) % 10,(passcodeNumber / 1000) % 10,(passcodeNumber / 100) % 10,(passcodeNumber / 10) % 10,passcodeNumber % 10];
     
     HKServer server = HKServer(acc->getDeviceType(), [hapName cString],[passscode cString],progress);
     
