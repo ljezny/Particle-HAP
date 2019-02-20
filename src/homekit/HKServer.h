@@ -22,18 +22,19 @@ private:
     TCPServer server = TCPServer(TCP_SERVER_PORT);
     HKBonjour bonjour;
     UDP udp;
+    bool paired = false;
     std::vector<HKConnection*> clients;
     int deviceType;
     std::string hapName;
     std::string deviceIdentity;
     std::string passcode;
-
+    
 public:
     HKPersistor *persistor;
     void (*progressPtr)(Progress_t);
     HKServer(int deviceType, std::string hapName, std::string passcode, void (*progressPtr)(Progress_t));
     void setup ();
-    void setupBonjour();
+    void setPaired(bool paired);
     void handle();
     std::string getDeviceIdentity() {
         return deviceIdentity;

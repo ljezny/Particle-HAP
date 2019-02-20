@@ -257,10 +257,10 @@ int HKBonjour::resolveName(const char* name, unsigned long timeout)
 {
    this->cancelResolveName();
 
-   char* n = (char*)malloc(strlen(name) + 7);
+   char* n = (char*)malloc(strlen(name) + 7 + 1);
    if (NULL == n)
       return 0;
-
+   memset(n, 0, strlen(name) + 7 + 1);
    strcpy(n, name);
    strcat(n, MDNS_TLD);
 
@@ -296,10 +296,10 @@ int HKBonjour::startDiscoveringService(const char* serviceName,
 {
    this->stopDiscoveringService();
 
-   char* n = (char*)malloc(strlen(serviceName) + 13);
+   char* n = (char*)malloc(strlen(serviceName) + 13 + 1);
    if (NULL == n)
       return 0;
-
+   memset(n, 0, strlen(serviceName) + 13 + 1);
    strcpy(n, serviceName);
 
    const uint8_t* srv_type = this->_postfixForProtocol(proto);
@@ -1155,10 +1155,10 @@ int HKBonjour::setBonjourName(const char* bonjourName)
    if (this->_bonjourName != NULL)
       free(this->_bonjourName);
 
-   this->_bonjourName = (uint8_t*)malloc(strlen(bonjourName) + 7);
+   this->_bonjourName = (uint8_t*)malloc(strlen(bonjourName) + 7 + 1);
    if (NULL == this->_bonjourName)
       return 0;
-
+   memset(this->_bonjourName, 0, strlen(bonjourName) + 7 + 1);
    strcpy((char*)this->_bonjourName, bonjourName);
    strcpy((char*)this->_bonjourName+strlen(bonjourName), MDNS_TLD);
 

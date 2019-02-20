@@ -190,6 +190,7 @@ void HKConnection::handleConnection() {
             HKLogger.printf("Handling Pair Varify...\n");
             if(handlePairVerify((const char *)inputBuffer)){
                 isEncrypted = true;
+                server->setPaired(true);
             }
         } else if (!strcmp(msg.directory, "identify")){
             client.stop();
@@ -199,6 +200,7 @@ void HKConnection::handleConnection() {
         }
     }
     processPostedCharacteristics();
+    keepAlive();
     free(inputBuffer);
 
 }
@@ -214,7 +216,7 @@ void HKConnection::announce(char* desc){
 }
 
 void HKConnection::keepAlive() {
-    if((millis() - lastKeepAliveMs) > 5000) {
+    if((millis() - lastKeepAliveMs) > 10000) {
         lastKeepAliveMs = millis();
         if(isConnected()) {
             if(isEncrypted && readsCount > 0) {
@@ -225,7 +227,6 @@ void HKConnection::keepAlive() {
                 strncpy(aliveMsg, "{\"characteristics\": []}", 32);
                 announce(aliveMsg);
                 free(aliveMsg);
-
             }
         }
     }
