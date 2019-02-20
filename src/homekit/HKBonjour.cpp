@@ -38,7 +38,7 @@
 #define  MDNS_RESPONSE_TTL       120    //120 two minutes (in seconds)
 
 #define  MDNS_MAX_SERVICES_PER_PACKET  6
-
+#define  MSNS_ANNOUNCE_TIME_SEC  5 //Send announce packet every 5 seconds
 
 static uint8_t mdnsMulticastIPAddr[] = { 224, 0, 0, 251 };
 //static uint8_t mdnsHWAddr[] = { 0x01, 0x00, 0x5e, 0x00, 0x00, 0xfb };
@@ -1133,8 +1133,7 @@ void HKBonjour::run()
    }
 
    // now, should we re-announce our services again?
-   unsigned long announceTimeOut = (((uint32_t)MDNS_RESPONSE_TTL/4));
-   if ((now - this->_lastAnnounceMillis) > 1000*announceTimeOut) {
+   if ((now - this->_lastAnnounceMillis) > 1000*MSNS_ANNOUNCE_TIME_SEC) {
       for (i=0; i<NumMDNSServiceRecords; i++) {
          if (NULL != this->_serviceRecords[i])
             (void)this->_sendMDNSMessage(0, 0, (int)MDNSPacketTypeServiceRecord, i);
