@@ -200,7 +200,7 @@ void HKConnection::handleConnection() {
         }
     }
     processPostedCharacteristics();
-    keepAlive();
+    //keepAlive();
     free(inputBuffer);
 
 }
