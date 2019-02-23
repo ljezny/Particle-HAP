@@ -16,7 +16,7 @@
 
 RgbColor c;
 
-
+int bulbPin = D1;
 
 void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
     RGB.control(true);
@@ -25,6 +25,8 @@ void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
     c.b = newValue ? (c.b > 0 ? c.b : 255) : 0;
 
     RGB.color(c.r, c.g, c.b);
+
+    digitalWrite(bulbPin,newValue ? HIGH : LOW);
 }
 
 void brightTrackable (int oldValue, int newValue, HKConnection *sender) {
@@ -76,6 +78,7 @@ void lightIdentify(bool oldValue, bool newValue, HKConnection *sender) {
 }
 
 void LightBulbAccessory::initAccessorySet() {
+    pinMode(bulbPin, OUTPUT);
     Accessory *lightAcc1 = new Accessory();
 
     //Add Light
@@ -91,7 +94,7 @@ void LightBulbAccessory::initAccessorySet() {
     lightAcc1->addCharacteristics(lightService1, lightServiceName1);
 
     boolCharacteristics *powerState1 = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
-    powerState1->characteristics::setValue("true");
+    powerState1->characteristics::setValue("false");
     powerState1->valueChangeFunctionCall = &powerTrackable;
     lightAcc1->addCharacteristics(lightService1, powerState1);
 
