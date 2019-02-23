@@ -21,11 +21,12 @@
 
 #include "../../../src/LightBulbAccessory.h"
 #include "../../../src/WindowsShutterAccessory.h"
-
+#include "../../../src/LightSensorAccessory.h"
 NSNetService *nsService;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+HAPAccessoryDescriptor *acc = new LightSensorAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);

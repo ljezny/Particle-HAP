@@ -94,6 +94,9 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, string
         case unit_percentage:
             result += wrap("unit")+":"+wrap("percentage")+",";
             break;
+        case unit_lux:
+            result += wrap("unit")+":"+wrap("lux")+",";
+            break;
     }
 
     result += "\"format\":\"int\"";
@@ -147,6 +150,9 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, string
             break;
         case unit_percentage:
             result += wrap("unit")+":"+wrap("percentage")+",";
+            break;
+        case unit_lux:
+            result += wrap("unit")+":"+wrap("lux")+",";
             break;
     }
 
@@ -236,6 +242,9 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, int va
         case unit_percentage:
             result += wrap("unit")+":"+wrap("percentage")+",";
             break;
+        case unit_lux:
+            result += wrap("unit")+":"+wrap("lux")+",";
+            break;
     }
 
     result += "\"format\":\"int\"";
@@ -291,6 +300,9 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, float 
             break;
         case unit_percentage:
             result += wrap("unit")+":"+wrap("percentage")+",";
+            break;
+        case unit_lux:
+            result += wrap("unit")+":"+wrap("lux")+",";
             break;
     }
 

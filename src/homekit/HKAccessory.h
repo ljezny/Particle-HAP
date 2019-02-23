@@ -194,7 +194,8 @@ typedef enum {
     unit_none = 0,
     unit_celsius,
     unit_percentage,
-    unit_arcDegree
+    unit_arcDegree,
+    unit_lux,
 } unit;
 
 class Accessory;
