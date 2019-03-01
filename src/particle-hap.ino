@@ -12,8 +12,8 @@
 
 HKServer *hkServer = NULL;
 
-//HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
+//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
@@ -28,7 +28,7 @@ void setup() {
 
   //HKPersistor().resetAll();
 
-  hkServer = new HKServer(acc->getDeviceType(),"Zen","523-12-643",progress);
+  hkServer = new HKServer(acc->getDeviceType(),"Particle","523-12-643",progress);
 
   hkServer->setup();
 }

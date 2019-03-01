@@ -22,6 +22,9 @@
 #define COVER_OPEN_TO_CLOSE_MS 60000
 #define TILT_OPEN_TO_CLOSE_MS 1000
 
+int upLed = D6;
+int downLed = D5;
+
 intCharacteristics *positionStateChar;
 intCharacteristics *currentPositionChar;
 intCharacteristics *currentTiltAngleChar;
@@ -37,14 +40,25 @@ int targetPosition = position;
 long endMS = LONG_MAX;
 
 void shutterIdentity(bool oldValue, bool newValue, HKConnection *sender) {
-    
+
 }
 
 void setState(int newState) {
     state = newState;
     positionStateChar->characteristics::setValue(format("%d",state)); //report state
     positionStateChar->notify(NULL);
-    //store to eeprom
+    switch (state) {
+      case 0:
+        digitalWrite(downLed, HIGH);
+      break;
+      case 1:
+        digitalWrite(upLed, HIGH);
+      break;
+      case 2:
+        digitalWrite(upLed, LOW);
+        digitalWrite(downLed, LOW);
+      break;
+    }
 }
 
 void setTilt(int newTilt) {
@@ -104,6 +118,9 @@ void setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender) {
 }
 
 void WindowsShutterAccessory::initAccessorySet() {
+    pinMode(upLed, OUTPUT);
+    pinMode(downLed, OUTPUT);
+
     Accessory *shutterAccessory = new Accessory();
 
     AccessorySet *accSet = &AccessorySet::getInstance();
