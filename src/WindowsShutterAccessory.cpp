@@ -39,7 +39,7 @@ int targetPosition = position;
 
 long endMS = LONG_MAX;
 
-void shutterIdentity(bool oldValue, bool newValue, HKConnection *sender) {
+void shutterIdentity(bool oldValue, bool newValue, HKConnection *sender,void *arg) {
 
 }
 
@@ -93,7 +93,7 @@ void WindowsShutterAccessory::handle() {
     }
 }
 
-void setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
+void setTargetPosition (int oldValue, int newValue, HKConnection *sender,void *arg) {
     HKLogger.printf("setTargetPosition %d\n",newValue);
     int diff = abs(newValue - position);
     long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
@@ -105,7 +105,7 @@ void setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
 
 }
 
-void setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender) {
+void setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender,void *arg) {
     HKLogger.printf("setTargetTiltAngle %d\n",newValue);
 
     int diff = abs(newValue - tilt);

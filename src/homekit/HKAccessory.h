@@ -205,6 +205,7 @@ private:
   std::vector<HKConnection *> notifiedConnections;
 public:
     Accessory *accessory;
+    void* valueChangedArg;
     const unsigned int type;
     const int premission;
     int iid;
@@ -215,7 +216,7 @@ public:
     }
     virtual void setValue(string str, HKConnection *sender) = 0;
     virtual string describe(HKConnection *sender) = 0;
-    string (*perUserQuery)(HKConnection *sender) = 0;
+    string (*perUserQuery)(HKConnection *sender,void* valueChangedArg) = 0;
     bool writable() { return premission&premission_write; }
     bool notifiable() { return premission&premission_notify; }
     void notify(HKConnection* conn);
@@ -241,11 +242,11 @@ public:
 class boolCharacteristics: public characteristics {
 public:
     bool _value;
-    void (*valueChangeFunctionCall)(bool oldValue, bool newValue, HKConnection *sender) = NULL;
+    void (*valueChangeFunctionCall)(bool oldValue, bool newValue, HKConnection *sender, void* valueChangedArg) = NULL;
     boolCharacteristics(unsigned int _type, int _premission): characteristics(_type, _premission) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
-            return perUserQuery(sender);
+            return perUserQuery(sender,valueChangedArg);
         if (_value)
             return "1";
         return "0";
@@ -253,7 +254,7 @@ public:
     virtual void setValue(string str, HKConnection *sender) {
         bool newValue = (strncmp("true", str.c_str(), 4)==0)||(strncmp("1", str.c_str(), 1)==0);
         if (valueChangeFunctionCall)
-            valueChangeFunctionCall(_value, newValue, sender);
+            valueChangeFunctionCall(_value, newValue, sender, valueChangedArg);
         _value = newValue;
     }
     virtual string describe(HKConnection *sender);
@@ -264,11 +265,11 @@ public:
     float _value;
     const float _minVal, _maxVal, _step;
     const unit _unit;
-    void (*valueChangeFunctionCall)(float oldValue, float newValue, HKConnection *sender) = NULL;
+    void (*valueChangeFunctionCall)(float oldValue, float newValue, HKConnection *sender, void* valueChangedArg) = NULL;
     floatCharacteristics(unsigned int _type, int _premission, float minVal, float maxVal, float step, unit charUnit): characteristics(_type, _premission), _minVal(minVal), _maxVal(maxVal), _step(step), _unit(charUnit) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
-            return perUserQuery(sender);
+            return perUserQuery(sender,valueChangedArg);
         char temp[16];
         snprintf(temp, 16, "%f", _value);
         return temp;
@@ -277,7 +278,7 @@ public:
         float temp = atof(str.c_str());
         if (temp == temp) {
             if (valueChangeFunctionCall)
-                valueChangeFunctionCall(_value, temp, sender);
+                valueChangeFunctionCall(_value, temp, sender, valueChangedArg);
             _value = temp;
         }
     }
@@ -289,13 +290,13 @@ public:
     int _value;
     const int _minVal, _maxVal, _step;
     const unit _unit;
-    void (*valueChangeFunctionCall)(int oldValue, int newValue, HKConnection *sender) = NULL;
+    void (*valueChangeFunctionCall)(int oldValue, int newValue, HKConnection *sender, void* valueChangedArg) = NULL;
     intCharacteristics(unsigned int _type, int _premission, int minVal, int maxVal, int step, unit charUnit): characteristics(_type, _premission), _minVal(minVal), _maxVal(maxVal), _step(step), _unit(charUnit) {
         _value = minVal;
     }
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
-            return perUserQuery(sender);
+            return perUserQuery(sender,valueChangedArg);
         char temp[16];
         snprintf(temp, 16, "%d", _value);
         return temp;
@@ -304,7 +305,7 @@ public:
         float temp = atoi(str.c_str());
         if (temp == temp) {
             if (valueChangeFunctionCall)
-                valueChangeFunctionCall(_value, temp, sender);
+                valueChangeFunctionCall(_value, temp, sender, valueChangedArg);
             _value = temp;
         }
     }
@@ -315,16 +316,16 @@ class stringCharacteristics: public characteristics {
 public:
     string _value;
     const unsigned short maxLen;
-    void (*valueChangeFunctionCall)(string oldValue, string newValue, HKConnection *sender) = NULL;
+    void (*valueChangeFunctionCall)(string oldValue, string newValue, HKConnection *sender, void* valueChangedArg) = NULL;
     stringCharacteristics(unsigned int _type, int _premission, unsigned short _maxLen): characteristics(_type, _premission), maxLen(_maxLen) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
-            return "\""+perUserQuery(sender)+"\"";
+            return "\""+perUserQuery(sender,valueChangedArg)+"\"";
         return "\""+_value+"\"";
     }
     virtual void setValue(string str, HKConnection *sender) {
         if (valueChangeFunctionCall)
-            valueChangeFunctionCall(_value, str, sender);
+            valueChangeFunctionCall(_value, str, sender, valueChangedArg);
         _value = str;
     }
     virtual string describe(HKConnection *sender);
@@ -446,7 +447,7 @@ public:
     string describe(HKConnection *sender);
 };
 
-typedef void (*identifyFunction)(bool oldValue, bool newValue, HKConnection *sender);
+typedef void (*identifyFunction)(bool oldValue, bool newValue, HKConnection *sender,void* arg);
 
 //Since Info Service contains only constant, only add method will be provided
 void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber,string firmware, identifyFunction identifyCallback);

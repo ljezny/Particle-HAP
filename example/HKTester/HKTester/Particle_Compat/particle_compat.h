@@ -253,7 +253,8 @@ void delay(int ms);
 long int millis();
 int random(int max);
 int analogRead(int pin);
-
+void digitalWrite(int pin, int value);
+void pinMode(int pin, int mode);
 extern EthernetClass Ethernet;
 extern UDP udp;
 extern EEPROMClass EEPROM;
@@ -261,5 +262,11 @@ extern SerialLink Serial;
 extern RGBClass RGB;
 
 #define A0 0
+#define D1 1
+#define D5 5
+#define D6 6
+#define LOW 0
+#define HIGH 1
+#define OUTPUT 0
 
 #endif /* particle_compat_h */

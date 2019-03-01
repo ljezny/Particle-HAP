@@ -61,3 +61,10 @@ int random(int max) {
 int analogRead(int pin) {
     return random() % 4096;
 }
+
+void digitalWrite(int pin, int value){
+    
+}
+void pinMode(int pin, int mode){
+    
+}

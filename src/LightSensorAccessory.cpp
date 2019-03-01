@@ -23,11 +23,11 @@ floatCharacteristics *currentAmbilightChar;
 
 int photosensor = A0;
 
-void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender) {
+void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender, void* arg) {
 
 }
 
-std::string getCurrentAmbilightLevel (HKConnection *sender) {
+std::string getCurrentAmbilightLevel (HKConnection *sender, void* arg) {
     int v = analogRead(photosensor); // read the input pin 0 - 4095
     return format("%d",v + 1);
 }

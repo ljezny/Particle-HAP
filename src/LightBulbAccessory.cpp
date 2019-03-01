@@ -18,7 +18,7 @@ RgbColor c;
 
 int bulbPin = D1;
 
-void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
+void powerTrackable (bool oldValue, bool newValue, HKConnection *sender,void *arg) {
     RGB.control(true);
     c.r = newValue ? (c.r > 0 ? c.r : 255) : 0;
     c.g = newValue ? (c.g > 0 ? c.g : 255) : 0;
@@ -29,7 +29,7 @@ void powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
     digitalWrite(bulbPin,newValue ? HIGH : LOW);
 }
 
-void brightTrackable (int oldValue, int newValue, HKConnection *sender) {
+void brightTrackable (int oldValue, int newValue, HKConnection *sender,void *arg) {
   RGB.control(true);
     c.r = (c.r * newValue) / 255;
     c.g = (c.g * newValue) / 255;
@@ -38,11 +38,11 @@ void brightTrackable (int oldValue, int newValue, HKConnection *sender) {
     RGB.color(c.r, c.g, c.b);
 }
 
-std::string getLedHue (HKConnection *sender) {
+std::string getLedHue (HKConnection *sender, void* arg) {
     return format("%d",((RgbToHsv(c).h) * 360) / 255);
 }
 
-void setLedHue (int oldValue, int newValue, HKConnection *sender) {
+void setLedHue (int oldValue, int newValue, HKConnection *sender,void *arg) {
   RGB.control(true);
     HsvColor hsv = RgbToHsv(c);
     hsv.h = (255 * newValue) / 360;
@@ -50,11 +50,11 @@ void setLedHue (int oldValue, int newValue, HKConnection *sender) {
     RGB.color(c.r, c.g, c.b);
 }
 
-std::string getLedBrightness (HKConnection *sender) {
+std::string getLedBrightness (HKConnection *sender, void* arg) {
     return format("%d",((RgbToHsv(c).v) * 100) / 255);
 }
 
-void setLedBrightness (int oldValue, int newValue, HKConnection *sender) {
+void setLedBrightness (int oldValue, int newValue, HKConnection *sender,void *arg) {
   RGB.control(true);
     HsvColor hsv = RgbToHsv(c);
     hsv.v = (255 * newValue) / 100;
@@ -62,18 +62,18 @@ void setLedBrightness (int oldValue, int newValue, HKConnection *sender) {
     RGB.color(c.r, c.g, c.b);
 }
 
-std::string getLedSaturation (HKConnection *sender) {
+std::string getLedSaturation (HKConnection *sender, void* arg) {
     return format("%d",((RgbToHsv(c).s) * 100) / 255);
 }
 
-void setLedSaturation (int oldValue, int newValue, HKConnection *sender) {
+void setLedSaturation (int oldValue, int newValue, HKConnection *sender,void *arg) {
     HsvColor hsv = RgbToHsv(c);
     hsv.s = (255 * newValue) / 100;
     c = HsvToRgb(hsv);
     RGB.color(c.r, c.g, c.b);
 }
 
-void lightIdentify(bool oldValue, bool newValue, HKConnection *sender) {
+void lightIdentify(bool oldValue, bool newValue, HKConnection *sender,void *arg) {
     Serial.printf("Start Identify Light\n");
 }
 
