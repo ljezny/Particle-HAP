@@ -252,11 +252,14 @@ public:
 void delay(int ms);
 long int millis();
 int random(int max);
+int analogRead(int pin);
 
 extern EthernetClass Ethernet;
 extern UDP udp;
 extern EEPROMClass EEPROM;
 extern SerialLink Serial;
 extern RGBClass RGB;
+
+#define A0 0
 
 #endif /* particle_compat_h */

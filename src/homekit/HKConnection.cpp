@@ -122,7 +122,7 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
                                            );
         if (r) {
             HKLogger.printf("Failed to chacha decrypt payload (code %d)\n", r);
-            //Once session security has been established, if the accessory encounters a decryption failure then it must immediately close the connection used for the session.
+            //Once session secufrity has been established, if the accessory encounters a decryption failure then it must immediately close the connection used for the session.
             //client.stop();
             *size = 0;
             return;
@@ -200,7 +200,6 @@ void HKConnection::handleConnection() {
         }
     }
     processPostedCharacteristics();
-    //keepAlive();
     free(inputBuffer);
 
 }
@@ -215,22 +214,6 @@ void HKConnection::announce(char* desc){
     free(reply);
 }
 
-void HKConnection::keepAlive() {
-    if((millis() - lastKeepAliveMs) > 10000) {
-        lastKeepAliveMs = millis();
-        if(isConnected()) {
-            if(isEncrypted && readsCount > 0) {
-                HKLogger.printf("Keeping alive..\n");
-
-                char *aliveMsg = new char[32];
-                memset(aliveMsg,0,32);
-                strncpy(aliveMsg, "{\"characteristics\": []}", 32);
-                announce(aliveMsg);
-                free(aliveMsg);
-            }
-        }
-    }
-}
 
 int wc_SrpSetKeyH(Srp *srp, byte *secret, word32 size) {
     SrpHash hash;

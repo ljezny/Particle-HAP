@@ -18,7 +18,6 @@
 
 #include <vector>
 
-
 extern "C" {
   #include "crypto/types.h"
   #include "crypto/srp.h"

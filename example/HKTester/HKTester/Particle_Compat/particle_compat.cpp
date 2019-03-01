@@ -58,3 +58,6 @@ long int millis() {
 int random(int max) {
     return random() % max;
 }
+int analogRead(int pin) {
+    return random() % 4096;
+}
