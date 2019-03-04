@@ -30,7 +30,6 @@ void WindowsShutterAccessory::setState(int newState) {
     state = newState;
     positionStateChar->characteristics::setValue(format("%d",state)); //report state
     positionStateChar->notify(NULL);
-
 }
 
 void WindowsShutterAccessory::setTilt(int newTilt) {
@@ -73,8 +72,9 @@ void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKC
     //WindowsShutterAccessory *obj = (WindowsShutterAccessory*) arg;
     HKLogger.printf("setTargetPosition %d\n",newValue);
     int diff = abs(newValue - position);
-    long time = (newValue == 0 || newValue == 100) ? COVER_OPEN_TO_CLOSE_MS : COVER_OPEN_TO_CLOSE_MS / 100 * diff;
-
+    //long time = (newValue == 0 || newValue == 100) ? COVER_OPEN_TO_CLOSE_MS : COVER_OPEN_TO_CLOSE_MS / 100 * diff;
+    long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
+    
     endMS = millis() + time;
     targetPosition = newValue;
     targetTilt = newValue > position ? 0 : -90;
