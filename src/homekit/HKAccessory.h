@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "HKConnection.h"
+#include <functional>
 
 typedef enum {
     charType_adminOnlyAccess    = 0x1,
@@ -200,12 +201,12 @@ typedef enum {
 
 class Accessory;
 
+typedef std::function<string(HKConnection *)> query_value_t;
 class characteristics {
 private:
   std::vector<HKConnection *> notifiedConnections;
 public:
     Accessory *accessory;
-    void* valueChangedArg;
     const unsigned int type;
     const int premission;
     int iid;
@@ -216,7 +217,7 @@ public:
     }
     virtual void setValue(string str, HKConnection *sender) = 0;
     virtual string describe(HKConnection *sender) = 0;
-    string (*perUserQuery)(HKConnection *sender,void* valueChangedArg) = 0;
+    query_value_t perUserQuery = 0;
     bool writable() { return premission&premission_write; }
     bool notifiable() { return premission&premission_notify; }
     void notify(HKConnection* conn);
@@ -238,15 +239,19 @@ public:
     }
 };
 
+typedef std::function<void(bool,bool,HKConnection *)> bool_value_changed_t;
+
 //To store value of device state, subclass the following type
 class boolCharacteristics: public characteristics {
 public:
     bool _value;
-    void (*valueChangeFunctionCall)(bool oldValue, bool newValue, HKConnection *sender, void* valueChangedArg) = NULL;
+    
+    //void (*valueChangeFunctionCall)(bool oldValue, bool newValue, HKConnection *sender) = NULL;
+    bool_value_changed_t valueChangeFunctionCall = NULL;
     boolCharacteristics(unsigned int _type, int _premission): characteristics(_type, _premission) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
-            return perUserQuery(sender,valueChangedArg);
+            return perUserQuery(sender);
         if (_value)
             return "1";
         return "0";
@@ -254,22 +259,23 @@ public:
     virtual void setValue(string str, HKConnection *sender) {
         bool newValue = (strncmp("true", str.c_str(), 4)==0)||(strncmp("1", str.c_str(), 1)==0);
         if (valueChangeFunctionCall)
-            valueChangeFunctionCall(_value, newValue, sender, valueChangedArg);
+            valueChangeFunctionCall(_value, newValue, sender);
         _value = newValue;
     }
     virtual string describe(HKConnection *sender);
 };
 
+typedef std::function<void(float,float,HKConnection *)> float_value_changed_t;
 class floatCharacteristics: public characteristics {
 public:
     float _value;
     const float _minVal, _maxVal, _step;
     const unit _unit;
-    void (*valueChangeFunctionCall)(float oldValue, float newValue, HKConnection *sender, void* valueChangedArg) = NULL;
+    float_value_changed_t valueChangeFunctionCall = NULL;
     floatCharacteristics(unsigned int _type, int _premission, float minVal, float maxVal, float step, unit charUnit): characteristics(_type, _premission), _minVal(minVal), _maxVal(maxVal), _step(step), _unit(charUnit) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
-            return perUserQuery(sender,valueChangedArg);
+            return perUserQuery(sender);
         char temp[16];
         snprintf(temp, 16, "%f", _value);
         return temp;
@@ -278,25 +284,25 @@ public:
         float temp = atof(str.c_str());
         if (temp == temp) {
             if (valueChangeFunctionCall)
-                valueChangeFunctionCall(_value, temp, sender, valueChangedArg);
+                valueChangeFunctionCall(_value, temp, sender);
             _value = temp;
         }
     }
     virtual string describe(HKConnection *sender);
 };
-
+typedef std::function<void(int,int,HKConnection *)> int_value_changed_t;
 class intCharacteristics: public characteristics {
 public:
     int _value;
     const int _minVal, _maxVal, _step;
     const unit _unit;
-    void (*valueChangeFunctionCall)(int oldValue, int newValue, HKConnection *sender, void* valueChangedArg) = NULL;
+    int_value_changed_t valueChangeFunctionCall = NULL;
     intCharacteristics(unsigned int _type, int _premission, int minVal, int maxVal, int step, unit charUnit): characteristics(_type, _premission), _minVal(minVal), _maxVal(maxVal), _step(step), _unit(charUnit) {
         _value = minVal;
     }
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
-            return perUserQuery(sender,valueChangedArg);
+            return perUserQuery(sender);
         char temp[16];
         snprintf(temp, 16, "%d", _value);
         return temp;
@@ -305,27 +311,27 @@ public:
         float temp = atoi(str.c_str());
         if (temp == temp) {
             if (valueChangeFunctionCall)
-                valueChangeFunctionCall(_value, temp, sender, valueChangedArg);
+                valueChangeFunctionCall(_value, temp, sender);
             _value = temp;
         }
     }
     virtual string describe(HKConnection *sender);
 };
-
+typedef std::function<void(string,string,HKConnection *)> string_value_changed_t;
 class stringCharacteristics: public characteristics {
 public:
     string _value;
     const unsigned short maxLen;
-    void (*valueChangeFunctionCall)(string oldValue, string newValue, HKConnection *sender, void* valueChangedArg) = NULL;
+    string_value_changed_t valueChangeFunctionCall = NULL;
     stringCharacteristics(unsigned int _type, int _premission, unsigned short _maxLen): characteristics(_type, _premission), maxLen(_maxLen) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
-            return "\""+perUserQuery(sender,valueChangedArg)+"\"";
+            return "\""+perUserQuery(sender)+"\"";
         return "\""+_value+"\"";
     }
     virtual void setValue(string str, HKConnection *sender) {
         if (valueChangeFunctionCall)
-            valueChangeFunctionCall(_value, str, sender, valueChangedArg);
+            valueChangeFunctionCall(_value, str, sender);
         _value = str;
     }
     virtual string describe(HKConnection *sender);
@@ -446,8 +452,7 @@ public:
     }
     string describe(HKConnection *sender);
 };
-
-typedef void (*identifyFunction)(bool oldValue, bool newValue, HKConnection *sender,void* arg);
+typedef std::function<void(bool,bool,HKConnection *)> identifyFunction;
 
 //Since Info Service contains only constant, only add method will be provided
 void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber,string firmware, identifyFunction identifyCallback);

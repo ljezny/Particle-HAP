@@ -23,6 +23,8 @@
 #include <netdb.h>
 #include <stdarg.h>
 #include <fcntl.h>
+#include <functional>
+
 using namespace std;
 
 struct HKStorage;
@@ -248,13 +250,19 @@ public:
     }
 };
 
+typedef std::function<void()> wiring_interrupt_handler_t;
 
 void delay(int ms);
+void delayMicroseconds(int micros);
 long int millis();
+long int micros();
 int random(int max);
 int analogRead(int pin);
+int digitalRead(int pin);
 void digitalWrite(int pin, int value);
 void pinMode(int pin, int mode);
+void attachInterrupt(int a,wiring_interrupt_handler_t b, int c);
+void detachInterrupt(int v);
 extern EthernetClass Ethernet;
 extern UDP udp;
 extern EEPROMClass EEPROM;
@@ -263,10 +271,13 @@ extern RGBClass RGB;
 
 #define A0 0
 #define D1 1
+#define D4 4
 #define D5 5
 #define D6 6
 #define LOW 0
 #define HIGH 1
 #define OUTPUT 0
+#define INPUT 1
+#define CHANGE 0
 
 #endif /* particle_compat_h */

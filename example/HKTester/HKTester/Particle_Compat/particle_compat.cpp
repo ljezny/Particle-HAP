@@ -42,7 +42,15 @@ void EEPROMClass::put(int address, HKStorage storage){
 void delay(int ms) {
     usleep(100 * ms);
 }
-
+void delayMicroseconds(int micros) {
+    usleep(micros);
+}
+void attachInterrupt(int a,wiring_interrupt_handler_t b, int c){
+    
+}
+void detachInterrupt(int v){
+    
+}
 long int timestamp() {
     struct timeval tp;
     gettimeofday(&tp, NULL);
@@ -55,13 +63,18 @@ long int start = timestamp();
 long int millis() {
     return timestamp() - start;
 }
+long int micros() {
+    return timestamp() - start;
+}
 int random(int max) {
     return random() % max;
 }
 int analogRead(int pin) {
     return random() % 4096;
 }
-
+int digitalRead(int pin){
+    return 1;
+}
 void digitalWrite(int pin, int value){
     
 }

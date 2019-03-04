@@ -22,11 +22,14 @@
 #include "../../../src/LightBulbAccessory.h"
 #include "../../../src/WindowsShutterAccessory.h"
 #include "../../../src/LightSensorAccessory.h"
+#include "../../../src/HomekitBridgeAccessory.h"
+#include "../../../src/MotionSensorAccessory.h"
 NSNetService *nsService;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
 //HAPAccessoryDescriptor *acc = new LightBulbAccessory();
-HAPAccessoryDescriptor *acc = new LightSensorAccessory();
+//HAPAccessoryDescriptor *acc = new LightSensorAccessory();
+HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
@@ -59,6 +62,11 @@ int main(int argc, const char * argv[]) {
     
     [nsService startMonitoring];
     [nsService publish];
+    
+    acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916));
+    acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036));
+    acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040));
+    acc->descriptors.push_back(new MotionSensorAccessory());
     
     acc->initAccessorySet();
     

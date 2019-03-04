@@ -14,6 +14,11 @@
 
 class LightSensorAccessory: public HAPAccessoryDescriptor {
 private:
+    floatCharacteristics *currentAmbilightChar;
+    int photosensor = A0;
+    long lastReportMS = 0;
+    void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);
+    std::string getCurrentAmbilightLevel (HKConnection *sender);
 public:
 
     virtual void initAccessorySet();

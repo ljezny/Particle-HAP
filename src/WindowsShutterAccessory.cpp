@@ -19,55 +19,27 @@
 #endif
 #include "homekit/HKLog.h"
 
-#define COVER_OPEN_TO_CLOSE_MS 60000
-#define TILT_OPEN_TO_CLOSE_MS 1000
+#define COVER_OPEN_TO_CLOSE_MS 56000
+#define TILT_OPEN_TO_CLOSE_MS 2000
 
-int upLed = D6;
-int downLed = D5;
-
-intCharacteristics *positionStateChar;
-intCharacteristics *currentPositionChar;
-intCharacteristics *currentTiltAngleChar;
-
-//initially fully closed
-int state = 2; //0 - going to minimum value, closing, down , 1 - going to maximum light - opening, up
-int position = 0;
-int tilt = -90;
-
-int targetTilt = tilt;
-int targetPosition = position;
-
-long endMS = LONG_MAX;
-
-void shutterIdentity(bool oldValue, bool newValue, HKConnection *sender,void *arg) {
+void WindowsShutterAccessory::shutterIdentity(bool oldValue, bool newValue, HKConnection *sender) {
 
 }
 
-void setState(int newState) {
+void WindowsShutterAccessory::setState(int newState) {
     state = newState;
     positionStateChar->characteristics::setValue(format("%d",state)); //report state
     positionStateChar->notify(NULL);
-    switch (state) {
-      case 0:
-        digitalWrite(downLed, HIGH);
-      break;
-      case 1:
-        digitalWrite(upLed, HIGH);
-      break;
-      case 2:
-        digitalWrite(upLed, LOW);
-        digitalWrite(downLed, LOW);
-      break;
-    }
+
 }
 
-void setTilt(int newTilt) {
+void WindowsShutterAccessory::setTilt(int newTilt) {
     tilt = newTilt;
     currentTiltAngleChar->characteristics::setValue(format("%d",tilt)); //report state
     currentTiltAngleChar->notify(NULL);
 }
 
-void setPosition(int newPosition) {
+void WindowsShutterAccessory::setPosition(int newPosition) {
     position = newPosition;
     currentPositionChar->characteristics::setValue(format("%d",position));//report position
     currentPositionChar->notify(NULL);
@@ -91,9 +63,21 @@ void WindowsShutterAccessory::handle() {
             }
         }
     }
+
+    switch (state) {
+        case 0:
+            rcSwitch.send(downCode, 24);
+            break;
+        case 1:
+            rcSwitch.send(upCode, 24);
+            break;
+        case 2:
+            break;
+    }
 }
 
-void setTargetPosition (int oldValue, int newValue, HKConnection *sender,void *arg) {
+void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
+    //WindowsShutterAccessory *obj = (WindowsShutterAccessory*) arg;
     HKLogger.printf("setTargetPosition %d\n",newValue);
     int diff = abs(newValue - position);
     long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
@@ -105,7 +89,7 @@ void setTargetPosition (int oldValue, int newValue, HKConnection *sender,void *a
 
 }
 
-void setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender,void *arg) {
+void WindowsShutterAccessory::setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender) {
     HKLogger.printf("setTargetTiltAngle %d\n",newValue);
 
     int diff = abs(newValue - tilt);
@@ -118,13 +102,14 @@ void setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender,void *
 }
 
 void WindowsShutterAccessory::initAccessorySet() {
-    pinMode(upLed, OUTPUT);
-    pinMode(downLed, OUTPUT);
+    pinMode(rcOutputPIN, OUTPUT);
+    rcSwitch.enableTransmit(rcOutputPIN);
+    rcSwitch.setProtocol(1);
 
     Accessory *shutterAccessory = new Accessory();
 
     AccessorySet *accSet = &AccessorySet::getInstance();
-    addInfoServiceToAccessory(shutterAccessory, "Shutter name", "Vendor name", "Model  name", "1","1.0.0", &shutterIdentity);
+    addInfoServiceToAccessory(shutterAccessory, "Shutter name", "Vendor name", "Model  name", "1","1.0.0", std::bind(&WindowsShutterAccessory::shutterIdentity, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3));
     accSet->addAccessory(shutterAccessory);
 
     Service *windowsCoverService = new Service(serviceType_windowCover);
@@ -136,7 +121,7 @@ void WindowsShutterAccessory::initAccessorySet() {
 
     intCharacteristics *targetPosition = new intCharacteristics(charType_targetPosition, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
     targetPosition->characteristics::setValue(format("%d",position));
-    targetPosition->valueChangeFunctionCall = &setTargetPosition;
+    targetPosition->valueChangeFunctionCall = std::bind(&WindowsShutterAccessory::setTargetPosition, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
     shutterAccessory->addCharacteristics(windowsCoverService, targetPosition);
 
     currentPositionChar = new intCharacteristics(charType_currentPosition, premission_read|premission_notify, 0, 100, 1, unit_percentage);
@@ -149,7 +134,7 @@ void WindowsShutterAccessory::initAccessorySet() {
 
     intCharacteristics *targetHorizontalTiltAngle = new intCharacteristics(charType_targetHorizontalTiltAngle, premission_read|premission_write|premission_notify, -90, 0, 10, unit_arcDegree);
     targetHorizontalTiltAngle->characteristics::setValue(format("%d",tilt));
-    targetHorizontalTiltAngle->valueChangeFunctionCall = &setTargetTiltAngle;
+    targetHorizontalTiltAngle->valueChangeFunctionCall = std::bind(&WindowsShutterAccessory::setTargetTiltAngle, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
     shutterAccessory->addCharacteristics(windowsCoverService, targetHorizontalTiltAngle);
 
     currentTiltAngleChar = new intCharacteristics(charType_currentHorizontalTiltAngle, premission_read|premission_notify, -90, 0, 10, unit_arcDegree);
