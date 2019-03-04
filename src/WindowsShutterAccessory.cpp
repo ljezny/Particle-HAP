@@ -54,13 +54,6 @@ void WindowsShutterAccessory::handle() {
             setState(2);
             setPosition(targetPosition);
             setTilt(targetTilt);
-        }  if (state != 2) { //report position progress
-            long msToGo = endMS - millis();
-            int positionPercentToGo = (msToGo * 100) / COVER_OPEN_TO_CLOSE_MS;
-            int estimatedCurrentPosition = state == 0 ? targetPosition + positionPercentToGo : targetPosition - positionPercentToGo;
-            if((position != estimatedCurrentPosition) && ((estimatedCurrentPosition % 5) == 0)) {//report change every five percents
-                setPosition(estimatedCurrentPosition);
-            }
         }
     }
 
@@ -80,13 +73,12 @@ void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKC
     //WindowsShutterAccessory *obj = (WindowsShutterAccessory*) arg;
     HKLogger.printf("setTargetPosition %d\n",newValue);
     int diff = abs(newValue - position);
-    long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
+    long time = (newValue == 0 || newValue == 100) ? COVER_OPEN_TO_CLOSE_MS : COVER_OPEN_TO_CLOSE_MS / 100 * diff;
 
     endMS = millis() + time;
     targetPosition = newValue;
     targetTilt = newValue > position ? 0 : -90;
     setState(newValue > position ? 1 : 0);
-
 }
 
 void WindowsShutterAccessory::setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender) {

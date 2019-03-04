@@ -24,7 +24,7 @@ private:
     
     //initially fully closed
     int state = 2; //0 - going to minimum value, closing, down , 1 - going to maximum light - opening, up
-    int position = 0;
+    int position = 50; //initially assume it's half open, so user can open/close to sync the state
     int tilt = -90;
     
     int targetTilt = tilt;
