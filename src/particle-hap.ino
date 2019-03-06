@@ -23,7 +23,6 @@ void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
 }
 
-STARTUP(WiFi.selectAntenna(ANT_EXTERNAL));
 
 // setup() runs once, when the device is first turned on.
 void setup() {
