@@ -176,9 +176,10 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
 void HKConnection::handleConnection() {
     uint8_t *inputBuffer = NULL;
     size_t len = 0;
+
     readData(&inputBuffer,&len);
 
-    if (len > 0) {
+    while (len > 0) {
         HKLogger.printf("Request Message read length: %d \n", len);
         lastKeepAliveMs = millis();
         HKNetworkMessage msg((const char *)inputBuffer);
@@ -198,10 +199,12 @@ void HKConnection::handleConnection() {
             HKLogger.printf("Handling message request: %s\n",msg.directory);
             handleAccessoryRequest((const char *)inputBuffer, len);
         }
+        free(inputBuffer);
+        delay(100); //expect more data
+        readData(&inputBuffer,&len);
     }
-    processPostedCharacteristics();
-    free(inputBuffer);
 
+    processPostedCharacteristics();
 }
 
 void HKConnection::announce(char* desc){

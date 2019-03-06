@@ -23,12 +23,12 @@ void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
 }
 
+
 // setup() runs once, when the device is first turned on.
 void setup() {
+
 	randomSeed(Time.now());//we need to somehow init random seed, so device identity will be unique
   Serial.begin();
-
-
 
   //HKPersistor().resetAll();
 
