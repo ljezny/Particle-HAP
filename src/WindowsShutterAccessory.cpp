@@ -60,10 +60,10 @@ void WindowsShutterAccessory::handle() {
 
     switch (state) {
         case 0:
-            rcSwitch.send(downCode, 24);
+            rcSwitch->send(downCode, 24);
             break;
         case 1:
-            rcSwitch.send(upCode, 24);
+            rcSwitch->send(upCode, 24);
             break;
         case 2:
             break;
@@ -99,8 +99,8 @@ void WindowsShutterAccessory::initAccessorySet() {
     if(!rcSwitch) {
       rcSwitch = new RCSwitch();
       pinMode(rcOutputPIN, OUTPUT);
-      rcSwitch.enableTransmit(rcOutputPIN);
-      rcSwitch.setProtocol(1);
+      rcSwitch->enableTransmit(rcOutputPIN);
+      rcSwitch->setProtocol(1);
     }
 
     Accessory *shutterAccessory = new Accessory();
