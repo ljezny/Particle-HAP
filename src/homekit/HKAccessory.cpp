@@ -521,10 +521,11 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
           replyDataLen = desc.length();
           replyData = new char[replyDataLen+1];
-          bcopy(desc.c_str(), replyData, replyDataLen);
+          memset(replyData,0,replyDataLen+1);
+          memcpy(replyData,desc.c_str(),replyDataLen);
           replyData[replyDataLen] = 0;
         }
-        //Serial.printf("Accessories reply: %s\n", replyData);
+        Serial.printf("Accessories reply: %s\n", replyData);
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);
         statusCode = 200;
@@ -626,12 +627,13 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
             replyDataLen = result.length();
             replyData = new char[replyDataLen+1];
             replyData[replyDataLen] = 0;
+            memset(replyData,0,replyDataLen+1);
             bcopy(result.c_str(), replyData, replyDataLen);
             statusCode = 200;
 
         } else if (strncmp(method, "PUT", 3) == 0) {
             //Change characteristics
-            Serial.printf("PUT characteristics: \n");
+            Serial.printf("PUT characteristics: %s\n",dataPtr);
 
             char characteristicsBuffer[1000];
             sscanf(dataPtr, "{\"characteristics\":[{%[^]]s}", characteristicsBuffer);

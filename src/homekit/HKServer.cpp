@@ -16,11 +16,11 @@ HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void
     this->progressPtr = progressPtr;
     persistor = new HKPersistor();
     persistor->loadRecordStorage();
-    
+
     char *deviceIdentity = new char[12+5];
     const unsigned char *deviceId = persistor->getDeviceId();
     sprintf(deviceIdentity, "%02X:%02X:%02X:%02X:%02X:%02X",deviceId[0],deviceId[1],deviceId[2],deviceId[3],deviceId[4],deviceId[5]);
-    
+
     this->deviceIdentity = deviceIdentity; //std::string will copy
     free(deviceIdentity);
 }
@@ -40,7 +40,7 @@ void HKServer::setPaired(bool p) {
     if(paired) {
         return;
     }
-    
+
     paired = p;
     bonjour.removeAllServiceRecords();
 
@@ -61,7 +61,7 @@ void HKServer::setPaired(bool p) {
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
                              recordTxt);
-    
+
     free(deviceTypeStr);
     free(recordTxt);
     free(bonjourName);
@@ -86,7 +86,7 @@ void HKServer::handle() {
             Serial.println("Client removed.");
             clients.erase(clients.begin() + i);
 
-            free(conn);
+            delete conn;
         }
 
         i--;

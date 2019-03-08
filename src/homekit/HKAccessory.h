@@ -224,6 +224,7 @@ public:
     void addNotifiedConnection(HKConnection *c){
       notifiedConnections.push_back(c);
 
+      c->addNotifiedCharacteristics(this);
       c->postCharacteristicsValue(this);
     }
     void removeNotifiedConnection(HKConnection *c){
@@ -232,6 +233,7 @@ public:
         HKConnection *item = notifiedConnections.at(i);
 
         if(item == c) {
+          //Serial.println("Removing notified connection.");
           notifiedConnections.erase(notifiedConnections.begin() + i);
         }
         i--;

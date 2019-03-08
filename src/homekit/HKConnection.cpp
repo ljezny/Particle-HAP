@@ -26,6 +26,13 @@ HKConnection::HKConnection(HKServer *s,TCPClient c) {
 
 }
 
+HKConnection::~HKConnection() {
+    HKLogger.println("HKConnection: destructor");
+    for (int i = 0; i < notifiableCharacteristics.size(); i++) {
+        notifiableCharacteristics.at(i)->removeNotifiedConnection(this);
+    }
+}
+
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     HKLogger.println("BEGIN: writeEncryptedData");
     byte nonce[12];
@@ -181,7 +188,6 @@ void HKConnection::handleConnection() {
 
     if (len > 0) {
         HKLogger.printf("Request Message read length: %d \n", len);
-        lastKeepAliveMs = millis();
         HKNetworkMessage msg((const char *)inputBuffer);
         if (!strcmp(msg.directory, "pair-setup")){
             HKLogger.printf("Handling Pair Setup...\n");
@@ -733,4 +739,8 @@ void HKConnection::processPostedCharacteristics() {
 
 void HKConnection::postCharacteristicsValue(characteristics *c){
     postedCharacteristics.push_back(c);
+}
+
+void HKConnection::addNotifiedCharacteristics(characteristics *c){
+    notifiableCharacteristics.push_back(c);
 }

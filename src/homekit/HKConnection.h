@@ -61,7 +61,6 @@ private:
   byte writeKey[CHACHA20_POLY1305_AEAD_KEYSIZE];
   int writesCount = 0;
   bool isEncrypted = false;
-  int lastKeepAliveMs = 0;
 
   std::vector<characteristics *> notifiableCharacteristics;
   std::vector<characteristics *> postedCharacteristics;
@@ -81,6 +80,7 @@ public:
   bool relay = false;
 
   HKConnection(HKServer *s,TCPClient c);
+  ~HKConnection();
   void handleConnection();
   void keepAlive();
   void announce(char* buffer);
@@ -98,5 +98,6 @@ public:
     client.stop();
   }
   void postCharacteristicsValue(characteristics *c);
+  void addNotifiedCharacteristics(characteristics *c);
 };
 #endif
