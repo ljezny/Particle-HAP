@@ -20,7 +20,7 @@
 #include "homekit/HKLog.h"
 
 #define COVER_OPEN_TO_CLOSE_MS 56000
-#define TILT_OPEN_TO_CLOSE_MS 2000
+#define TILT_OPEN_TO_CLOSE_MS 1200
 
 RCSwitch *rcSwitch = NULL; //this is static, it will be initialized one time
 
