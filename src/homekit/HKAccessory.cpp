@@ -346,7 +346,7 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, string
 
     return "{"+result+"}";
 }
-inline string arrayWrap(string *s, unsigned short len) {
+string arrayWrap(string *s, unsigned short len) {
     string result;
 
     result += "[";
@@ -360,7 +360,7 @@ inline string arrayWrap(string *s, unsigned short len) {
 
     return result;
 }
-inline string dictionaryWrap(string *key, string *value, unsigned short len) {
+string dictionaryWrap(string *key, string *value, unsigned short len) {
     string result;
 
     result += "{";
@@ -384,44 +384,50 @@ void characteristics::notify(HKConnection* conn) {
 }
 
 string boolCharacteristics::describe(HKConnection *sender) {
-    return attribute(type, iid, premission, value(sender));
+    string result = attribute(type, iid, premission, value(sender));
+    //Serial.printf("boolCharacteristics::describe: %s\n",result.c_str());
+    return result;
 }
 
 string floatCharacteristics::describe(HKConnection *sender) {
-    return attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
+    string result = attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
+    //Serial.printf("boolCharacteristics::describe: %s\n",result.c_str());
+    return result;
 }
 
 string intCharacteristics::describe(HKConnection *sender) {
-    return attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
+    string result = attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
+    //Serial.printf("boolCharacteristics::describe: %s\n",result.c_str());
+    return result;
 }
 
 string stringCharacteristics::describe(HKConnection *sender) {
-    return attribute(type, iid, premission, value(sender), maxLen);
+    string result = attribute(type, iid, premission, value(sender), maxLen);
+    //Serial.printf("boolCharacteristics::describe: %s\n",result.c_str());
+    return result;
 }
 
 string Service::describe(HKConnection *sender) {
     string keys[3] = {"iid", "type", "characteristics"};
     string values[3];
-    {
-        char temp[8];
-        snprintf(temp, 8, "%d", serviceID);
-        values[0] = temp;
+    char serviceIDStr[8];
+    snprintf(serviceIDStr, 8, "%d", serviceID);
+    values[0] = serviceIDStr;
+    char uuidStr[8];
+    snprintf(uuidStr, 8, "\"%X\"", uuid);
+    values[1] = uuidStr;
+
+    int no = numberOfCharacteristics();
+    string *chars = new string[no];
+    for (int i = 0; i < no; i++) {
+        chars[i] = _characteristics[i]->describe(sender);
     }
-    {
-        char temp[8];
-        snprintf(temp, 8, "\"%X\"", uuid);
-        values[1] = temp;
-    }
-    {
-        int no = numberOfCharacteristics();
-        string *chars = new string[no];
-        for (int i = 0; i < no; i++) {
-            chars[i] = _characteristics[i]->describe(sender);
-        }
-        values[2] = arrayWrap(chars, no);
-        delete [] chars;
-    }
-    return dictionaryWrap(keys, values, 3);
+    values[2] = arrayWrap(chars, no);
+    delete [] chars;
+
+    string result = dictionaryWrap(keys, values, 3);
+    //Serial.printf("Service::describe: %s\n",result.c_str());
+    return result;
 }
 
 string Accessory::describe(HKConnection *sender) {
@@ -443,6 +449,7 @@ string Accessory::describe(HKConnection *sender) {
     delete [] services;
 
     string result = dictionaryWrap(keys, values, 2);
+    //Serial.printf("Accessory::describe: %s\n",result.c_str());
     return result;
 }
 
@@ -456,6 +463,7 @@ string AccessorySet::describe(HKConnection *sender) {
     delete [] desc;
     string key = "accessories";
     result = dictionaryWrap(&key, &result, 1);
+    //Serial.printf("AccessorySet::describe %s\n",result.c_str());
     return result;
 }
 /*
@@ -472,14 +480,13 @@ void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value
 void handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender) {
     int index = 5;
     char method[5];
-    {
-        //Read method
-        method[4] = 0;
-        bcopy(request, method, 4);
-        if (method[3] == ' ') {
-            method[3] = 0;
-            index = 4;
-        }
+
+    //Read method
+    method[4] = 0;
+    bcopy(request, method, 4);
+    if (method[3] == ' ') {
+        method[3] = 0;
+        index = 4;
     }
 
     char path[1024];
@@ -509,11 +516,15 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         //Publish the characterists of the accessories
         Serial.printf("Ask for accessories info\n");
         statusCode = 200;
-        string desc = AccessorySet::getInstance().describe(sender);
-        replyDataLen = desc.length();
-        replyData = new char[replyDataLen+1];
-        bcopy(desc.c_str(), replyData, replyDataLen);
-        replyData[replyDataLen] = 0;
+        {
+          string desc = AccessorySet::getInstance().describe(sender);
+
+          replyDataLen = desc.length();
+          replyData = new char[replyDataLen+1];
+          bcopy(desc.c_str(), replyData, replyDataLen);
+          replyData[replyDataLen] = 0;
+        }
+        //Serial.printf("Accessories reply: %s\n", replyData);
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);
         statusCode = 200;

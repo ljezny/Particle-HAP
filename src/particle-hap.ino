@@ -13,8 +13,6 @@
 #include "MotionSensorAccessory.h"
 #include "HomekitBridgeAccessory.h"
 
-SYSTEM_THREAD(ENABLED);
-
 HKServer *hkServer = NULL;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
@@ -38,20 +36,17 @@ void setup() {
   acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916));
   acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036));
   acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040));
-  acc->descriptors.push_back(new MotionSensorAccessory());
+  //acc->descriptors.push_back(new MotionSensorAccessory());
   //END MYHOME
 
   acc->initAccessorySet();
+
+  hkServer = new HKServer(acc->getDeviceType(),"Kit","523-12-643",progress);
+  hkServer->setup();
 }
 
 // loop() runs over and over again, as quickly as it can execute.
 void loop() {
-  if(WiFi.ready()){
-    if(!hkServer){
-      hkServer = new HKServer(acc->getDeviceType(),"Kit","523-12-643",progress);
-      hkServer->setup();
-    }
-    hkServer->handle();
-  }
+  hkServer->handle();
   acc->handle();
 }
