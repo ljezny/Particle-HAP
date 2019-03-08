@@ -25,6 +25,8 @@ HKStorage EEPROMClass::get(int address, HKStorage storage){
     if(f){
         fread(&storage, sizeof(HKStorage), 1, f);
         fclose(f);
+    } else {
+        memset(&storage, 0xFF, sizeof(HKStorage)); //simulate empty eeprom
     }
     return storage;
 }

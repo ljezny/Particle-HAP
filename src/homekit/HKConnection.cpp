@@ -179,7 +179,7 @@ void HKConnection::handleConnection() {
 
     readData(&inputBuffer,&len);
 
-    while (len > 0) {
+    if (len > 0) {
         HKLogger.printf("Request Message read length: %d \n", len);
         lastKeepAliveMs = millis();
         HKNetworkMessage msg((const char *)inputBuffer);
@@ -200,17 +200,15 @@ void HKConnection::handleConnection() {
             handleAccessoryRequest((const char *)inputBuffer, len);
         }
         free(inputBuffer);
-        delay(100); //expect more data
-        readData(&inputBuffer,&len);
     }
 
     processPostedCharacteristics();
 }
 
 void HKConnection::announce(char* desc){
-    char *reply = (char*)malloc(1024);
-    memset(reply,0,1024);
-    int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    char *reply = (char*)malloc(2048);
+    memset(reply,0,2048);
+    int len = snprintf(reply, 2048, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
 
     HKLogger.printf("--------ANNOUNCE: %s--------\n",clientID());
     writeData((byte*)reply,len);

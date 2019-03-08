@@ -33,21 +33,23 @@ HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
+    delay(2000); //simulate slowness of photon
 }
-
+HKServer *server = NULL;
 int main(int argc, const char * argv[]) {
+   
     NSString *hapName = @"HKTester1";
     
     int passcodeNumber = 52312643;
     NSString *passscode = [NSString stringWithFormat:@"%d%d%d-%d%d-%d%d%d", (passcodeNumber / 10000000) % 10,(passcodeNumber / 1000000) % 10,(passcodeNumber / 100000) % 10,(passcodeNumber / 10000) % 10,(passcodeNumber / 1000) % 10,(passcodeNumber / 100) % 10,(passcodeNumber / 10) % 10,passcodeNumber % 10];
     
-    HKServer server = HKServer(acc->getDeviceType(), [hapName cString],[passscode cString],progress);
+    server = new HKServer(acc->getDeviceType(), [hapName cString],[passscode cString],progress);
     
-    nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:@"HKTester" port:TCP_SERVER_PORT];
+    nsService = [[NSNetService alloc] initWithDomain:@"" type:@"_hap._tcp." name:hapName port:TCP_SERVER_PORT];
 
     NSDictionary *txtDict = @{
         @"pv": [@"1.0" dataUsingEncoding:NSUTF8StringEncoding], // state
-        @"id": [[NSString stringWithCString:server.getDeviceIdentity().c_str()] dataUsingEncoding:NSUTF8StringEncoding], // identifier
+        @"id": [[NSString stringWithCString:server->getDeviceIdentity().c_str()] dataUsingEncoding:NSUTF8StringEncoding], // identifier
         @"c#": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // version
         @"s#": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // state
         @"sf": [@"1" dataUsingEncoding:NSUTF8StringEncoding], // discoverable
@@ -70,11 +72,11 @@ int main(int argc, const char * argv[]) {
     
     acc->initAccessorySet();
     
-    server.setup();
+    server->setup();
     for(;;) {
-        server.handle();
+        server->handle();
         acc->handle();
-        usleep(10000);
+        usleep(100);
     }
     return 0;
 }

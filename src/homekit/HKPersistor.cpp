@@ -2,8 +2,9 @@
 #include "HKStringUtils.h"
 void HKPersistor::loadRecordStorage() {
     Serial.println("Persistor: load");
+    
     storage = EEPROM.get(EEPROM_STORAGE_ADDRESS_OFFSET, storage);
-    if(storage.pairings[0].controllerID[0] == 0xFF) { //particle eeprom default value
+    if(((unsigned char *)&storage)[0] == 0xFF) { //particle eeprom default value
         resetAll();
     }
 }
