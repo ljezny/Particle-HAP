@@ -22,6 +22,8 @@
 #define COVER_OPEN_TO_CLOSE_MS 56000
 #define TILT_OPEN_TO_CLOSE_MS 2000
 
+RCSwitch *rcSwitch = NULL; //this is static, it will be initialized one time
+
 void WindowsShutterAccessory::shutterIdentity(bool oldValue, bool newValue, HKConnection *sender) {
 
 }
@@ -58,10 +60,10 @@ void WindowsShutterAccessory::handle() {
 
     switch (state) {
         case 0:
-            rcSwitch.send(downCode, 24);
+            rcSwitch->send(downCode, 24);
             break;
         case 1:
-            rcSwitch.send(upCode, 24);
+            rcSwitch->send(upCode, 24);
             break;
         case 2:
             break;
@@ -74,7 +76,7 @@ void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKC
     int diff = abs(newValue - position);
     //long time = (newValue == 0 || newValue == 100) ? COVER_OPEN_TO_CLOSE_MS : COVER_OPEN_TO_CLOSE_MS / 100 * diff;
     long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
-    
+
     endMS = millis() + time;
     targetPosition = newValue;
     targetTilt = newValue > position ? 0 : -90;
@@ -94,9 +96,12 @@ void WindowsShutterAccessory::setTargetTiltAngle (int oldValue, int newValue, HK
 }
 
 void WindowsShutterAccessory::initAccessorySet() {
-    pinMode(rcOutputPIN, OUTPUT);
-    rcSwitch.enableTransmit(rcOutputPIN);
-    rcSwitch.setProtocol(1);
+    if(!rcSwitch) {
+      rcSwitch = new RCSwitch();
+      pinMode(rcOutputPIN, OUTPUT);
+      rcSwitch->enableTransmit(rcOutputPIN);
+      rcSwitch->setProtocol(1);
+    }
 
     Accessory *shutterAccessory = new Accessory();
 
