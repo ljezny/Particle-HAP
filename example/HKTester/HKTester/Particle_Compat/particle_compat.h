@@ -9,8 +9,6 @@
 #ifndef particle_compat_h
 #define particle_compat_h
 
-#include <sys/socket.h>
-
 #include <unistd.h>
 #include <sys/time.h>
 #include <stdint.h>
@@ -136,19 +134,26 @@ class TCPServer {
 private:
     int server_socket;
     struct sockaddr_in servaddr, cliaddr;
+    
 public:
+    int port;
     TCPServer(int port){
+        this->port = port;
         if ( (server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
             perror("socket creation failed");
         }
+        int opt_val = 1;
+        setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof opt_val);
+        setsockopt(server_socket, SOL_SOCKET, SO_REUSEPORT, &opt_val, sizeof opt_val);
         
         memset(&servaddr, 0, sizeof(servaddr));
-        //memset(&cliaddr, 0, sizeof(cliaddr));
         
         // Filling server information
-        servaddr.sin_family    = AF_INET; // IPv4
-        servaddr.sin_addr.s_addr = INADDR_ANY;
+        servaddr.sin_family = AF_INET;
         servaddr.sin_port = htons(port);
+        servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+        
+        
         
         bind(server_socket, (const struct sockaddr *)&servaddr, sizeof(servaddr));
         if ((listen(server_socket, 0)) != 0) {
