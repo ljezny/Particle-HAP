@@ -224,7 +224,7 @@ public:
     void addNotifiedConnection(HKConnection *c){
       notifiedConnections.push_back(c);
 
-      //c->postCharacteristicsValue(this);
+      c->postCharacteristicsValue(this);
     }
     void removeNotifiedConnection(HKConnection *c){
       int i = notifiedConnections.size() - 1;
@@ -245,7 +245,7 @@ typedef std::function<void(bool,bool,HKConnection *)> bool_value_changed_t;
 class boolCharacteristics: public characteristics {
 public:
     bool _value;
-    
+
     //void (*valueChangeFunctionCall)(bool oldValue, bool newValue, HKConnection *sender) = NULL;
     bool_value_changed_t valueChangeFunctionCall = NULL;
     boolCharacteristics(unsigned int _type, int _premission): characteristics(_type, _premission) {}
