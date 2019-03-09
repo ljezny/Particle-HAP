@@ -738,6 +738,12 @@ void HKConnection::processPostedCharacteristics() {
 }
 
 void HKConnection::postCharacteristicsValue(characteristics *c){
+    for(int i = 0; i < postedCharacteristics.size(); i++) {
+        characteristics *item = postedCharacteristics.at(i);
+        if(c == item) { //already registered
+          return;
+        }
+    }
     postedCharacteristics.push_back(c);
 }
 
