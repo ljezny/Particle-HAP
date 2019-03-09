@@ -525,7 +525,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
           memcpy(replyData,desc.c_str(),replyDataLen);
           replyData[replyDataLen] = 0;
         }
-        Serial.printf("Accessories reply: %s\n", replyData);
+        //Serial.printf("Accessories reply: %s\n", replyData);
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);
         statusCode = 200;

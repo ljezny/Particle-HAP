@@ -32,6 +32,8 @@ void WindowsShutterAccessory::setState(int newState) {
     state = newState;
     positionStateChar->characteristics::setValue(format("%d",state)); //report state
     positionStateChar->notify(NULL);
+
+    setPosition(position);
 }
 
 void WindowsShutterAccessory::setTilt(int newTilt) {
@@ -55,15 +57,25 @@ void WindowsShutterAccessory::handle() {
             setState(2);
             setPosition(targetPosition);
             setTilt(targetTilt);
+        } else {
+          long msToGo = endMS - millis();
+          int positionPercentToGo = (msToGo * 100) / COVER_OPEN_TO_CLOSE_MS;
+          int estimatedCurrentPosition = state == 0 ? targetPosition + positionPercentToGo : targetPosition - positionPercentToGo;
+          /*if((position != estimatedCurrentPosition) && ((estimatedCurrentPosition % 5) == 0)) {//report change every five percents
+              setPosition(estimatedCurrentPosition);
+          }*/
+          position = estimatedCurrentPosition;
         }
     }
 
     switch (state) {
         case 0:
             rcSwitch->send(downCode, 24);
+            Serial.printf("Sending downCode: %d\n", downCode);
             break;
         case 1:
             rcSwitch->send(upCode, 24);
+            Serial.printf("Sending upCode: %d\n", upCode);
             break;
         case 2:
             break;
@@ -72,7 +84,7 @@ void WindowsShutterAccessory::handle() {
 
 void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
     //WindowsShutterAccessory *obj = (WindowsShutterAccessory*) arg;
-    HKLogger.printf("setTargetPosition %d\n",newValue);
+    Serial.printf("setTargetPosition %d\n",newValue);
     int diff = abs(newValue - position);
     //long time = (newValue == 0 || newValue == 100) ? COVER_OPEN_TO_CLOSE_MS : COVER_OPEN_TO_CLOSE_MS / 100 * diff;
     long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
@@ -98,9 +110,9 @@ void WindowsShutterAccessory::setTargetTiltAngle (int oldValue, int newValue, HK
 void WindowsShutterAccessory::initAccessorySet() {
     if(!rcSwitch) {
       rcSwitch = new RCSwitch();
-      pinMode(rcOutputPIN, OUTPUT);
       rcSwitch->enableTransmit(rcOutputPIN);
       rcSwitch->setProtocol(1);
+      //rcSwitch->setRepeatTransmit(1);
     }
 
     Accessory *shutterAccessory = new Accessory();
@@ -116,10 +128,10 @@ void WindowsShutterAccessory::initAccessorySet() {
     nameCharacteristic->characteristics::setValue("Window name");
     shutterAccessory->addCharacteristics(windowsCoverService, nameCharacteristic);
 
-    intCharacteristics *targetPosition = new intCharacteristics(charType_targetPosition, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
-    targetPosition->characteristics::setValue(format("%d",position));
-    targetPosition->valueChangeFunctionCall = std::bind(&WindowsShutterAccessory::setTargetPosition, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
-    shutterAccessory->addCharacteristics(windowsCoverService, targetPosition);
+    intCharacteristics *targetPositionChar = new intCharacteristics(charType_targetPosition, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
+    targetPositionChar->characteristics::setValue(format("%d",targetPosition));
+    targetPositionChar->valueChangeFunctionCall = std::bind(&WindowsShutterAccessory::setTargetPosition, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
+    shutterAccessory->addCharacteristics(windowsCoverService, targetPositionChar);
 
     currentPositionChar = new intCharacteristics(charType_currentPosition, premission_read|premission_notify, 0, 100, 1, unit_percentage);
     currentPositionChar->characteristics::setValue(format("%d",position));
@@ -137,4 +149,5 @@ void WindowsShutterAccessory::initAccessorySet() {
     currentTiltAngleChar = new intCharacteristics(charType_currentHorizontalTiltAngle, premission_read|premission_notify, -90, 0, 10, unit_arcDegree);
     currentTiltAngleChar->characteristics::setValue(format("%d",tilt));
     shutterAccessory->addCharacteristics(windowsCoverService, currentTiltAngleChar);
+    
 };
