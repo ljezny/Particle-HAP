@@ -16,7 +16,7 @@ const char pairingTlv8Type[] = "application/pairing+tlv8";
 //Wrap to JSON
 inline string wrap(const char *str) { return (string)"\""+str+"\""; }
 //Value String
-inline string attribute(unsigned int type, unsigned short acclaim, int p, string value) {
+string attribute(unsigned int type, unsigned short acclaim, int p, string value) {
     string result;
     if (p & premission_read) {
         result += wrap("value")+":";
@@ -46,7 +46,7 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, string
 
     return "{"+result+"}";
 }
-inline string attribute(unsigned int type, unsigned short acclaim, int p, string value, int minVal, int maxVal, int step, unit valueUnit) {
+string attribute(unsigned int type, unsigned short acclaim, int p, string value, int minVal, int maxVal, int step, unit valueUnit) {
     string result;
     char tempStr[16];
 
@@ -103,7 +103,7 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, string
 
     return "{"+result+"}";
 }
-inline string attribute(unsigned int type, unsigned short acclaim, int p, string value, float minVal, float maxVal, float step, unit valueUnit) {
+string attribute(unsigned int type, unsigned short acclaim, int p, string value, float minVal, float maxVal, float step, unit valueUnit) {
     string result;
     char tempStr[16];
 
@@ -161,7 +161,7 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, string
     return "{"+result+"}";
 }
 //Raw value
-inline string attribute(unsigned int type, unsigned short acclaim, int p, bool value) {
+string attribute(unsigned int type, unsigned short acclaim, int p, bool value) {
     string result;
     if (p & premission_read) {
         result += wrap("value")+":";
@@ -192,7 +192,7 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, bool v
 
     return "{"+result+"}";
 }
-inline string attribute(unsigned int type, unsigned short acclaim, int p, int value, int minVal, int maxVal, int step, unit valueUnit) {
+string attribute(unsigned int type, unsigned short acclaim, int p, int value, int minVal, int maxVal, int step, unit valueUnit) {
     string result;
     char tempStr[16];
 
@@ -251,7 +251,7 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, int va
 
     return "{"+result+"}";
 }
-inline string attribute(unsigned int type, unsigned short acclaim, int p, float value, float minVal, float maxVal, float step, unit valueUnit) {
+string attribute(unsigned int type, unsigned short acclaim, int p, float value, float minVal, float maxVal, float step, unit valueUnit) {
     string result;
     char tempStr[16];
 
@@ -310,7 +310,7 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, float 
 
     return "{"+result+"}";
 }
-inline string attribute(unsigned int type, unsigned short acclaim, int p, string value, unsigned short len) {
+string attribute(unsigned int type, unsigned short acclaim, int p, string value, unsigned short len) {
     string result;
     char tempStr[4];
 
@@ -347,32 +347,30 @@ inline string attribute(unsigned int type, unsigned short acclaim, int p, string
     return "{"+result+"}";
 }
 string arrayWrap(string *s, unsigned short len) {
-    string result;
-
-    result += "[";
-
+    string result = "";
+    result.append("[");
     for (int i = 0; i < len; i++) {
-        result += s[i]+",";
+        result.append(s[i]);
+        if(i != len - 1) { //ommit last ,
+          result.append(",");
+        }
     }
-    result = result.substr(0, result.size()-1);
-
-    result += "]";
+    result.append("]");
 
     return result;
 }
 string dictionaryWrap(string *key, string *value, unsigned short len) {
-    string result;
+  string result = "";
+  result.append("{");
+  for (int i = 0; i < len; i++) {
+      result.append(wrap(key[i].c_str())+":"+value[i]);
+      if(i != len - 1) { //ommit last ,
+        result.append(",");
+      }
+  }
+  result.append("}");
 
-    result += "{";
-
-    for (int i = 0; i < len; i++) {
-        result += wrap(key[i].c_str())+":"+value[i]+",";
-    }
-    result = result.substr(0, result.size()-1);
-
-    result += "}";
-
-    return result;
+  return result;
 }
 
 void characteristics::notify(HKConnection* conn) {
@@ -431,39 +429,50 @@ string Service::describe(HKConnection *sender) {
 }
 
 string Accessory::describe(HKConnection *sender) {
-    string keys[2];
-    string values[2];
+  string result = "";
+  result.append("{");
 
-    keys[0] = "aid";
-    char temp[8];
-    sprintf(temp, "%d", aid);
-    values[0] = temp;
-    //Form services list
-    int noOfService = numberOfService();
-    string *services = new string[noOfService];
-    for (int i = 0; i < noOfService; i++) {
-        services[i] = _services[i]->describe(sender);
-    }
-    keys[1] = "services";
-    values[1] = arrayWrap(services, noOfService);
-    delete [] services;
+  result.append("\"services\":[");
 
-    string result = dictionaryWrap(keys, values, 2);
-    //Serial.printf("Accessory::describe: %s\n",result.c_str());
-    return result;
+  int len = numberOfService();
+  for (int i = 0; i < len; i++) {
+      result.append(_services[i]->describe(sender));
+      if(i != len - 1) { //ommit last ,
+        result.append(",");
+      }
+  }
+
+  result.append("]");
+  result.append(",");
+
+  char temp[8];
+  sprintf(temp, "\"aid\":%d", aid);
+  result.append(temp);
+
+  result.append("}");
+
+  return result;
 }
 
 string AccessorySet::describe(HKConnection *sender) {
+    string result = "";
+    result.append("{");
+
+    result.append("\"accessories\":[");
+
     int numberOfAcc = numberOfAccessory();
-    string *desc = new string[numberOfAcc];
     for (int i = 0; i < numberOfAcc; i++) {
-        desc[i] = _accessories[i]->describe(sender);
+        result.append(_accessories[i]->describe(sender));
+        if(i != numberOfAcc - 1) { //ommit last ,
+          result.append(",");
+        }
     }
-    string result = arrayWrap(desc, numberOfAcc);
-    delete [] desc;
-    string key = "accessories";
-    result = dictionaryWrap(&key, &result, 1);
-    //Serial.printf("AccessorySet::describe %s\n",result.c_str());
+
+    result.append("]");
+
+    result.append("}");
+
+    //Serial.printf("%s\n", result.c_str());
     return result;
 }
 /*
@@ -516,16 +525,13 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         //Publish the characterists of the accessories
         Serial.printf("Ask for accessories info\n");
         statusCode = 200;
-        {
-          string desc = AccessorySet::getInstance().describe(sender);
-
-          replyDataLen = desc.length();
-          replyData = new char[replyDataLen+1];
-          memset(replyData,0,replyDataLen+1);
-          memcpy(replyData,desc.c_str(),replyDataLen);
-          replyData[replyDataLen] = 0;
-        }
-        //Serial.printf("Accessories reply: %s\n", replyData);
+        string desc = AccessorySet::getInstance().describe(sender);
+        //Serial.printf("%s\n", desc.c_str());
+        replyDataLen = desc.length();
+        replyData = (char*) malloc((replyDataLen+1)*sizeof(char));//new char[replyDataLen+1];
+        memset(replyData,0,replyDataLen+1);
+        memcpy(replyData,desc.c_str(),replyDataLen);
+        replyData[replyDataLen] = 0;
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);
         statusCode = 200;
