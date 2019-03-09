@@ -11,13 +11,16 @@
 HKLog HKLogger;
 
 int HKLog::printf(const char *format, ...){
-    char output[512];
-
+    char* output = new char[4096];
+    memset(output,0,4096);
     va_list argptr;
     va_start(argptr, format);
     vsprintf(output,format,argptr);
     Serial.println(output);
     va_end(argptr);
+
+    free(output);
+
     return 0;
 
 }
