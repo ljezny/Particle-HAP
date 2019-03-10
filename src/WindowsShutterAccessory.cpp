@@ -68,7 +68,7 @@ void WindowsShutterAccessory::handle() {
           }*/
           position = estimatedCurrentPosition;
 
-          rcSwitch->setRepeatTransmit(1);
+          rcSwitch->setRepeatTransmit(20);
           if(msToGo > 1000) {
             rcSwitch->setRepeatTransmit(100);
           }
