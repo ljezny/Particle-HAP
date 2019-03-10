@@ -36,9 +36,9 @@ void setup() {
   //HKPersistor().resetAll();
 
   //BEGIN MYHOME
-  acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916));
-  acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036));
-  acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040));
+  acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
   //END MYHOME
 
   acc->initAccessorySet();

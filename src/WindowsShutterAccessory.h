@@ -17,6 +17,7 @@ private:
     int rcOutputPIN = D6;
     int upCode = 0;
     int downCode = 0;
+    int eepromAddr = 0;
 
     intCharacteristics *positionStateChar;
     intCharacteristics *currentPositionChar;
@@ -41,9 +42,10 @@ private:
 
 
 public:
-    WindowsShutterAccessory(int upCode,int downCode){
+    WindowsShutterAccessory(int upCode,int downCode,int eepromAddr){
         this->upCode = upCode;
         this->downCode = downCode;
+        this->eepromAddr = eepromAddr;
     }
 
     virtual void initAccessorySet();

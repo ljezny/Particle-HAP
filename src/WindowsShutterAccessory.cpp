@@ -46,6 +46,8 @@ void WindowsShutterAccessory::setPosition(int newPosition) {
     position = newPosition;
     currentPositionChar->characteristics::setValue(format("%d",position));//report position
     currentPositionChar->notify(NULL);
+
+    EEPROM.put(this->eepromAddr, this->position);
 }
 
 void WindowsShutterAccessory::handle() {
@@ -114,6 +116,10 @@ void WindowsShutterAccessory::initAccessorySet() {
       rcSwitch->setProtocol(1);
       //rcSwitch->setRepeatTransmit(1);
     }
+    EEPROM.get(this->eepromAddr, this->position);
+    if(this->position > 100) {
+      this->position = 50;
+    }
 
     Accessory *shutterAccessory = new Accessory();
 
@@ -149,5 +155,5 @@ void WindowsShutterAccessory::initAccessorySet() {
     currentTiltAngleChar = new intCharacteristics(charType_currentHorizontalTiltAngle, premission_read|premission_notify, -90, 0, 10, unit_arcDegree);
     currentTiltAngleChar->characteristics::setValue(format("%d",tilt));
     shutterAccessory->addCharacteristics(windowsCoverService, currentTiltAngleChar);
-    
+
 };
