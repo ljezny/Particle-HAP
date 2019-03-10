@@ -117,7 +117,7 @@ void WindowsShutterAccessory::initAccessorySet() {
       //rcSwitch->setRepeatTransmit(1);
     }
     EEPROM.get(this->eepromAddr, this->position);
-    if(this->position > 100) {
+    if(0 < this->position || this->position > 100) {
       this->position = 50;
     }
 
