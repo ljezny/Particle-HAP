@@ -7,10 +7,12 @@
 //
 
 #include "HKLog.h"
-
+#include <stdlib.h>
+#include "HKStringUtils.h"
 HKLog HKLogger;
 
 int HKLog::printf(const char *format, ...){
+    return 0;
     char* output = new char[4096];
     memset(output,0,4096);
     va_list argptr;
@@ -20,12 +22,12 @@ int HKLog::printf(const char *format, ...){
     va_end(argptr);
 
     free(output);
-
     return 0;
 
 }
 
 int HKLog::println(const char *value) {
+  return 0;
     Serial.println(value);
     return 0;
 }

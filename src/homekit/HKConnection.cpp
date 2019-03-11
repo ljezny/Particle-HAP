@@ -205,9 +205,8 @@ void HKConnection::handleConnection() {
             HKLogger.printf("Handling message request: %s\n",msg.directory);
             handleAccessoryRequest((const char *)inputBuffer, len);
         }
-        free(inputBuffer);
     }
-
+    free(inputBuffer);
     processPostedCharacteristics();
 }
 
