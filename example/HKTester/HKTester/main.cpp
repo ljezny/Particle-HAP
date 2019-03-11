@@ -27,9 +27,9 @@
 NSNetService *nsService;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+HAPAccessoryDescriptor *acc = new LightBulbAccessory();
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
-HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+//HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
@@ -65,21 +65,18 @@ int main(int argc, const char * argv[]) {
     [nsService startMonitoring];
     [nsService publish];
     
-    acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,sizeof(int)));
-    acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
-    acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
-    acc->descriptors.push_back(new MotionSensorAccessory());
+    //acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,sizeof(int)));
+    //acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
+    //acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
     
     acc->initAccessorySet();
     
     server->setup();
     
-  //  string s = AccessorySet::getInstance().describe(NULL);
-    
     for(;;) {
         server->handle();
         acc->handle();
-        usleep(100);
+        usleep(10);
     }
     return 0;
 }

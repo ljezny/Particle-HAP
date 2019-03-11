@@ -1,7 +1,9 @@
 #include "HKPersistor.h"
 #include "HKStringUtils.h"
+#include "HKLog.h"
+
 void HKPersistor::loadRecordStorage() {
-    Serial.println("Persistor: load");
+    HKLogger.println("Persistor: load");
     
     storage = EEPROM.get(EEPROM_STORAGE_ADDRESS_OFFSET, storage);
     if(((unsigned char *)&storage)[0] == 0xFF) { //particle eeprom default value
@@ -10,12 +12,12 @@ void HKPersistor::loadRecordStorage() {
 }
 
 void HKPersistor::saveSaveStorage(){
-    Serial.println("Persistor: save");
+    HKLogger.println("Persistor: save");
     EEPROM.put(EEPROM_STORAGE_ADDRESS_OFFSET, storage);
 }
 
 void HKPersistor::resetAll() {
-    Serial.println("Persistor: resetAll");
+    HKLogger.println("Persistor: resetAll");
     for(int i = 0; i < 6; i++){
         storage.deviceId[i] = random(256);
     }
@@ -23,7 +25,7 @@ void HKPersistor::resetAll() {
 }
 
 void HKPersistor::resetPairings() {
-    Serial.println("Persistor: resetPairings");
+    HKLogger.println("Persistor: resetPairings");
     for(int i = 0; i<MAX_PAIRINGS; i++) { //find first empty slot
        memset(&storage.pairings[i],0,sizeof(HKKeyRecord));
     }
@@ -54,26 +56,26 @@ void HKPersistor::removeKey(HKKeyRecord record) {
 }
 
 int HKPersistor::keyIndex(HKKeyRecord record) {
-    Serial.println("Persistor: key exists");
+    HKLogger.println("Persistor: key exists");
     for (unsigned char i = 0; i < MAX_PAIRINGS; i++) {
         if (bcmp(storage.pairings[i].controllerID, record.controllerID, 32) == 0) {
             Serial.println("Persistor: key found");
             return i;
         }
     }
-    Serial.println("Persistor: key not found");
+    HKLogger.println("Persistor: key not found");
     return -1;
 }
 
 HKKeyRecord HKPersistor::getKey(char controllerID[32]) {
-    Serial.println("Persistor: key get");
+    HKLogger.println("Persistor: key get");
     for (unsigned char i = 0; i < MAX_PAIRINGS; i++) {
         if (bcmp(storage.pairings[i].controllerID, controllerID, 32) == 0) {
             Serial.println("Persistor: key found");
             return storage.pairings[i];
         }
     }
-    Serial.println("Persistor: key not found");
+    HKLogger.println("Persistor: key not found");
     HKKeyRecord emptyRecord;
     bzero(emptyRecord.controllerID, 32);
     return emptyRecord;
