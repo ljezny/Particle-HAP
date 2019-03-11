@@ -8,10 +8,11 @@
 
 #include "HKLog.h"
 #include <stdlib.h>
+#include "HKStringUtils.h"
 HKLog HKLogger;
 
 int HKLog::printf(const char *format, ...){
-  return 0;
+    return 0;
     char* output = new char[4096];
     memset(output,0,4096);
     va_list argptr;

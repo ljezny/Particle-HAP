@@ -408,12 +408,12 @@ string stringCharacteristics::describe(HKConnection *sender) {
 string Service::describe(HKConnection *sender) {
     string result = "";
     result+="{";
-    
-    char serviceIDStr[8];
+   
+    char serviceIDStr[32];
     sprintf(serviceIDStr, "\"iid\":%d,", serviceID);
     result+=serviceIDStr;
     
-    char uuidStr[8];
+    char uuidStr[32];
     sprintf(uuidStr, "\"type\":\"%X\",", uuid);
     result+=uuidStr;
     
@@ -432,27 +432,6 @@ string Service::describe(HKConnection *sender) {
     result+="}";
     
     return result;
-    
-    /*string keys[3] = {"iid", "type", "characteristics"};
-    string values[3];
-    char serviceIDStr[8];
-    snprintf(serviceIDStr, 8, "%d", serviceID);
-    values[0] = serviceIDStr;
-    char uuidStr[8];
-    snprintf(uuidStr, 8, "\"%X\"", uuid);
-    values[1] = uuidStr;
-
-    int no = numberOfCharacteristics();
-    string *chars = new string[no];
-    for (int i = 0; i < no; i++) {
-        chars[i] = _characteristics[i]->describe(sender);
-    }
-    values[2] = arrayWrap(chars, no);
-    delete [] chars;
-
-    string result = dictionaryWrap(keys, values, 3);
-    //Serial.printf("Service::describe: %s\n",result.c_str());
-    return result;*/
 }
 
 string Accessory::describe(HKConnection *sender) {
@@ -472,7 +451,7 @@ string Accessory::describe(HKConnection *sender) {
   result+="]";
   result+=",";
 
-  char temp[8];
+  char temp[32];
   sprintf(temp, "\"aid\":%d", aid);
   result+=temp;
 

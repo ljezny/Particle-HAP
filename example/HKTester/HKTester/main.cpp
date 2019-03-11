@@ -74,7 +74,7 @@ int main(int argc, const char * argv[]) {
     
     server->setup();
     
-    string s = AccessorySet::getInstance().describe(NULL);
+  //  string s = AccessorySet::getInstance().describe(NULL);
     
     for(;;) {
         server->handle();
