@@ -14,7 +14,7 @@
 #include "HomekitBridgeAccessory.h"
 
 
-SYSTEM_THREAD(ENABLED);
+//SYSTEM_THREAD(ENABLED);
 
 HKServer *hkServer = NULL;
 
@@ -39,6 +39,8 @@ void setup() {
   acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
   acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
   acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
+//  acc->descriptors.push_back(new MotionSensorAccessory());
+
   //END MYHOME
 
   acc->initAccessorySet();
