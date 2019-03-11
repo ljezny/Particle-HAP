@@ -7,7 +7,7 @@
 //
 
 #include "HKLog.h"
-
+#include <stdlib.h>
 HKLog HKLogger;
 
 int HKLog::printf(const char *format, ...){
@@ -21,7 +21,6 @@ int HKLog::printf(const char *format, ...){
     va_end(argptr);
 
     free(output);
-
     return 0;
 
 }

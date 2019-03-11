@@ -65,14 +65,17 @@ int main(int argc, const char * argv[]) {
     [nsService startMonitoring];
     [nsService publish];
     
-    acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916));
-    acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036));
-    acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040));
+    acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,sizeof(int)));
+    acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
+    acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
     acc->descriptors.push_back(new MotionSensorAccessory());
     
     acc->initAccessorySet();
     
     server->setup();
+    
+    string s = AccessorySet::getInstance().describe(NULL);
+    
     for(;;) {
         server->handle();
         acc->handle();

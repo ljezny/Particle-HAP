@@ -348,27 +348,27 @@ string attribute(unsigned int type, unsigned short acclaim, int p, string value,
 }
 string arrayWrap(string *s, unsigned short len) {
     string result = "";
-    result.append("[");
+    result+="[";
     for (int i = 0; i < len; i++) {
-        result.append(s[i]);
+        result+=s[i];
         if(i != len - 1) { //ommit last ,
-          result.append(",");
+          result+=",";
         }
     }
-    result.append("]");
+    result+="]";
 
     return result;
 }
 string dictionaryWrap(string *key, string *value, unsigned short len) {
   string result = "";
-  result.append("{");
+  result+="{";
   for (int i = 0; i < len; i++) {
-      result.append(wrap(key[i].c_str())+":"+value[i]);
+      result+=wrap(key[i].c_str())+":"+value[i];
       if(i != len - 1) { //ommit last ,
-        result.append(",");
+        result+=",";
       }
   }
-  result.append("}");
+  result+="}";
 
   return result;
 }
@@ -406,7 +406,34 @@ string stringCharacteristics::describe(HKConnection *sender) {
 }
 
 string Service::describe(HKConnection *sender) {
-    string keys[3] = {"iid", "type", "characteristics"};
+    string result = "";
+    result+="{";
+    
+    char serviceIDStr[8];
+    sprintf(serviceIDStr, "\"iid\":%d,", serviceID);
+    result+=serviceIDStr;
+    
+    char uuidStr[8];
+    sprintf(uuidStr, "\"type\":\"%X\",", uuid);
+    result+=uuidStr;
+    
+    result+="\"characteristics\":[";
+    
+    int len = numberOfCharacteristics();
+    for (int i = 0; i < len; i++) {
+        result+=_characteristics[i]->describe(sender);
+        if(i != len - 1) { //ommit last ,
+            result+=",";
+        }
+    }
+    
+    result+="]";
+    
+    result+="}";
+    
+    return result;
+    
+    /*string keys[3] = {"iid", "type", "characteristics"};
     string values[3];
     char serviceIDStr[8];
     snprintf(serviceIDStr, 8, "%d", serviceID);
@@ -425,52 +452,52 @@ string Service::describe(HKConnection *sender) {
 
     string result = dictionaryWrap(keys, values, 3);
     //Serial.printf("Service::describe: %s\n",result.c_str());
-    return result;
+    return result;*/
 }
 
 string Accessory::describe(HKConnection *sender) {
   string result = "";
-  result.append("{");
+  result+="{";
 
-  result.append("\"services\":[");
+  result+="\"services\":[";
 
   int len = numberOfService();
   for (int i = 0; i < len; i++) {
-      result.append(_services[i]->describe(sender));
+      result+=_services[i]->describe(sender);
       if(i != len - 1) { //ommit last ,
-        result.append(",");
+        result+=",";
       }
   }
 
-  result.append("]");
-  result.append(",");
+  result+="]";
+  result+=",";
 
   char temp[8];
   sprintf(temp, "\"aid\":%d", aid);
-  result.append(temp);
+  result+=temp;
 
-  result.append("}");
+  result+="}";
 
   return result;
 }
 
 string AccessorySet::describe(HKConnection *sender) {
     string result = "";
-    result.append("{");
+    result+="{";
 
-    result.append("\"accessories\":[");
+    result+="\"accessories\":[";
 
     int numberOfAcc = numberOfAccessory();
     for (int i = 0; i < numberOfAcc; i++) {
-        result.append(_accessories[i]->describe(sender));
+        result+=_accessories[i]->describe(sender);
         if(i != numberOfAcc - 1) { //ommit last ,
-          result.append(",");
+          result+=",";
         }
     }
 
-    result.append("]");
+    result+="]";
 
-    result.append("}");
+    result+="}";
 
     //Serial.printf("%s\n", result.c_str());
     return result;

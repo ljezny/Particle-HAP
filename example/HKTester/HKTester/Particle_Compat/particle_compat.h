@@ -15,13 +15,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <sys/un.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <stdarg.h>
 #include <fcntl.h>
-#include <functional>
+
 
 using namespace std;
 
@@ -139,7 +139,7 @@ public:
     int port;
     TCPServer(int port){
         this->port = port;
-        if ( (server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
+        if ( (server_socket = socket(PF_INET, SOCK_STREAM, 0)) < 0 ) {
             perror("socket creation failed");
         }
         int opt_val = 1;
@@ -209,7 +209,12 @@ class EEPROMClass {
 public:
     HKStorage get(int address, HKStorage storage);
     void put(int address, HKStorage storage);
-    
+    int get(int address, int value){
+        return 0;
+    }
+    void put(int address, int value){
+        
+    }
 };
 
 
@@ -255,7 +260,7 @@ public:
     }
 };
 
-typedef std::function<void()> wiring_interrupt_handler_t;
+//typedef std::function<void()> wiring_interrupt_handler_t;
 
 void delay(int ms);
 void delayMicroseconds(int micros);
@@ -266,8 +271,6 @@ int analogRead(int pin);
 int digitalRead(int pin);
 void digitalWrite(int pin, int value);
 void pinMode(int pin, int mode);
-void attachInterrupt(int a,wiring_interrupt_handler_t b, int c);
-void detachInterrupt(int v);
 extern EthernetClass Ethernet;
 extern UDP udp;
 extern EEPROMClass EEPROM;

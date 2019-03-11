@@ -47,12 +47,7 @@ void delay(int ms) {
 void delayMicroseconds(int micros) {
     usleep(micros);
 }
-void attachInterrupt(int a,wiring_interrupt_handler_t b, int c){
-    
-}
-void detachInterrupt(int v){
-    
-}
+
 long int timestamp() {
     struct timeval tp;
     gettimeofday(&tp, NULL);
