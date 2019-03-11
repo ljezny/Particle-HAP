@@ -67,6 +67,11 @@ void WindowsShutterAccessory::handle() {
               setPosition(estimatedCurrentPosition);
           }*/
           position = estimatedCurrentPosition;
+
+          rcSwitch->setRepeatTransmit(20);
+          if(msToGo > 1000) {
+            rcSwitch->setRepeatTransmit(100);
+          }
         }
     }
 
@@ -90,7 +95,9 @@ void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKC
     int diff = abs(newValue - position);
     //long time = (newValue == 0 || newValue == 100) ? COVER_OPEN_TO_CLOSE_MS : COVER_OPEN_TO_CLOSE_MS / 100 * diff;
     long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
-
+    if(newValue == 0) {
+      time = COVER_OPEN_TO_CLOSE_MS;
+    }
     endMS = millis() + time;
     targetPosition = newValue;
     targetTilt = newValue > position ? 0 : -90;
@@ -114,12 +121,13 @@ void WindowsShutterAccessory::initAccessorySet() {
       rcSwitch = new RCSwitch();
       rcSwitch->enableTransmit(rcOutputPIN);
       rcSwitch->setProtocol(1);
-      //rcSwitch->setRepeatTransmit(1);
+
     }
     EEPROM.get(this->eepromAddr, this->position);
     if(this->position < 0 ||this->position > 100) {
       this->position = 50;
     }
+    this->targetPosition = this->position;
 
     Accessory *shutterAccessory = new Accessory();
 
