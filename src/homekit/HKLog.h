@@ -15,12 +15,12 @@
 #include <Particle.h>
 #endif
 
-
+#include <string>
 
 class HKLog {
 public:
-    int printf(const char *format, ...);
-    int println(const char *value);
+    int printf(const std::string format, ...);
+    int println(const std::string value);
 };
 extern HKLog HKLogger;
 #endif /* HKLog_hpp */

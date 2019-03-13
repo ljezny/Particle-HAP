@@ -725,7 +725,6 @@ void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
 void HKConnection::processPostedCharacteristics() {
     for(int i = 0; i < postedCharacteristics.size(); i++) {
         characteristics *c = postedCharacteristics.at(i);
-
         char* broadcastTemp = new char[1024];
         memset(broadcastTemp,0,1024);
         snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
