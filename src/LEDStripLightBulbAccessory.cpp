@@ -15,9 +15,9 @@ void LEDStripLightBulbAccessory::updateColor(RgbColor color) {
 }
 
 void LEDStripLightBulbAccessory::initAccessorySet() {
-    LightBulbAccessoryBase::initAccessorySet();
-    
-    pinMode(redPIN, OUTPUT);
-    pinMode(greenPIN, OUTPUT);
-    pinMode(bluePIN, OUTPUT);
+  pinMode(redPIN, OUTPUT);
+  pinMode(greenPIN, OUTPUT);
+  pinMode(bluePIN, OUTPUT);
+
+  LightBulbAccessoryBase::initAccessorySet();
 }

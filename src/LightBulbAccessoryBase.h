@@ -8,9 +8,9 @@
 
 typedef struct RgbColor
 {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
+    unsigned char r = 255;
+    unsigned char g = 255;
+    unsigned char b = 255;
 } RgbColor;
 
 typedef struct HsvColor
@@ -22,12 +22,14 @@ typedef struct HsvColor
 
 class LightBulbAccessoryBase: public HAPAccessoryDescriptor {
 private:
-    RgbColor color;
+    RgbColor color; //initially turned ON
     RgbColor HsvToRgb(HsvColor hsv);
     HsvColor RgbToHsv(RgbColor rgb);
-    
+
+    intCharacteristics *brightnessStateChar = NULL;
+
+    std::string getPower (HKConnection *sender);
     void powerTrackable (bool oldValue, bool newValue, HKConnection *sender);
-    void brightTrackable (int oldValue, int newValue, HKConnection *sender);
     std::string getLedHue (HKConnection *sender);
     void setLedHue (int oldValue, int newValue, HKConnection *sender);
     std::string getLedBrightness (HKConnection *sender);
@@ -38,12 +40,12 @@ private:
     virtual void updateColor(RgbColor color) = 0;
 public:
     virtual void initAccessorySet();
-    
+
     virtual int getDeviceType(){
         return deviceType_lightBulb;
     }
     virtual void handle(){
-        
+
     }
 };
 #endif

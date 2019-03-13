@@ -13,34 +13,33 @@
 #endif
 
 
+std::string LightBulbAccessoryBase::getPower (HKConnection *sender) {
+    return (color.r > 0 || color.g > 0 || color.b > 0) ? "true" : "false";
+}
+
 
 void LightBulbAccessoryBase::powerTrackable (bool oldValue, bool newValue, HKConnection *sender) {
-    RGB.control(true);
     color.r = newValue ? (color.r > 0 ? color.r : 255) : 0;
     color.g = newValue ? (color.g > 0 ? color.g : 255) : 0;
     color.b = newValue ? (color.b > 0 ? color.b : 255) : 0;
 
     updateColor(color);
+
+    if(brightnessStateChar) {
+      brightnessStateChar->notify(NULL);
+    }
 }
 
-void LightBulbAccessoryBase::brightTrackable (int oldValue, int newValue, HKConnection *sender) {
-    color.r = (color.r * newValue) / 255;
-    color.g = (color.g * newValue) / 255;
-    color.b = (color.b * newValue) / 255;
-
-    updateColor(color);
-}
 
 std::string LightBulbAccessoryBase::getLedHue (HKConnection *sender) {
     return format("%d",((RgbToHsv(color).h) * 360) / 255);
 }
 
 void LightBulbAccessoryBase::setLedHue (int oldValue, int newValue, HKConnection *sender) {
-  RGB.control(true);
     HsvColor hsv = RgbToHsv(color);
     hsv.h = (255 * newValue) / 360;
     color = HsvToRgb(hsv);
-    RGB.color(color.r, color.g, color.b);
+    updateColor(color);
 }
 
 std::string LightBulbAccessoryBase::getLedBrightness (HKConnection *sender) {
@@ -85,31 +84,33 @@ void LightBulbAccessoryBase::initAccessorySet() {
     lightAcc1->addCharacteristics(lightService1, lightServiceName1);
 
     boolCharacteristics *powerState1 = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
-    powerState1->characteristics::setValue("false");
+    powerState1->perUserQuery = std::bind(&LightBulbAccessoryBase::getPower, this, std::placeholders::_1);
     powerState1->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::powerTrackable, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
     lightAcc1->addCharacteristics(lightService1, powerState1);
 
-    intCharacteristics *brightnessState1 = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
-    brightnessState1->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedBrightness, this, std::placeholders::_1);
-    brightnessState1->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::brightTrackable, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
-    lightAcc1->addCharacteristics(lightService1, brightnessState1);
+    brightnessStateChar = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
+    brightnessStateChar->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedBrightness, this, std::placeholders::_1);
+    brightnessStateChar->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::setLedBrightness, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
+    lightAcc1->addCharacteristics(lightService1, brightnessStateChar);
 
-    intCharacteristics *ledSaturationState = new intCharacteristics(charType_saturation, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
-    ledSaturationState->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedSaturation, this, std::placeholders::_1);
-    ledSaturationState->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::setLedSaturation, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
-    lightAcc1->addCharacteristics(lightService1, ledSaturationState);
+    intCharacteristics *ledSaturationStateChar = new intCharacteristics(charType_saturation, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
+    ledSaturationStateChar->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedSaturation, this, std::placeholders::_1);
+    ledSaturationStateChar->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::setLedSaturation, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
+    lightAcc1->addCharacteristics(lightService1, ledSaturationStateChar);
 
-    intCharacteristics *ledHueState = new intCharacteristics(charType_hue, premission_read|premission_write|premission_notify, 0, 360, 1, unit_arcDegree);
-    ledHueState->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedHue, this, std::placeholders::_1);
-    ledHueState->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::setLedHue, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
-    lightAcc1->addCharacteristics(lightService1, ledHueState);
+    intCharacteristics *ledHueStateChar = new intCharacteristics(charType_hue, premission_read|premission_write|premission_notify, 0, 360, 1, unit_arcDegree);
+    ledHueStateChar->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedHue, this, std::placeholders::_1);
+    ledHueStateChar->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::setLedHue, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
+    lightAcc1->addCharacteristics(lightService1, ledHueStateChar);
+
+    updateColor(color);
 };
 
 RgbColor LightBulbAccessoryBase::HsvToRgb(HsvColor hsv)
 {
     RgbColor rgb;
     unsigned char region, remainder, p, q, t;
-    
+
     if (hsv.s == 0)
     {
         rgb.r = hsv.v;
@@ -117,14 +118,14 @@ RgbColor LightBulbAccessoryBase::HsvToRgb(HsvColor hsv)
         rgb.b = hsv.v;
         return rgb;
     }
-    
+
     region = hsv.h / 43;
     remainder = (hsv.h - (region * 43)) * 6;
-    
+
     p = (hsv.v * (255 - hsv.s)) >> 8;
     q = (hsv.v * (255 - ((hsv.s * remainder) >> 8))) >> 8;
     t = (hsv.v * (255 - ((hsv.s * (255 - remainder)) >> 8))) >> 8;
-    
+
     switch (region)
     {
         case 0:
@@ -146,7 +147,7 @@ RgbColor LightBulbAccessoryBase::HsvToRgb(HsvColor hsv)
             rgb.r = hsv.v; rgb.g = p; rgb.b = q;
             break;
     }
-    
+
     return rgb;
 }
 
@@ -154,10 +155,10 @@ HsvColor LightBulbAccessoryBase::RgbToHsv(RgbColor rgb)
 {
     HsvColor hsv;
     unsigned char rgbMin, rgbMax;
-    
+
     rgbMin = rgb.r < rgb.g ? (rgb.r < rgb.b ? rgb.r : rgb.b) : (rgb.g < rgb.b ? rgb.g : rgb.b);
     rgbMax = rgb.r > rgb.g ? (rgb.r > rgb.b ? rgb.r : rgb.b) : (rgb.g > rgb.b ? rgb.g : rgb.b);
-    
+
     hsv.v = rgbMax;
     if (hsv.v == 0)
     {
@@ -165,20 +166,20 @@ HsvColor LightBulbAccessoryBase::RgbToHsv(RgbColor rgb)
         hsv.s = 0;
         return hsv;
     }
-    
+
     hsv.s = 255 * long(rgbMax - rgbMin) / hsv.v;
     if (hsv.s == 0)
     {
         hsv.h = 0;
         return hsv;
     }
-    
+
     if (rgbMax == rgb.r)
         hsv.h = 0 + 43 * (rgb.g - rgb.b) / (rgbMax - rgbMin);
     else if (rgbMax == rgb.g)
         hsv.h = 85 + 43 * (rgb.b - rgb.r) / (rgbMax - rgbMin);
     else
         hsv.h = 171 + 43 * (rgb.r - rgb.g) / (rgbMax - rgbMin);
-    
+
     return hsv;
 }
