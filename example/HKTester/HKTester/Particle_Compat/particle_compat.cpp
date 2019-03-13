@@ -75,6 +75,9 @@ int digitalRead(int pin){
 void digitalWrite(int pin, int value){
     
 }
+void analogWrite(int pin, int value){
+    
+}
 void pinMode(int pin, int mode){
     
 }

@@ -270,6 +270,7 @@ int random(int max);
 int analogRead(int pin);
 int digitalRead(int pin);
 void digitalWrite(int pin, int value);
+void analogWrite(int pin, int value);
 void pinMode(int pin, int mode);
 extern EthernetClass Ethernet;
 extern UDP udp;

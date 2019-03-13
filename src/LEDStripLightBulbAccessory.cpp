@@ -9,10 +9,15 @@
 #include "LEDStripLightBulbAccessory.h"
 
 void LEDStripLightBulbAccessory::updateColor(RgbColor color) {
-    
+    analogWrite(redPIN,color.r);
+    analogWrite(greenPIN,color.g);
+    analogWrite(bluePIN,color.b);
 }
 
 void LEDStripLightBulbAccessory::initAccessorySet() {
     LightBulbAccessoryBase::initAccessorySet();
     
+    pinMode(redPIN, OUTPUT);
+    pinMode(greenPIN, OUTPUT);
+    pinMode(bluePIN, OUTPUT);
 }
