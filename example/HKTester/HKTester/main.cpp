@@ -19,17 +19,19 @@
 #include <stdio.h>
 
 
-#include "../../../src/LightBulbAccessory.h"
+#include "../../../src/LightBulbAccessoryBase.h"
 #include "../../../src/WindowsShutterAccessory.h"
 #include "../../../src/LightSensorAccessory.h"
 #include "../../../src/HomekitBridgeAccessory.h"
 #include "../../../src/MotionSensorAccessory.h"
+#include "../../../src/LEDStripLightBulbAccessory.h"
+
 NSNetService *nsService;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D0,D1,D2);
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
-HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+//HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
@@ -65,10 +67,10 @@ int main(int argc, const char * argv[]) {
     [nsService startMonitoring];
     [nsService publish];
     
-    acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,sizeof(int)));
-    acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
-    acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
-    acc->descriptors.push_back(new MotionSensorAccessory());
+    //acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,sizeof(int)));
+    //acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
+    //acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
+    //acc->descriptors.push_back(new MotionSensorAccessory());
     
     acc->initAccessorySet();
     

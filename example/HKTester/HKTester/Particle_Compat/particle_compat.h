@@ -278,7 +278,9 @@ extern SerialLink Serial;
 extern RGBClass RGB;
 
 #define A0 0
+#define D0 0
 #define D1 1
+#define D2 2
 #define D4 4
 #define D5 5
 #define D6 6
