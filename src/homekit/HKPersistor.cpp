@@ -4,10 +4,13 @@
 
 void HKPersistor::loadRecordStorage() {
     HKLogger.println("Persistor: load");
-    
+
     storage = EEPROM.get(EEPROM_STORAGE_ADDRESS_OFFSET, storage);
     if(((unsigned char *)&storage)[0] == 0xFF) { //particle eeprom default value
         resetAll();
+    }
+    if(storage.configurationVersion == 0xFFFF) {
+      storage.configurationVersion = 1;
     }
 }
 
@@ -18,9 +21,10 @@ void HKPersistor::saveSaveStorage(){
 
 void HKPersistor::resetAll() {
     HKLogger.println("Persistor: resetAll");
-    for(int i = 0; i < 6; i++){
+    for(int i = 0; i < 6; i++) {
         storage.deviceId[i] = random(256);
     }
+    storage.configurationVersion = 1;
     resetPairings();
 }
 

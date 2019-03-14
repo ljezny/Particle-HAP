@@ -38,8 +38,8 @@ void WindowsShutterAccessory::setState(int newState) {
 
 void WindowsShutterAccessory::setTilt(int newTilt) {
     tilt = newTilt;
-    currentTiltAngleChar->characteristics::setValue(format("%d",tilt)); //report state
-    currentTiltAngleChar->notify(NULL);
+    //currentTiltAngleChar->characteristics::setValue(format("%d",tilt)); //report state
+    //currentTiltAngleChar->notify(NULL);
 }
 
 void WindowsShutterAccessory::setPosition(int newPosition) {
@@ -154,7 +154,7 @@ void WindowsShutterAccessory::initAccessorySet() {
     positionStateChar = new intCharacteristics(charType_positionState, premission_read|premission_notify, 0, 2, 1, unit_percentage);
     positionStateChar->characteristics::setValue(format("%d",state));
     shutterAccessory->addCharacteristics(windowsCoverService, positionStateChar);
-
+/*
     intCharacteristics *targetHorizontalTiltAngle = new intCharacteristics(charType_targetHorizontalTiltAngle, premission_read|premission_write|premission_notify, -90, 0, 10, unit_arcDegree);
     targetHorizontalTiltAngle->characteristics::setValue(format("%d",tilt));
     targetHorizontalTiltAngle->valueChangeFunctionCall = std::bind(&WindowsShutterAccessory::setTargetTiltAngle, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
@@ -163,5 +163,5 @@ void WindowsShutterAccessory::initAccessorySet() {
     currentTiltAngleChar = new intCharacteristics(charType_currentHorizontalTiltAngle, premission_read|premission_notify, -90, 0, 10, unit_arcDegree);
     currentTiltAngleChar->characteristics::setValue(format("%d",tilt));
     shutterAccessory->addCharacteristics(windowsCoverService, currentTiltAngleChar);
-
+*/
 };

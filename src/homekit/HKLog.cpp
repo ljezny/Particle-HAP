@@ -12,6 +12,8 @@
 HKLog HKLogger;
 
 int HKLog::printf(const std::string fmt, ...){
+    return 0;
+
     int size = ((int)fmt.size()) * 2 + 50;   // Use a rubric appropriate for your code
     std::string str;
     va_list ap;
@@ -34,6 +36,7 @@ int HKLog::printf(const std::string fmt, ...){
 }
 
 int HKLog::println(const std::string value) {
+    return 0;
     Serial.println(value.c_str());
     return 0;
 }
