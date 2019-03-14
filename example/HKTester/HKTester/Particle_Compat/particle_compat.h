@@ -270,6 +270,7 @@ int random(int max);
 int analogRead(int pin);
 int digitalRead(int pin);
 void digitalWrite(int pin, int value);
+void analogWrite(int pin, int value);
 void pinMode(int pin, int mode);
 extern EthernetClass Ethernet;
 extern UDP udp;
@@ -278,7 +279,9 @@ extern SerialLink Serial;
 extern RGBClass RGB;
 
 #define A0 0
+#define D0 0
 #define D1 1
+#define D2 2
 #define D4 4
 #define D5 5
 #define D6 6

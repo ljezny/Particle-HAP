@@ -37,7 +37,7 @@
 		56125A3522070D9B00DCFA13 /* particle_compat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3422070D9B00DCFA13 /* particle_compat.cpp */; };
 		56125A382207490000DCFA13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A372207490000DCFA13 /* Foundation.framework */; };
 		56125A3A22074AFC00DCFA13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A3922074AFC00DCFA13 /* CoreFoundation.framework */; };
-		56125A3D2208C29A00DCFA13 /* LightBulbAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3C2208C29A00DCFA13 /* LightBulbAccessory.cpp */; };
+		56125A3D2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3C2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp */; };
 		56125A442208D06300DCFA13 /* ge_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A422208D06300DCFA13 /* ge_low_mem.cpp */; };
 		56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A432208D06300DCFA13 /* fe_low_mem.cpp */; };
 		56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A462208D0FE00DCFA13 /* ge_operations.cpp */; };
@@ -48,6 +48,8 @@
 		5645093E222A93CA00054765 /* MotionSensorAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5645093C222A93CA00054765 /* MotionSensorAccessory.cpp */; };
 		5675A7302221647D00942207 /* LightSensorAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5675A72E2221647D00942207 /* LightSensorAccessory.cpp */; };
 		56947C8C220AEFF300767C5A /* HKLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56947C8A220AEFF300767C5A /* HKLog.cpp */; };
+		56D840CE223910480061092A /* LEDStripLightBulbAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */; };
+		56D840CF223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -132,13 +134,12 @@
 		56125A3422070D9B00DCFA13 /* particle_compat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = particle_compat.cpp; sourceTree = "<group>"; };
 		56125A372207490000DCFA13 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		56125A3922074AFC00DCFA13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		56125A3B2208C29900DCFA13 /* LightBulbAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightBulbAccessory.h; path = ../../../src/LightBulbAccessory.h; sourceTree = "<group>"; };
-		56125A3C2208C29A00DCFA13 /* LightBulbAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightBulbAccessory.cpp; path = ../../../src/LightBulbAccessory.cpp; sourceTree = "<group>"; };
+		56125A3B2208C29900DCFA13 /* LightBulbAccessoryBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightBulbAccessoryBase.h; path = ../../../src/LightBulbAccessoryBase.h; sourceTree = "<group>"; };
+		56125A3C2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightBulbAccessoryBase.cpp; path = ../../../src/LightBulbAccessoryBase.cpp; sourceTree = "<group>"; };
 		56125A422208D06300DCFA13 /* ge_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_low_mem.cpp; sourceTree = "<group>"; };
 		56125A432208D06300DCFA13 /* fe_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_low_mem.cpp; sourceTree = "<group>"; };
 		56125A462208D0FE00DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
 		56125A472208D0FE00DCFA13 /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
-		56125A4A220E189200DCFA13 /* rgb2hsv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rgb2hsv.h; sourceTree = "<group>"; };
 		56125A4B2210313E00DCFA13 /* WindowsShutterAccessory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowsShutterAccessory.cpp; path = ../../../src/WindowsShutterAccessory.cpp; sourceTree = "<group>"; };
 		56125A4C2210313E00DCFA13 /* WindowsShutterAccessory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WindowsShutterAccessory.h; path = ../../../src/WindowsShutterAccessory.h; sourceTree = "<group>"; };
 		56125A4F22103E9900DCFA13 /* HAPAccessoryDescriptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HAPAccessoryDescriptor.h; path = ../../../src/HAPAccessoryDescriptor.h; sourceTree = "<group>"; };
@@ -152,6 +153,10 @@
 		5675A72F2221647D00942207 /* LightSensorAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightSensorAccessory.h; path = ../../../src/LightSensorAccessory.h; sourceTree = "<group>"; };
 		56947C8A220AEFF300767C5A /* HKLog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HKLog.cpp; sourceTree = "<group>"; };
 		56947C8B220AEFF300767C5A /* HKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKLog.h; sourceTree = "<group>"; };
+		56D840CA223910480061092A /* LEDStripLightBulbAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LEDStripLightBulbAccessory.h; path = ../../../src/LEDStripLightBulbAccessory.h; sourceTree = "<group>"; };
+		56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LEDStripLightBulbAccessory.cpp; path = ../../../src/LEDStripLightBulbAccessory.cpp; sourceTree = "<group>"; };
+		56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhotoSystemLEDLightBulbAccessory.cpp; path = ../../../src/PhotoSystemLEDLightBulbAccessory.cpp; sourceTree = "<group>"; };
+		56D840CD223910480061092A /* PhotoSystemLEDLightBulbAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoSystemLEDLightBulbAccessory.h; path = ../../../src/PhotoSystemLEDLightBulbAccessory.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,15 +193,18 @@
 		561259B62206E95600DCFA13 /* HKTester */ = {
 			isa = PBXGroup;
 			children = (
+				56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */,
+				56D840CA223910480061092A /* LEDStripLightBulbAccessory.h */,
+				56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */,
+				56D840CD223910480061092A /* PhotoSystemLEDLightBulbAccessory.h */,
 				56450938222A82B600054765 /* rcswitch */,
 				5675A72E2221647D00942207 /* LightSensorAccessory.cpp */,
 				5675A72F2221647D00942207 /* LightSensorAccessory.h */,
 				56125A4F22103E9900DCFA13 /* HAPAccessoryDescriptor.h */,
-				56125A3C2208C29A00DCFA13 /* LightBulbAccessory.cpp */,
-				56125A3B2208C29900DCFA13 /* LightBulbAccessory.h */,
+				56125A3C2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp */,
+				56125A3B2208C29900DCFA13 /* LightBulbAccessoryBase.h */,
 				561259B72206E95600DCFA13 /* main.cpp */,
 				561259BF2206E9E100DCFA13 /* Particle_Compat */,
-				56125A4A220E189200DCFA13 /* rgb2hsv.h */,
 				56125A4B2210313E00DCFA13 /* WindowsShutterAccessory.cpp */,
 				56125A4C2210313E00DCFA13 /* WindowsShutterAccessory.h */,
 				56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */,
@@ -383,6 +391,7 @@
 				5675A7302221647D00942207 /* LightSensorAccessory.cpp in Sources */,
 				561259B82206E95600DCFA13 /* main.cpp in Sources */,
 				56125A242206F24600DCFA13 /* integer.cpp in Sources */,
+				56D840CE223910480061092A /* LEDStripLightBulbAccessory.cpp in Sources */,
 				56125A2F2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp in Sources */,
 				56125A1F2206F24600DCFA13 /* hmac.cpp in Sources */,
 				56125A492208D0FE00DCFA13 /* fe_operations.cpp in Sources */,
@@ -394,10 +403,11 @@
 				5645093B222A82B600054765 /* RCSwitch.cpp in Sources */,
 				56125A1A2206F24600DCFA13 /* ed25519.cpp in Sources */,
 				56125A4D2210313E00DCFA13 /* WindowsShutterAccessory.cpp in Sources */,
-				56125A3D2208C29A00DCFA13 /* LightBulbAccessory.cpp in Sources */,
+				56125A3D2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp in Sources */,
 				56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */,
 				56125A232206F24600DCFA13 /* curve25519.cpp in Sources */,
 				56125A3522070D9B00DCFA13 /* particle_compat.cpp in Sources */,
+				56D840CF223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp in Sources */,
 				56125A1E2206F24600DCFA13 /* poly1305.cpp in Sources */,
 				56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */,
 				56125A2C2206F24600DCFA13 /* HKServer.cpp in Sources */,

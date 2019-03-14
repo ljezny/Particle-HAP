@@ -19,15 +19,21 @@
 #include <stdio.h>
 
 
-#include "../../../src/LightBulbAccessory.h"
+#include "../../../src/LightBulbAccessoryBase.h"
 #include "../../../src/WindowsShutterAccessory.h"
 #include "../../../src/LightSensorAccessory.h"
 #include "../../../src/HomekitBridgeAccessory.h"
 #include "../../../src/MotionSensorAccessory.h"
+#include "../../../src/LEDStripLightBulbAccessory.h"
+
 NSNetService *nsService;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
+<<<<<<< HEAD
+HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D0,D1,D2);
+=======
 HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+>>>>>>> 1b9f68deedde50bd18621dbc022486e91d3a61cf
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
 //HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
@@ -68,6 +74,10 @@ int main(int argc, const char * argv[]) {
     //acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,sizeof(int)));
     //acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
     //acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
+<<<<<<< HEAD
+    //acc->descriptors.push_back(new MotionSensorAccessory());
+=======
+>>>>>>> 1b9f68deedde50bd18621dbc022486e91d3a61cf
     
     acc->initAccessorySet();
     
