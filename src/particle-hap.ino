@@ -14,7 +14,7 @@
 #include "HomekitBridgeAccessory.h"
 
 
-//SYSTEM_THREAD(ENABLED);
+SYSTEM_THREAD(ENABLED);
 
 HKServer *hkServer = NULL;
 
