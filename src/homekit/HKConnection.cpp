@@ -75,7 +75,11 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
         part++;
 
         if(isConnected()){
-            client.write(tempBuffer,chunk_size + 16 + 2);
+            int bytes = client.write(tempBuffer,chunk_size + 16 + 2,3000);
+            int err = client.getWriteError();
+            if (err != 0) {
+              Log.trace("writeEncryptedData:: failed (error = %d), number of bytes written: %d", err, bytes);
+            }
         }
     }
 
