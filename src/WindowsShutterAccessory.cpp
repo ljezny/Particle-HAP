@@ -20,7 +20,7 @@
 #include "homekit/HKLog.h"
 
 #define COVER_OPEN_TO_CLOSE_MS 56000
-#define TILT_OPEN_TO_CLOSE_MS 1200
+#define COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS 1244 //100 repeat tooked 4500ms
 
 RCSwitch *rcSwitch = NULL; //this is static, it will be initialized one time
 
@@ -29,83 +29,71 @@ void WindowsShutterAccessory::shutterIdentity(bool oldValue, bool newValue, HKCo
 }
 
 void WindowsShutterAccessory::setState(int newState) {
-    state = newState;
-    positionStateChar->characteristics::setValue(format("%d",state)); //report state
-    positionStateChar->notify(NULL);
+    if(state != newState) {
+      state = newState;
+      positionStateChar->characteristics::setValue(format("%d",state)); //report state
+      positionStateChar->notify(NULL);
 
-    setPosition(position);
+      setPosition(position);
+    }
 }
 
 void WindowsShutterAccessory::setPosition(int newPosition) {
-    position = newPosition;
-    currentPositionChar->characteristics::setValue(format("%d",position));//report position
-    currentPositionChar->notify(NULL);
+    if(newPosition != position) {
+      position = newPosition;
+      currentPositionChar->characteristics::setValue(format("%d",position));//report position
+      currentPositionChar->notify(NULL);
 
-    EEPROM.put(this->eepromAddr, this->position);
+      EEPROM.put(this->eepromAddr, this->position);
+    }
 }
 
 void WindowsShutterAccessory::handle() {
-    if(state != 2) { //moving up or down
-        if(endMS < millis()) { //expired, stop
-            //stop current
-            endMS = LONG_MAX;
-            int oldState = state;
-            setState(2);
-            setPosition(targetPosition);
-
-            if(targetPosition > 0 && oldState == 0) //was going down, but it should be finally opened, so send one up code for sure.
-            {
-              delay(200);
-              rcSwitch->setRepeatTransmit(40); //made it shorter
-              rcSwitch->send(upCode, 24);
-              rcSwitch->setRepeatTransmit(100); //restore original value
-            }
-        } else {
-          long msToGo = endMS - millis();
-          int positionPercentToGo = (msToGo * 100) / COVER_OPEN_TO_CLOSE_MS;
-          int estimatedCurrentPosition = state == 0 ? targetPosition + positionPercentToGo : targetPosition - positionPercentToGo;
-          if(estimatedCurrentPosition < 0) {
-            estimatedCurrentPosition = 0;
-          }
-          if(estimatedCurrentPosition > 100) {
-            estimatedCurrentPosition = 100;
-          }
-          position = estimatedCurrentPosition;
-        }
+  int diff = abs(targetPosition - position);
+  if(diff > 0) {
+    setState(position < targetPosition ? 1 : 0);
+    int newPosition = position;
+    long start = millis();
+    if(diff > 10) { //limit percent in one step
+      diff = 10;
     }
+    int transmit_repeats = (diff * COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS) / 100;
 
+    rcSwitch->setRepeatTransmit(transmit_repeats);
     switch (state) {
         case 0:
             RGB.control(true);
             RGB.color(0, 0, 255);
             rcSwitch->send(downCode, 24);
-            Serial.printf("Sending downCode: %d\n", downCode);
+            Serial.printf("Sending downCode: %d,repeats: %d, took: %d ms\n", downCode,transmit_repeats, millis() - start);
             RGB.control(false);
+            newPosition -= diff;
             break;
         case 1:
             RGB.control(true);
             RGB.color(0, 0, 255);
             rcSwitch->send(upCode, 24);
-            Serial.printf("Sending upCode: %d\n", upCode);
+            Serial.printf("Sending upCode: %d,repeats: %d, took: %d ms\n", upCode,transmit_repeats,millis() - start);
             RGB.control(false);
+            newPosition += diff;
             break;
         case 2:
             break;
     }
-}
 
-void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
-    //WindowsShutterAccessory *obj = (WindowsShutterAccessory*) arg;
-    Serial.printf("setTargetPosition %d\n",newValue);
-    int diff = abs(newValue - position);
-    //long time = (newValue == 0 || newValue == 100) ? COVER_OPEN_TO_CLOSE_MS : COVER_OPEN_TO_CLOSE_MS / 100 * diff;
-    long time = COVER_OPEN_TO_CLOSE_MS / 100 * diff;
-    if(newValue == 0) {
-      time = COVER_OPEN_TO_CLOSE_MS;
+    if(newPosition < 0) {
+      newPosition = 0;
     }
-    endMS = millis() + time;
-    targetPosition = newValue;
-    setState(newValue > position ? 1 : 0);
+    if(newPosition > 100) {
+      newPosition = 100;
+    }
+    setPosition(newPosition);
+  } else {
+    setState(2);
+    setPosition(targetPosition);
+  }
+
+  
 }
 
 void WindowsShutterAccessory::initAccessorySet() {
@@ -113,7 +101,6 @@ void WindowsShutterAccessory::initAccessorySet() {
       rcSwitch = new RCSwitch();
       rcSwitch->enableTransmit(rcOutputPIN);
       rcSwitch->setProtocol(1);
-      rcSwitch->setRepeatTransmit(100);
     }
     EEPROM.get(this->eepromAddr, this->position);
     if(this->position < 0 ||this->position > 100) {
