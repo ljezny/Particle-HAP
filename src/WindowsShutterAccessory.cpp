@@ -93,7 +93,11 @@ void WindowsShutterAccessory::handle() {
     setPosition(targetPosition);
   }
 
-  
+
+}
+
+void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
+  targetPosition = newValue;
 }
 
 void WindowsShutterAccessory::initAccessorySet() {
