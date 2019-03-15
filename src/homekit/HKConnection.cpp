@@ -187,6 +187,8 @@ void HKConnection::handleConnection() {
     readData(&inputBuffer,&len);
 
     if (len > 0) {
+        RGB.control(true);
+        RGB.color(255, 255, 0);
         HKLogger.printf("Request Message read length: %d \n", len);
         HKNetworkMessage msg((const char *)inputBuffer);
         if (!strcmp(msg.directory, "pair-setup")){
@@ -205,6 +207,7 @@ void HKConnection::handleConnection() {
             HKLogger.printf("Handling message request: %s\n",msg.directory);
             handleAccessoryRequest((const char *)inputBuffer, len);
         }
+        RGB.control(false);
     }
     free(inputBuffer);
     processPostedCharacteristics();

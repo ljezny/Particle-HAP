@@ -18,9 +18,9 @@ SYSTEM_THREAD(ENABLED);
 HKServer *hkServer = NULL;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
+//HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
-//HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
@@ -36,10 +36,9 @@ void setup() {
   //HKPersistor().resetAll();
 
   //BEGIN MYHOME
-  //acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
-  //acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
-  //acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
-
+  acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
   //END MYHOME
 
   acc->initAccessorySet();
@@ -51,7 +50,7 @@ void setup() {
 void loop() {
   if(WiFi.ready()) {
     if(!hkServer){//first time init
-      hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
+      hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
       hkServer->setup();
     }
     hkServer->handle();

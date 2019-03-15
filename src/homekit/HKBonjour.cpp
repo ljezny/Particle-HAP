@@ -35,7 +35,7 @@
 #define  MDNS_SERVER_PORT        5353
 #define  MDNS_NQUERY_RESEND_TIME 1000   // 1 second, name query resend timeout
 #define  MDNS_SQUERY_RESEND_TIME 1000  // 10 seconds, service query resend timeout
-#define  MDNS_RESPONSE_TTL       10    //120 two minutes (in seconds)
+#define  MDNS_RESPONSE_TTL       120    //120 two minutes (in seconds)
 
 #define  MDNS_MAX_SERVICES_PER_PACKET  6
 #define  MSNS_ANNOUNCE_TIME_SEC  1 //Send announce packet every 5 seconds
@@ -540,7 +540,7 @@ errorReturn:
    if (NULL != dnsHeader)
       free(dnsHeader);
 
-   //Serial.printf("Bonjour send message status: %d\n", statusCode);
+   Serial.printf("Bonjour send message status: %d\n", statusCode);
    return statusCode;
 }
 
