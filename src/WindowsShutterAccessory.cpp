@@ -55,6 +55,7 @@ void WindowsShutterAccessory::handle() {
 
             if(targetPosition > 0 && oldState == 0) //was going down, but it should be finally opened, so send one up code for sure.
             {
+              delay(200);
               rcSwitch->setRepeatTransmit(40); //made it shorter
               rcSwitch->send(upCode, 24);
               rcSwitch->setRepeatTransmit(100); //restore original value
