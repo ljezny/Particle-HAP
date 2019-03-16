@@ -20,7 +20,8 @@
 #include "homekit/HKLog.h"
 
 #define COVER_OPEN_TO_CLOSE_MS 56000
-#define COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS 1244 //100 repeat tooked 4500ms
+#define COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS 1400 //100 repeat tooked 4500ms
+#define TILT_OPEN_TO_CLOSE_TRANSMIT_REPEATS 40 //100 repeat tooked 4500ms
 
 RCSwitch *rcSwitch = NULL; //this is static, it will be initialized one time
 
@@ -89,6 +90,11 @@ void WindowsShutterAccessory::handle() {
     }
     setPosition(newPosition);
   } else {
+    if(state == 0 && targetPosition > 0) { //send one more code up to shutters remain in open position
+      delay(200);
+      rcSwitch->setRepeatTransmit(TILT_OPEN_TO_CLOSE_TRANSMIT_REPEATS);
+      rcSwitch->send(upCode, 24);
+    }
     setState(2);
     setPosition(targetPosition);
   }

@@ -408,17 +408,17 @@ string stringCharacteristics::describe(HKConnection *sender) {
 string Service::describe(HKConnection *sender) {
     string result = "";
     result+="{";
-   
+
     char serviceIDStr[32];
     sprintf(serviceIDStr, "\"iid\":%d,", serviceID);
     result+=serviceIDStr;
-    
+
     char uuidStr[32];
     sprintf(uuidStr, "\"type\":\"%X\",", uuid);
     result+=uuidStr;
-    
+
     result+="\"characteristics\":[";
-    
+
     int len = numberOfCharacteristics();
     for (int i = 0; i < len; i++) {
         result+=_characteristics[i]->describe(sender);
@@ -426,11 +426,11 @@ string Service::describe(HKConnection *sender) {
             result+=",";
         }
     }
-    
+
     result+="]";
-    
+
     result+="}";
-    
+
     return result;
 }
 
@@ -532,7 +532,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         Serial.printf("Ask for accessories info\n");
         statusCode = 200;
         string desc = AccessorySet::getInstance().describe(sender);
-        //Serial.printf("%s\n", desc.c_str());
+        Serial.println(desc.c_str());
         replyDataLen = desc.length();
         replyData = (char*) malloc((replyDataLen+1)*sizeof(char));//new char[replyDataLen+1];
         memset(replyData,0,replyDataLen+1);

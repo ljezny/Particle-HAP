@@ -13,7 +13,7 @@
 #include "HomekitBridgeAccessory.h"
 #include "LEDStripLightBulbAccessory.h"
 
-SYSTEM_THREAD(ENABLED);
+//SYSTEM_THREAD(ENABLED);
 
 HKServer *hkServer = NULL;
 
