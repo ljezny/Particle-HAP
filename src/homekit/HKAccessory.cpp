@@ -533,7 +533,9 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         hkLog.info("Ask for accessories info");
         statusCode = 200;
         string desc = AccessorySet::getInstance().describe(sender);
-        hkLog.info(desc.c_str());
+        //hkLog.info(desc.c_str());
+        //Serial.printf("%s\n", desc.c_str());
+        //delay(100);
         replyDataLen = desc.length();
         replyData = (char*) malloc((replyDataLen+1)*sizeof(char));//new char[replyDataLen+1];
         memset(replyData,0,replyDataLen+1);
