@@ -14,8 +14,6 @@
 #include "HomekitBridgeAccessory.h"
 #include "LEDStripLightBulbAccessory.h"
 
-//SYSTEM_THREAD(ENABLED);
-
 SerialLogHandler logHandler;
 
 HKServer *hkServer = NULL;
@@ -26,7 +24,7 @@ HKServer *hkServer = NULL;
 HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
 void progress(Progress_t progress) {
-    hkLog.info("HK : %d\n",progress);
+    hkLog.info("Homekit progress callback: %d",progress);
 }
 
 
