@@ -32,6 +32,8 @@ HKConnection::~HKConnection() {
         notifiableCharacteristics.at(i)->removeNotifiedConnection(this);
     }
     free(c_ID);
+    free(publicKey);
+    free(response);
 }
 
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
