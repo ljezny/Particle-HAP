@@ -67,7 +67,7 @@ int HKPersistor::keyIndex(HKKeyRecord record) {
             return i;
         }
     }
-    hkLog.info("Persistor: key not found");
+    hkLog.warn("Persistor: key not found");
     return -1;
 }
 
@@ -79,7 +79,7 @@ HKKeyRecord HKPersistor::getKey(char controllerID[32]) {
             return storage.pairings[i];
         }
     }
-    hkLog.info("Persistor: key not found");
+    hkLog.warn("Persistor: key not found");
     HKKeyRecord emptyRecord;
     bzero(emptyRecord.controllerID, 32);
     return emptyRecord;

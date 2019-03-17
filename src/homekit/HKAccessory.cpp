@@ -384,25 +384,25 @@ void characteristics::notify(HKConnection* conn) {
 
 string boolCharacteristics::describe(HKConnection *sender) {
     string result = attribute(type, iid, premission, value(sender));
-    //hkLog.info("boolCharacteristics::describe: %s\n",result.c_str());
+    //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string floatCharacteristics::describe(HKConnection *sender) {
     string result = attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
-    //hkLog.info("boolCharacteristics::describe: %s\n",result.c_str());
+    //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string intCharacteristics::describe(HKConnection *sender) {
     string result = attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
-    //hkLog.info("boolCharacteristics::describe: %s\n",result.c_str());
+    //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string stringCharacteristics::describe(HKConnection *sender) {
     string result = attribute(type, iid, premission, value(sender), maxLen);
-    //hkLog.info("boolCharacteristics::describe: %s\n",result.c_str());
+    //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
@@ -479,7 +479,7 @@ string AccessorySet::describe(HKConnection *sender) {
 
     result+="}";
 
-    //hkLog.info("%s\n", result.c_str());
+    //hkLog.info("%s", result.c_str());
     return result;
 }
 /*
@@ -511,7 +511,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         path[i] = request[index];
     }
     path[i] = 0;
-    hkLog.info("Path: %s\n", path);
+    hkLog.info("Path: %s", path);
 
     const char *dataPtr = request;
     while (true) {
@@ -530,7 +530,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
     if (strcmp(path, "/accessories") == 0) {
         //Publish the characterists of the accessories
-        hkLog.info("Ask for accessories info\n");
+        hkLog.info("Ask for accessories info");
         statusCode = 200;
         string desc = AccessorySet::getInstance().describe(sender);
         hkLog.info(desc.c_str());
@@ -542,11 +542,11 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);
         statusCode = 200;
-        hkLog.info("%d\n", *msg.data.dataPtrForIndex(0));
+        hkLog.info("%d", *msg.data.dataPtrForIndex(0));
         if (*msg.data.dataPtrForIndex(0) == 3) {
             //Pairing with new user
 
-            hkLog.info("Add new user\n");
+            hkLog.info("Add new user");
 
             HKKeyRecord controllerRec;
             bcopy(msg.data.dataPtrForIndex(3), controllerRec.publicKey, 32);
@@ -579,7 +579,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         //Pairing status change, so update
         //updatePairable();
     } else if (strncmp(path, "/characteristics", 16) == 0){
-        hkLog.info("Characteristics\n");
+        hkLog.info("Characteristics");
         if (strncmp(method, "GET", 3) == 0) {
             //Read characteristics
             int aid = 0;    int iid = 0;
@@ -588,7 +588,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
             sscanf(path, "/characteristics?id=%[^\n]", indexBuffer);
 
 
-            hkLog.info("Get characteristics %s with len %d\n", indexBuffer, strlen(indexBuffer));
+            hkLog.info("Get characteristics %s with len %d", indexBuffer, strlen(indexBuffer));
 
             statusCode = 404;
 
@@ -596,15 +596,15 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
             while (strlen(indexBuffer) > 0) {
 
-                hkLog.info("Get characteristics %s with len %d\n", indexBuffer, strlen(indexBuffer));
+                hkLog.info("Get characteristics %s with len %d", indexBuffer, strlen(indexBuffer));
 
                 char temp[1000];
                 //Initial the temp
                 temp[0] = 0;
                 sscanf(indexBuffer, "%d.%d%[^\n]", &aid, &iid, temp);
-                hkLog.info("Get temp %s with len %d\n", temp, strlen(temp));
+                hkLog.info("Get temp %s with len %d", temp, strlen(temp));
                 strncpy(indexBuffer, temp, 1000);
-                hkLog.info("Get characteristics %s with len %d\n", indexBuffer, strlen(indexBuffer));
+                hkLog.info("Get characteristics %s with len %d", indexBuffer, strlen(indexBuffer));
                 //Trim comma
                 if (indexBuffer[0] == ',') {
                     indexBuffer[0] = '0';
@@ -614,7 +614,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                 if (a != NULL) {
                     characteristics *c = a->characteristicsAtIndex(iid);
                     if (c != NULL) {
-                        hkLog.info("Ask for one characteristics: %d . %d\n", aid, iid);
+                        hkLog.info("Ask for one characteristics: %d . %d", aid, iid);
                         char c1[3], c2[3];
                         sprintf(c1, "%d", aid);
                         sprintf(c2, "%d", iid);
@@ -646,7 +646,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
         } else if (strncmp(method, "PUT", 3) == 0) {
             //Change characteristics
-            hkLog.info("PUT characteristics: %s\n",dataPtr);
+            hkLog.info("PUT characteristics: %s",dataPtr);
 
             char characteristicsBuffer[1000];
             sscanf(dataPtr, "{\"characteristics\":[{%[^]]s}", characteristicsBuffer);
@@ -671,7 +671,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                     }
                     sender->relay = true;
                 }
-                hkLog.info("%d . %d\n",aid, iid);
+                hkLog.info("%d . %d",aid, iid);
 
                 Accessory *a = AccessorySet::getInstance().accessoryAtIndex(aid);
                 if (a==NULL) {
@@ -680,7 +680,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                     characteristics *c = a->characteristicsAtIndex(iid);
 
                     if (updateNotify) {
-                        hkLog.info("Ask to notify one characteristics: %d . %d -> %s\n", aid, iid, value);
+                        hkLog.info("Ask to notify one characteristics: %d . %d -> %s", aid, iid, value);
                         if (c==NULL) {
                             statusCode = 400;
                         } else {
@@ -695,7 +695,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                             }
                         }
                     } else {
-                        hkLog.info("Ask to change one characteristics: %d . %d -> %s\n", aid, iid, value);
+                        hkLog.info("Ask to change one characteristics: %d . %d -> %s", aid, iid, value);
                         if (c==NULL) {
                             statusCode = 400;
                         } else {
@@ -720,8 +720,8 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
             return;
         }
     } else {
-        hkLog.info("Ask for something I don't know\n");
-        hkLog.info("%s\n", request);
+        hkLog.info("Ask for something I don't know");
+        hkLog.info("%s", request);
         hkLog.info("%s", path);
         statusCode = 404;
     }
@@ -729,7 +729,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
     //Calculate the length of header
     char * tmp = new char[256];
     bzero(tmp, 256);
-    int len = snprintf(tmp, 256, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u\r\n\r\n", protocol, statusCode, returnType, replyDataLen);
+    int len = snprintf(tmp, 256, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u\r\n\r", protocol, statusCode, returnType, replyDataLen);
     delete [] tmp;
 
     //replyLen should omit the '\0'.
@@ -737,14 +737,14 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
     //reply should add '\0', or the printf is incorrect
     *reply = new char[*replyLen + 1];
     bzero(*reply, *replyLen + 1);
-    snprintf(*reply, len + 1, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u\r\n\r\n", protocol, statusCode, returnType, replyDataLen);
+    snprintf(*reply, len + 1, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u\r\n\r", protocol, statusCode, returnType, replyDataLen);
 
     if (replyData) {
         bcopy(replyData, &(*reply)[len], replyDataLen);
         delete [] replyData;
     }
 
-    //hkLog.info("Reply: %s\n", *reply);
+    //hkLog.info("Reply: %s", *reply);
 
 }
 
