@@ -2,6 +2,7 @@
 
 
 #include "homekit/HKConnection.h"
+#include "homekit/HKLog.h"
 
 
 #include <set>
@@ -65,7 +66,7 @@ void LightBulbAccessoryBase::setLedSaturation (int oldValue, int newValue, HKCon
 }
 
 void LightBulbAccessoryBase::lightIdentify(bool oldValue, bool newValue, HKConnection *sender) {
-    Serial.printf("Start Identify Light\n");
+    hkLog.info("Start Identify Light\n");
 }
 
 void LightBulbAccessoryBase::initAccessorySet() {

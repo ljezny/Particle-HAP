@@ -27,7 +27,7 @@ HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void
 void HKServer::setup () {
 
     server.begin();
-    HKLogger.printf("Server started at port %d", TCP_SERVER_PORT);
+    hkLog.info("Server started at port %d", TCP_SERVER_PORT);
 
 
     bonjour.setUDP( &udp );
@@ -73,11 +73,12 @@ void HKServer::setPaired(bool p) {
 }
 
 void HKServer::handle() {
+
     bonjour.run();
 
     TCPClient newClient = server.available();
     if(newClient) {
-        Serial.println("Client connected.");
+        hkLog.info("Client connected.");
         clients.insert(clients.begin(),new HKConnection(this,newClient));
     }
 
@@ -87,10 +88,10 @@ void HKServer::handle() {
 
         conn->handleConnection();
         if(!conn->isConnected()) {
-            conn->close();
-            Serial.println("Client removed.");
-            clients.erase(clients.begin() + i);
+            hkLog.info("Client removed.");
 
+            conn->close();
+            clients.erase(clients.begin() + i);
             delete conn;
         }
 

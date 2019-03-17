@@ -66,7 +66,7 @@ void WindowsShutterAccessory::handle() {
             RGB.control(true);
             RGB.color(0, 0, 255);
             rcSwitch->send(downCode, 24);
-            Serial.printf("Sending downCode: %d,repeats: %d, took: %d ms\n", downCode,transmit_repeats, millis() - start);
+            hkLog.info("Sending downCode: %d,repeats: %d, took: %d ms\n", downCode,transmit_repeats, millis() - start);
             RGB.control(false);
             newPosition -= diff;
             break;
@@ -74,7 +74,7 @@ void WindowsShutterAccessory::handle() {
             RGB.control(true);
             RGB.color(0, 0, 255);
             rcSwitch->send(upCode, 24);
-            Serial.printf("Sending upCode: %d,repeats: %d, took: %d ms\n", upCode,transmit_repeats,millis() - start);
+            hkLog.info("Sending upCode: %d,repeats: %d, took: %d ms\n", upCode,transmit_repeats,millis() - start);
             RGB.control(false);
             newPosition += diff;
             break;

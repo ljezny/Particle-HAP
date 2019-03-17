@@ -6,6 +6,7 @@
  */
 
 #include "homekit/HKServer.h"
+#include "homekit/HKLog.h"
 
 #include "WindowsShutterAccessory.h"
 #include "LightSensorAccessory.h"
@@ -15,6 +16,8 @@
 
 //SYSTEM_THREAD(ENABLED);
 
+SerialLogHandler logHandler;
+
 HKServer *hkServer = NULL;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
@@ -23,7 +26,7 @@ HKServer *hkServer = NULL;
 HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
 void progress(Progress_t progress) {
-    Serial.printf("PROGRESS: %d\n",progress);
+    hkLog.info("HK : %d\n",progress);
 }
 
 

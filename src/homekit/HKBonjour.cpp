@@ -28,7 +28,7 @@
 #include <stdlib.h>
 
 #include "HKBonjour.h"
-
+#include "HKLog.h"
 #define  MDNS_DEFAULT_NAME       "arduino"
 #define  MDNS_TLD                ".local"
 #define  DNS_SD_SERVICE          "_services._dns-sd._udp.local"
@@ -540,7 +540,7 @@ errorReturn:
    if (NULL != dnsHeader)
       free(dnsHeader);
 
-   Serial.printf("Bonjour send message status: %d\n", statusCode);
+   hkLog.info("Bonjour advertised");
    return statusCode;
 }
 
@@ -570,7 +570,7 @@ MDNSError_t HKBonjour::_processMDNSQuery()
       statusCode = MDNSTryLater;
       goto errorReturn;
    }
-    Serial.println("Processing MNDS Query packet");
+    hkLog.info("Processing MNDS Query packet");
    udpBuffer = (uint8_t*) malloc(udp_len);  //allocate memory to hold _remaining UDP packet
    if (NULL == udpBuffer) {
       this->flush();

@@ -233,7 +233,7 @@ public:
         HKConnection *item = notifiedConnections.at(i);
 
         if(item == c) {
-          //Serial.println("Removing notified connection.");
+          //hkLog.info("Removing notified connection.");
           notifiedConnections.erase(notifiedConnections.begin() + i);
         }
         i--;

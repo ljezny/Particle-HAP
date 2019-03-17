@@ -36,7 +36,7 @@ void LightSensorAccessory::handle() {
         lastReportMS = millis();
         currentAmbilightChar->notify(NULL);
     }
-    //Serial.printf("photosensor: %d\n", analogRead(photosensor));
+    //hkLog.info("photosensor: %d\n", analogRead(photosensor));
 }
 
 void LightSensorAccessory::initAccessorySet() {
