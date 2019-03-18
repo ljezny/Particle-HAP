@@ -60,6 +60,7 @@ void WindowsShutterAccessory::handle() {
     }
     int transmit_repeats = (diff * COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS) / 100;
 
+
     rcSwitch->setRepeatTransmit(transmit_repeats);
     switch (state) {
         case 0:
@@ -90,16 +91,19 @@ void WindowsShutterAccessory::handle() {
     }
     setPosition(newPosition);
   } else {
-    if(state == 0 && targetPosition > 0) { //send one more code up to shutters remain in open position
+    int old_state = state;
+    setState(2);
+    setPosition(targetPosition);
+
+    if(old_state == 0 && targetPosition > 0) { //send one more code up to shutters remain in open position
       delay(200);
       rcSwitch->setRepeatTransmit(TILT_OPEN_TO_CLOSE_TRANSMIT_REPEATS);
       rcSwitch->send(upCode, 24);
+    } else if(old_state == 0 && targetPosition == 0) { //just make sure to really close the shutters
+      rcSwitch->setRepeatTransmit(COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS / 4);
+      rcSwitch->send(downCode, 24);
     }
-    setState(2);
-    setPosition(targetPosition);
   }
-
-
 }
 
 void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
