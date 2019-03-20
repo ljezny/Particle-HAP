@@ -23,7 +23,7 @@ HKServer *hkServer = NULL;
 //HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
 HAPAccessoryDescriptor *acc = new NixieClockAccessory();
-///HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+//HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 
 void progress(Progress_t progress) {
     hkLog.info("Homekit progress callback: %d",progress);
@@ -47,6 +47,7 @@ void setup() {
   acc->initAccessorySet();
 
   //hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+  //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
   hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
 
   hkServer->setup();

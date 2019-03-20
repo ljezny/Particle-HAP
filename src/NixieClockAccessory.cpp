@@ -16,6 +16,9 @@
 
 int digitPINs[10] = {D4,D0,A0,D3,D1,A3,A4,D2,A1,A2};//{A0,A1,A2,A3,A4,D0,D1,D2,D3,D4};
 int powerPIN = A5;
+int MIN_BRIGHTNESS = 32;
+int MAX_BRIGHTNESS = 255;
+
 
 std::string NixieClockAccessory::getPower (HKConnection *sender){
     return on ? "true" : "false";
@@ -33,11 +36,19 @@ int fade(int pin, int from, int to) {
   int step = from < to ? 1 : -1;
   int v = from;
   while(v != to) {
-    analogWrite(pin,v);
-    delay(2);
+    analogWrite(pin,v,2000); //analogWriteMaxFrequency(pin)
+    delay(1);
     v += step;
   }
   return v;
+}
+
+int showDigit(int pin) {
+  digitalWrite(pin,0);
+  fade(powerPIN,MIN_BRIGHTNESS,MAX_BRIGHTNESS);
+  delay(300);
+  fade(powerPIN,MAX_BRIGHTNESS,MIN_BRIGHTNESS);
+  digitalWrite(pin,1);
 }
 
 void NixieClockAccessory::handle() {
@@ -46,36 +57,18 @@ void NixieClockAccessory::handle() {
           time_t utcNow = Time.now();
           time_t local = timezone->toLocal(utcNow);
 
-          int max = 255;
-          int min = 31;
+          int max = MAX_BRIGHTNESS;
+          int min = MIN_BRIGHTNESS;
 
           int h = hour(local);
           int m = minute(local);
 
-          int current = min;
-          analogWrite(powerPIN,current);
+          showDigit(digitPINs[(h / 10) % 10]);
+          showDigit(digitPINs[h % 10]);
+          delay(600);
+          showDigit(digitPINs[(m / 10) % 10]);
+          showDigit(digitPINs[m % 10]);
 
-          digitalWrite(digitPINs[(h / 10) % 10], 0);
-          current = fade(powerPIN,current,max);
-          delay(200);
-          current = fade(powerPIN,current,min);
-          digitalWrite(digitPINs[(h / 10) % 10], 1);
-          digitalWrite(digitPINs[h % 10], 0);
-          current = fade(powerPIN,current,max);
-          delay(200);
-          current = fade(powerPIN,current,min);
-          digitalWrite(digitPINs[h % 10], 1);
-          delay(400);
-          digitalWrite(digitPINs[(m / 10) % 10], 0);
-          current = fade(powerPIN,current,max);
-          delay(200);
-          current = fade(powerPIN,current,min);
-          digitalWrite(digitPINs[(m / 10) % 10], 1);
-          digitalWrite(digitPINs[m % 10], 0);
-          current = fade(powerPIN,current,max);
-          delay(200);
-          current = fade(powerPIN,current,min);
-          digitalWrite(digitPINs[m % 10], 1);
 
           lastShowMS = millis();
       }
@@ -86,7 +79,8 @@ void NixieClockAccessory::initAccessorySet() {
   pinMode(powerPIN, OUTPUT);
   for(int i = 0; i<10; i++) {
     pinMode(digitPINs[i], OUTPUT);
-    digitalWrite(digitPINs[i],1);
+
+    showDigit(digitPINs[i]);
   }
 
   Accessory *nixieAcc = new Accessory();
