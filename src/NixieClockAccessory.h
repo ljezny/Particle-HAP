@@ -10,8 +10,6 @@
 
 class NixieClockAccessory: public HAPAccessoryDescriptor {
 private:
-
-  int maxBrightness = 255;
   bool on = true;
   int lastShowMS = 0;
   int TIME_PERIOD = 2000;
@@ -19,9 +17,6 @@ private:
 
   std::string getPower (HKConnection *sender);
   void setPower (bool oldValue, bool newValue, HKConnection *sender);
-
-  std::string getBrightness (HKConnection *sender);
-  void setBrightness (int oldValue, int newValue, HKConnection *sender);
 
   Timezone *timezone = NULL;
 public:

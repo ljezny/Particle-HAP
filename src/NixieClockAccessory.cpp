@@ -14,7 +14,7 @@
 
 #include "time/TimeLib.h"
 
-int digitPINs[10] = {A0,A1,A2,A3,A4,D0,D1,D2,D3,D4};
+int digitPINs[10] = {D4,D0,A0,D3,D1,A3,A4,D2,A1,A2};//{A0,A1,A2,A3,A4,D0,D1,D2,D3,D4};
 int powerPIN = A5;
 
 std::string NixieClockAccessory::getPower (HKConnection *sender){
@@ -25,47 +25,59 @@ void NixieClockAccessory::setPower (bool oldValue, bool newValue, HKConnection *
     on = newValue;
 }
 
-std::string NixieClockAccessory::getBrightness (HKConnection *sender){
-    return format("%d",(maxBrightness * 100) / 255);
-}
-
-void NixieClockAccessory::setBrightness (int oldValue, int newValue, HKConnection *sender){
-    maxBrightness = (newValue * 255) / 100;
-}
-
 void NixieClockAccessory::lightIdentify(bool oldValue, bool newValue, HKConnection *sender) {
     Serial.printf("Start Identify Light\n");
+}
+
+int fade(int pin, int from, int to) {
+  int step = from < to ? 1 : -1;
+  int v = from;
+  while(v != to) {
+    analogWrite(pin,v);
+    delay(2);
+    v += step;
+  }
+  return v;
 }
 
 void NixieClockAccessory::handle() {
     if(on) {
       if((millis() - lastShowMS) > TIME_PERIOD) {
-          lastShowMS = millis();
-
-          time_t utcNow = now();
+          time_t utcNow = Time.now();
           time_t local = timezone->toLocal(utcNow);
 
-          analogWrite(powerPIN,maxBrightness);
+          int max = 255;
+          int min = 31;
+
           int h = hour(local);
           int m = minute(local);
 
-          digitalWrite(digitPINs[(h / 10) % 10], 1);
-          delay(200);
-          digitalWrite(digitPINs[(h / 10) % 10], 0);
-          delay(100);
-          digitalWrite(digitPINs[h % 10], 1);
-          delay(200);
-          digitalWrite(digitPINs[h % 10], 0);
-          delay(100);
+          int current = min;
+          analogWrite(powerPIN,current);
 
-          digitalWrite(digitPINs[(m / 10) % 10], 1);
+          digitalWrite(digitPINs[(h / 10) % 10], 0);
+          current = fade(powerPIN,current,max);
           delay(200);
+          current = fade(powerPIN,current,min);
+          digitalWrite(digitPINs[(h / 10) % 10], 1);
+          digitalWrite(digitPINs[h % 10], 0);
+          current = fade(powerPIN,current,max);
+          delay(200);
+          current = fade(powerPIN,current,min);
+          digitalWrite(digitPINs[h % 10], 1);
+          delay(400);
           digitalWrite(digitPINs[(m / 10) % 10], 0);
-          delay(100);
-          digitalWrite(digitPINs[m % 10], 1);
+          current = fade(powerPIN,current,max);
           delay(200);
+          current = fade(powerPIN,current,min);
+          digitalWrite(digitPINs[(m / 10) % 10], 1);
           digitalWrite(digitPINs[m % 10], 0);
-          delay(100);
+          current = fade(powerPIN,current,max);
+          delay(200);
+          current = fade(powerPIN,current,min);
+          digitalWrite(digitPINs[m % 10], 1);
+
+          lastShowMS = millis();
       }
     }
 }
@@ -74,6 +86,7 @@ void NixieClockAccessory::initAccessorySet() {
   pinMode(powerPIN, OUTPUT);
   for(int i = 0; i<10; i++) {
     pinMode(digitPINs[i], OUTPUT);
+    digitalWrite(digitPINs[i],1);
   }
 
   Accessory *nixieAcc = new Accessory();
@@ -94,10 +107,5 @@ void NixieClockAccessory::initAccessorySet() {
   powerState->perUserQuery = std::bind(&NixieClockAccessory::getPower, this, std::placeholders::_1);
   powerState->valueChangeFunctionCall = std::bind(&NixieClockAccessory::setPower, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
   nixieAcc->addCharacteristics(lightService, powerState);
-
-  intCharacteristics *brightnessState = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
-  brightnessState->perUserQuery = std::bind(&NixieClockAccessory::getBrightness, this, std::placeholders::_1);
-  brightnessState->valueChangeFunctionCall = std::bind(&NixieClockAccessory::setBrightness, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
-  nixieAcc->addCharacteristics(lightService, brightnessState);
 
 }
