@@ -28,14 +28,14 @@
 #include <stdlib.h>
 
 #include "HKBonjour.h"
-
+#include "HKLog.h"
 #define  MDNS_DEFAULT_NAME       "arduino"
 #define  MDNS_TLD                ".local"
 #define  DNS_SD_SERVICE          "_services._dns-sd._udp.local"
 #define  MDNS_SERVER_PORT        5353
 #define  MDNS_NQUERY_RESEND_TIME 1000   // 1 second, name query resend timeout
 #define  MDNS_SQUERY_RESEND_TIME 1000  // 10 seconds, service query resend timeout
-#define  MDNS_RESPONSE_TTL       20    //120 two minutes (in seconds)
+#define  MDNS_RESPONSE_TTL       120    //120 two minutes (in seconds)
 
 #define  MDNS_MAX_SERVICES_PER_PACKET  6
 #define  MSNS_ANNOUNCE_TIME_SEC  1 //Send announce packet every 5 seconds
@@ -540,7 +540,7 @@ errorReturn:
    if (NULL != dnsHeader)
       free(dnsHeader);
 
-   //Serial.printf("Bonjour send message status: %d\n", statusCode);
+   hkLog.info("Bonjour advertised");
    return statusCode;
 }
 
@@ -570,7 +570,7 @@ MDNSError_t HKBonjour::_processMDNSQuery()
       statusCode = MDNSTryLater;
       goto errorReturn;
    }
-    Serial.println("Processing MNDS Query packet");
+    hkLog.info("Processing MNDS Query packet");
    udpBuffer = (uint8_t*) malloc(udp_len);  //allocate memory to hold _remaining UDP packet
    if (NULL == udpBuffer) {
       this->flush();

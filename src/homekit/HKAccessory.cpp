@@ -8,6 +8,7 @@
 
 #include "HKAccessory.h"
 #include "HKServer.h"
+#include "HKLog.h"
 
 const char hapJsonType[] = "application/hap+json";
 const char pairingTlv8Type[] = "application/pairing+tlv8";
@@ -383,42 +384,42 @@ void characteristics::notify(HKConnection* conn) {
 
 string boolCharacteristics::describe(HKConnection *sender) {
     string result = attribute(type, iid, premission, value(sender));
-    //Serial.printf("boolCharacteristics::describe: %s\n",result.c_str());
+    //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string floatCharacteristics::describe(HKConnection *sender) {
     string result = attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
-    //Serial.printf("boolCharacteristics::describe: %s\n",result.c_str());
+    //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string intCharacteristics::describe(HKConnection *sender) {
     string result = attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
-    //Serial.printf("boolCharacteristics::describe: %s\n",result.c_str());
+    //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string stringCharacteristics::describe(HKConnection *sender) {
     string result = attribute(type, iid, premission, value(sender), maxLen);
-    //Serial.printf("boolCharacteristics::describe: %s\n",result.c_str());
+    //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string Service::describe(HKConnection *sender) {
     string result = "";
     result+="{";
-   
+
     char serviceIDStr[32];
     sprintf(serviceIDStr, "\"iid\":%d,", serviceID);
     result+=serviceIDStr;
-    
+
     char uuidStr[32];
     sprintf(uuidStr, "\"type\":\"%X\",", uuid);
     result+=uuidStr;
-    
+
     result+="\"characteristics\":[";
-    
+
     int len = numberOfCharacteristics();
     for (int i = 0; i < len; i++) {
         result+=_characteristics[i]->describe(sender);
@@ -426,11 +427,11 @@ string Service::describe(HKConnection *sender) {
             result+=",";
         }
     }
-    
+
     result+="]";
-    
+
     result+="}";
-    
+
     return result;
 }
 
@@ -478,7 +479,7 @@ string AccessorySet::describe(HKConnection *sender) {
 
     result+="}";
 
-    //Serial.printf("%s\n", result.c_str());
+    //hkLog.info("%s", result.c_str());
     return result;
 }
 /*
@@ -510,7 +511,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         path[i] = request[index];
     }
     path[i] = 0;
-    Serial.printf("Path: %s\n", path);
+    hkLog.info("Path: %s", path);
 
     const char *dataPtr = request;
     while (true) {
@@ -529,10 +530,12 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
     if (strcmp(path, "/accessories") == 0) {
         //Publish the characterists of the accessories
-        Serial.printf("Ask for accessories info\n");
+        hkLog.info("Ask for accessories info");
         statusCode = 200;
         string desc = AccessorySet::getInstance().describe(sender);
+        //hkLog.info(desc.c_str());
         //Serial.printf("%s\n", desc.c_str());
+        //delay(100);
         replyDataLen = desc.length();
         replyData = (char*) malloc((replyDataLen+1)*sizeof(char));//new char[replyDataLen+1];
         memset(replyData,0,replyDataLen+1);
@@ -541,11 +544,11 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);
         statusCode = 200;
-        Serial.printf("%d\n", *msg.data.dataPtrForIndex(0));
+        hkLog.info("%d", *msg.data.dataPtrForIndex(0));
         if (*msg.data.dataPtrForIndex(0) == 3) {
             //Pairing with new user
 
-            Serial.printf("Add new user\n");
+            hkLog.info("Add new user");
 
             HKKeyRecord controllerRec;
             bcopy(msg.data.dataPtrForIndex(3), controllerRec.publicKey, 32);
@@ -561,7 +564,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
             statusCode = 200;
         } else {
 
-            Serial.printf("Delete user");
+            hkLog.info("Delete user");
 
             HKKeyRecord controllerRec;
             bcopy(msg.data.dataPtrForIndex(1), controllerRec.controllerID, 36);
@@ -578,7 +581,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         //Pairing status change, so update
         //updatePairable();
     } else if (strncmp(path, "/characteristics", 16) == 0){
-        Serial.printf("Characteristics\n");
+        hkLog.info("Characteristics");
         if (strncmp(method, "GET", 3) == 0) {
             //Read characteristics
             int aid = 0;    int iid = 0;
@@ -587,7 +590,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
             sscanf(path, "/characteristics?id=%[^\n]", indexBuffer);
 
 
-            Serial.printf("Get characteristics %s with len %d\n", indexBuffer, strlen(indexBuffer));
+            hkLog.info("Get characteristics %s with len %d", indexBuffer, strlen(indexBuffer));
 
             statusCode = 404;
 
@@ -595,15 +598,15 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
             while (strlen(indexBuffer) > 0) {
 
-                Serial.printf("Get characteristics %s with len %d\n", indexBuffer, strlen(indexBuffer));
+                hkLog.info("Get characteristics %s with len %d", indexBuffer, strlen(indexBuffer));
 
                 char temp[1000];
                 //Initial the temp
                 temp[0] = 0;
                 sscanf(indexBuffer, "%d.%d%[^\n]", &aid, &iid, temp);
-                Serial.printf("Get temp %s with len %d\n", temp, strlen(temp));
+                hkLog.info("Get temp %s with len %d", temp, strlen(temp));
                 strncpy(indexBuffer, temp, 1000);
-                Serial.printf("Get characteristics %s with len %d\n", indexBuffer, strlen(indexBuffer));
+                hkLog.info("Get characteristics %s with len %d", indexBuffer, strlen(indexBuffer));
                 //Trim comma
                 if (indexBuffer[0] == ',') {
                     indexBuffer[0] = '0';
@@ -613,7 +616,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                 if (a != NULL) {
                     characteristics *c = a->characteristicsAtIndex(iid);
                     if (c != NULL) {
-                        Serial.printf("Ask for one characteristics: %d . %d\n", aid, iid);
+                        hkLog.info("Ask for one characteristics: %d . %d", aid, iid);
                         char c1[3], c2[3];
                         sprintf(c1, "%d", aid);
                         sprintf(c2, "%d", iid);
@@ -645,7 +648,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
         } else if (strncmp(method, "PUT", 3) == 0) {
             //Change characteristics
-            Serial.printf("PUT characteristics: %s\n",dataPtr);
+            hkLog.info("PUT characteristics: %s",dataPtr);
 
             char characteristicsBuffer[1000];
             sscanf(dataPtr, "{\"characteristics\":[{%[^]]s}", characteristicsBuffer);
@@ -670,7 +673,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                     }
                     sender->relay = true;
                 }
-                Serial.printf("%d . %d\n",aid, iid);
+                hkLog.info("%d . %d",aid, iid);
 
                 Accessory *a = AccessorySet::getInstance().accessoryAtIndex(aid);
                 if (a==NULL) {
@@ -679,7 +682,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                     characteristics *c = a->characteristicsAtIndex(iid);
 
                     if (updateNotify) {
-                        Serial.printf("Ask to notify one characteristics: %d . %d -> %s\n", aid, iid, value);
+                        hkLog.info("Ask to notify one characteristics: %d . %d -> %s", aid, iid, value);
                         if (c==NULL) {
                             statusCode = 400;
                         } else {
@@ -694,7 +697,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                             }
                         }
                     } else {
-                        Serial.printf("Ask to change one characteristics: %d . %d -> %s\n", aid, iid, value);
+                        hkLog.info("Ask to change one characteristics: %d . %d -> %s", aid, iid, value);
                         if (c==NULL) {
                             statusCode = 400;
                         } else {
@@ -719,9 +722,9 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
             return;
         }
     } else {
-        Serial.printf("Ask for something I don't know\n");
-        Serial.printf("%s\n", request);
-        Serial.printf("%s", path);
+        hkLog.info("Ask for something I don't know");
+        hkLog.info("%s", request);
+        hkLog.info("%s", path);
         statusCode = 404;
     }
 
@@ -743,7 +746,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         delete [] replyData;
     }
 
-    //Serial.printf("Reply: %s\n", *reply);
+    //hkLog.info("Reply: %s", *reply);
 
 }
 

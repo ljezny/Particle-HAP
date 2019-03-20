@@ -52,9 +52,6 @@ private:
   word32 responseLength = 128;
   char* response = new char[responseLength];
 
-  char* *secretKey = NULL;
-  unsigned int secretKeyLength = 0;
-
   byte sharedKey[CURVE25519_KEYSIZE];
   byte readKey[CHACHA20_POLY1305_AEAD_KEYSIZE];
   int readsCount = 0;

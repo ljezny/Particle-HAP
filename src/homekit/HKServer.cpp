@@ -27,7 +27,7 @@ HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void
 void HKServer::setup () {
 
     server.begin();
-    HKLogger.printf("Server started at port %d", TCP_SERVER_PORT);
+    hkLog.info("Server started at port %d", TCP_SERVER_PORT);
 
 
     bonjour.setUDP( &udp );
@@ -40,9 +40,14 @@ void HKServer::setPaired(bool p) {
     if(paired) {
         return;
     }
+    unsigned short configNumber = persistor->getAndUpdateConfigurationVersion();
 
     paired = p;
     bonjour.removeAllServiceRecords();
+
+    char* configNumberStr = new char[32];
+    memset(configNumberStr, 0, 6);
+    int configNumberLen = sprintf(configNumberStr, "%d",configNumber);
 
     char* deviceTypeStr = new char[6];
     memset(deviceTypeStr, 0, 6);
@@ -50,7 +55,7 @@ void HKServer::setPaired(bool p) {
 
     char* recordTxt = new char[512];
     memset(recordTxt, 0, 512);
-    int len = sprintf(recordTxt, "%csf=%d%cid=%s%cpv=1.0%cc#=2%cs#=1%cff=0%cmd=%s%cci=%s",4, p ? 0 : 1,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,4,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
+    int len = sprintf(recordTxt, "%csf=%d%cid=%s%cpv=1.0%cc#=%s%cs#=1%cff=0%cmd=%s%cci=%s",4, p ? 0 : 1,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,3+configNumberLen,configNumberStr,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
 
     char* bonjourName = new char[128];
     memset(bonjourName, 0, 128);
@@ -68,11 +73,12 @@ void HKServer::setPaired(bool p) {
 }
 
 void HKServer::handle() {
+
     bonjour.run();
 
     TCPClient newClient = server.available();
     if(newClient) {
-        Serial.println("Client connected.");
+        hkLog.info("Client connected.");
         clients.insert(clients.begin(),new HKConnection(this,newClient));
     }
 
@@ -82,10 +88,10 @@ void HKServer::handle() {
 
         conn->handleConnection();
         if(!conn->isConnected()) {
-            conn->close();
-            Serial.println("Client removed.");
-            clients.erase(clients.begin() + i);
+            hkLog.info("Client removed.");
 
+            conn->close();
+            clients.erase(clients.begin() + i);
             delete conn;
         }
 

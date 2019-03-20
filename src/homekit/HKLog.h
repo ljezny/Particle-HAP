@@ -17,10 +17,6 @@
 
 #include <string>
 
-class HKLog {
-public:
-    int printf(const std::string format, ...);
-    int println(const std::string value);
-};
-extern HKLog HKLogger;
+extern Logger hkLog;
+
 #endif /* HKLog_hpp */

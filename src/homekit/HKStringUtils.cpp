@@ -1,4 +1,5 @@
 #include "HKStringUtils.h"
+#include "HKLog.h"
 
 #include <stdio.h>
 #ifdef PARTICLE_COMPAT
@@ -27,11 +28,11 @@ void print_hex_memory(void *mem, int count) {
   int i;
   unsigned char *p = (unsigned char *)mem;
   for (i=0; i < count; i++) {
-    Serial.printf("0x%02x, ", p[i]);
+    hkLog.info("0x%02x, ", p[i]);
     if ((i%16==0) && i)
-      Serial.printf("\n");
+      hkLog.info("\n");
   }
-  Serial.printf("\n");
+  hkLog.info("\n");
 }
 
 std::string format(const std::string fmt, ...) {
@@ -54,4 +55,3 @@ std::string format(const std::string fmt, ...) {
     }
     return str;
 }
-

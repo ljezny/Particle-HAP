@@ -6,24 +6,25 @@
  */
 
 #include "homekit/HKServer.h"
+#include "homekit/HKLog.h"
 
-#include "LightBulbAccessory.h"
 #include "WindowsShutterAccessory.h"
 #include "LightSensorAccessory.h"
 #include "MotionSensorAccessory.h"
 #include "HomekitBridgeAccessory.h"
+#include "LEDStripLightBulbAccessory.h"
 
-
-//SYSTEM_THREAD(ENABLED);
+SerialLogHandler logHandler;
 
 HKServer *hkServer = NULL;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-//HAPAccessoryDescriptor *acc = new LightBulbAccessory();
+//HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
 HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+
 void progress(Progress_t progress) {
-    Serial.printf("PROGRESS: %d\n",progress);
+    hkLog.info("Homekit progress callback: %d",progress);
 }
 
 
@@ -39,8 +40,6 @@ void setup() {
   acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
   acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
   acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
-//  acc->descriptors.push_back(new MotionSensorAccessory());
-
   //END MYHOME
 
   acc->initAccessorySet();
@@ -52,7 +51,7 @@ void setup() {
 void loop() {
   if(WiFi.ready()) {
     if(!hkServer){//first time init
-      hkServer = new HKServer(acc->getDeviceType(),"Kit","523-12-643",progress);
+      hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
       hkServer->setup();
     }
     hkServer->handle();

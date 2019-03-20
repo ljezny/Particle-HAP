@@ -26,20 +26,16 @@ private:
     //initially fully closed
     int state = 2; //0 - going to minimum value, closing, down , 1 - going to maximum light - opening, up
     int position = 50; //initially assume it's half open, so user can open/close to sync the state
-    int tilt = -90;
 
-    int targetTilt = tilt;
     int targetPosition = position;
 
     long endMS = LONG_MAX;
 
     void shutterIdentity(bool oldValue, bool newValue, HKConnection *sender);
     void setState(int newState);
-    void setTilt(int newTilt);
     void setPosition(int newPosition);
     void setTargetPosition (int oldValue, int newValue, HKConnection *sender);
-    void setTargetTiltAngle (int oldValue, int newValue, HKConnection *sender);
-
+  
 
 public:
     WindowsShutterAccessory(int upCode,int downCode,int eepromAddr){

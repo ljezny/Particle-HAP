@@ -614,7 +614,7 @@ bool RECEIVE_ATTR RCSwitch::receiveProtocol(const int p, unsigned int changeCoun
      * The 2nd saved duration starts the data
      */
     const unsigned int firstDataTiming = (pro.invertedSignal) ? (2) : (1);
-    Serial.printf("receiveProtocol changeCount: %d\n",changeCount);
+    hkLog.info("receiveProtocol changeCount: %d\n",changeCount);
 
     for (unsigned int i = firstDataTiming; i < changeCount - 1; i += 2) {
         code <<= 1;
@@ -636,7 +636,7 @@ bool RECEIVE_ATTR RCSwitch::receiveProtocol(const int p, unsigned int changeCoun
         RCSwitch::nReceivedBitlength = (changeCount - 1) / 2;
         RCSwitch::nReceivedDelay = delay;
         RCSwitch::nReceivedProtocol = p;
-        Serial.printf("%d\n", code);
+        hkLog.info("%d\n", code);
         return true;
     }
 
