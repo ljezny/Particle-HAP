@@ -12,6 +12,8 @@
 #endif
 #include "homekit/HKLog.h"
 
+#include "time/TimeLib.h"
+
 int digitPINs[10] = {A0,A1,A2,A3,A4,D0,D1,D2,D3,D4};
 int powerPIN = A5;
 
@@ -36,30 +38,35 @@ void NixieClockAccessory::lightIdentify(bool oldValue, bool newValue, HKConnecti
 }
 
 void NixieClockAccessory::handle() {
-    if((millis() - lastShowMS) > TIME_PERIOD) {
-        lastShowMS = millis();
+    if(on) {
+      if((millis() - lastShowMS) > TIME_PERIOD) {
+          lastShowMS = millis();
 
-        analogWrite(powerPIN,maxBrightness);
-        int hour = Time.hour();
-        int minutes = Time.minute();
+          time_t utcNow = now();
+          time_t local = timezone->toLocal(utcNow);
 
-        digitalWrite(digitPINs[(hour / 10) % 10], 1);
-        delay(200);
-        digitalWrite(digitPINs[(hour / 10) % 10], 0);
-        delay(100);
-        digitalWrite(digitPINs[hour % 10], 1);
-        delay(200);
-        digitalWrite(digitPINs[hour % 10], 0);
-        delay(100);
+          analogWrite(powerPIN,maxBrightness);
+          int h = hour(local);
+          int m = minute(local);
 
-        digitalWrite(digitPINs[(minutes / 10) % 10], 1);
-        delay(200);
-        digitalWrite(digitPINs[(minutes / 10) % 10], 0);
-        delay(100);
-        digitalWrite(digitPINs[minutes % 10], 1);
-        delay(200);
-        digitalWrite(digitPINs[minutes % 10], 0);
-        delay(100);
+          digitalWrite(digitPINs[(h / 10) % 10], 1);
+          delay(200);
+          digitalWrite(digitPINs[(h / 10) % 10], 0);
+          delay(100);
+          digitalWrite(digitPINs[h % 10], 1);
+          delay(200);
+          digitalWrite(digitPINs[h % 10], 0);
+          delay(100);
+
+          digitalWrite(digitPINs[(m / 10) % 10], 1);
+          delay(200);
+          digitalWrite(digitPINs[(m / 10) % 10], 0);
+          delay(100);
+          digitalWrite(digitPINs[m % 10], 1);
+          delay(200);
+          digitalWrite(digitPINs[m % 10], 0);
+          delay(100);
+      }
     }
 }
 
