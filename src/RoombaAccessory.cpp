@@ -22,12 +22,16 @@ void RoombaAccessory::setPower (bool oldValue, bool newValue, HKConnection *send
     if(on) {
       Serial1.write(128); //start communication
       delay(200);
+      Serial1.write(173);//stop communication
+      delay(200);
+      Serial1.write(128); //start communication
+      delay(2000);
       Serial1.write(135); //clean
       delay(200);
       Serial1.write(173);//stop communication
     } else {
       Serial1.write(128); //start communication
-      delay(200);
+      delay(2000);
       Serial1.write(143);//send dock to pause pending cleaning
       delay(2000);
       Serial1.write(143);//send dock once again to go to dock

@@ -47,7 +47,8 @@ void setup() {
 
   acc->initAccessorySet();
 
-  hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+  hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
+  //hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
   hkServer->start();
