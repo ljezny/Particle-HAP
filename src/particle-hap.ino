@@ -15,6 +15,7 @@
 #include "LEDStripLightBulbAccessory.h"
 #include "NixieClockAccessory.h"
 
+//SYSTEM_THREAD(ENABLED);
 SerialLogHandler logHandler;
 
 HKServer *hkServer = NULL;
@@ -43,11 +44,17 @@ void setup() {
   //END MYHOME
 
   acc->initAccessorySet();
+
+  hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+  //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
+  //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
+  hkServer->start();
 }
 
 // loop() runs over and over again, as quickly as it can execute.
 void loop() {
-  if(WiFi.ready()) { //wifi is ready
+  //if SYSTEM_THREAD is enable use following code:
+  /*if(WiFi.ready()) { //wifi is ready
     if(!hkServer) { //start server
       hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
       //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
@@ -61,7 +68,8 @@ void loop() {
       delete hkServer;
       hkServer = NULL;
     }
-  }
+  }*/
 
+  hkServer->handle(); //handle connections
   acc->handle(); //handle accessory even if there's no wifi connection
 }
