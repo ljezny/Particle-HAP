@@ -8,11 +8,16 @@
 class RoombaAccessory: public HAPAccessoryDescriptor {
 private:
   bool on = false;
+  int batteryLevel = 100;
+  int chargingState = 0;
+  int statusLow = 0;
   void roombaIdentify(bool oldValue, bool newValue, HKConnection *sender);
 
   std::string getPower (HKConnection *sender);
   void setPower (bool oldValue, bool newValue, HKConnection *sender);
-
+  std::string getBatteryLevel (HKConnection *sender);
+  std::string getChargingState (HKConnection *sender);
+  std::string getStatusLowBattery (HKConnection *sender);
 public:
   RoombaAccessory() {
   }
