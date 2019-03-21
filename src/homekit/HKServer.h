@@ -33,7 +33,9 @@ public:
     HKPersistor *persistor;
     void (*progressPtr)(Progress_t);
     HKServer(int deviceType, std::string hapName, std::string passcode, void (*progressPtr)(Progress_t));
-    void setup ();
+    ~HKServer();
+    void start ();
+    void stop();
     void setPaired(bool paired);
     void handle();
     std::string getDeviceIdentity() {

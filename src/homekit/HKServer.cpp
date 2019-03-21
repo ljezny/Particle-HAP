@@ -24,16 +24,25 @@ HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void
     this->deviceIdentity = deviceIdentity; //std::string will copy
     free(deviceIdentity);
 }
-void HKServer::setup () {
 
+HKServer::~HKServer() {
+    delete persistor;
+    hkLog.info("Server destructed");
+}
+
+void HKServer::start () {
     server.begin();
     hkLog.info("Server started at port %d", TCP_SERVER_PORT);
-
 
     bonjour.setUDP( &udp );
     bonjour.begin(hapName.c_str());
     setPaired(false);
+}
 
+void HKServer::stop () {
+    server.stop();
+    hkLog.info("Server stopped");
+    bonjour.stop();
 }
 
 void HKServer::setPaired(bool p) {
