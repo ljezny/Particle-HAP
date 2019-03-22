@@ -12,6 +12,16 @@
 #endif
 #include "homekit/HKLog.h"
 
+#define OI_START_COMM 128
+#define OI_STOP_COMM 173
+#define OI_RESET 7
+#define OI_CLEAN 135
+#define OI_STOP 141
+#define OI_DOCK 143
+#define OI_QUERY_LIST 149
+
+#define PACKET_ID_BATTERY_CHARGE 25
+#define PACKET_ID_BATTERY_CAPACITY 26
 
 std::string RoombaAccessory::getPower (HKConnection *sender){
     return on ? "true" : "false";
@@ -27,20 +37,25 @@ std::string RoombaAccessory::getStatusLowBattery (HKConnection *sender){
   return "0";
 }
 
+
+
 void RoombaAccessory::setPower (bool oldValue, bool newValue, HKConnection *sender){
     on = newValue;
     if(on) {
-      Serial1.write(128); //start communication
-      Serial1.write(7); //reset
-      Serial1.write(128); //reset
-      Serial1.write(135); //clean
-      Serial1.write(173);//stop communication
+      Serial1.write(OI_START_COMM);
+      Serial1.write(OI_STOP_COMM);//stop communication
+      Serial1.write(OI_START_COMM); //start communication
+      Serial1.write(OI_RESET); //reset
+      delay(6000);
+      Serial1.write(OI_START_COMM); //start communication
+      Serial1.write(OI_CLEAN); //clean
+      Serial1.write(OI_STOP_COMM);//stop communication
     } else {
-      Serial1.write(128); //start communication
-      Serial1.write(7); //reset
-      Serial1.write(128); //reset
-      Serial1.write(143); //dock
-      Serial1.write(173);//stop communication
+      Serial1.write(OI_START_COMM); //start communication
+      Serial1.write(OI_DOCK); //stop
+      delay(2000);
+      Serial1.write(OI_DOCK); //dock
+      Serial1.write(OI_STOP_COMM);//stop communication
     }
 }
 
@@ -51,6 +66,16 @@ void RoombaAccessory::roombaIdentify(bool oldValue, bool newValue, HKConnection 
 
 void RoombaAccessory::handle() {
     //query state?
+    if((millis() - lastMS) > REPORT_PERIOD) {
+        lastMS = REPORT_PERIOD;
+
+
+    }
+
+    while(Serial1.available()) {
+      int v = Serial1.read();
+
+    }
 }
 
 void RoombaAccessory::initAccessorySet() {

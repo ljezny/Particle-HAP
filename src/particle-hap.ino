@@ -75,5 +75,5 @@ void loop() {
   }*/
 
   hkServer->handle(); //handle connections
-  acc->handle(); //handle accessory even if there's no wifi connection
+  acc->handle(); //handle accessory
 }

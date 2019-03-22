@@ -11,6 +11,10 @@ private:
   int batteryLevel = 100;
   int chargingState = 0;
   int statusLow = 0;
+
+  int REPORT_PERIOD = 2000;
+  int lastMS = 0;
+
   void roombaIdentify(bool oldValue, bool newValue, HKConnection *sender);
 
   std::string getPower (HKConnection *sender);
