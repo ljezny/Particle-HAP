@@ -104,7 +104,7 @@ bool WindowsShutterAccessory::handle() {
       rcSwitch->send(upCode, 24);
       result = true;
     } else if(old_state == 0 && targetPosition == 0) { //just make sure to really close the shutters
-      rcSwitch->setRepeatTransmit(COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS / 4);
+      rcSwitch->setRepeatTransmit(COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS / 8);
       rcSwitch->send(downCode, 24);
     }
   }
