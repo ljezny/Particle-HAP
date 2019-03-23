@@ -51,7 +51,7 @@ int showDigit(int pin) {
   digitalWrite(pin,1);
 }
 
-void NixieClockAccessory::handle() {
+bool NixieClockAccessory::handle() {
     if(on) {
       if((millis() - lastShowMS) > TIME_PERIOD) {
           time_t utcNow = Time.now();

@@ -25,8 +25,8 @@ HKServer *hkServer = NULL;
 //HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
 //HAPAccessoryDescriptor *acc = new NixieClockAccessory();
-//HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
-HAPAccessoryDescriptor *acc = new RoombaAccessory();
+HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+//HAPAccessoryDescriptor *acc = new RoombaAccessory();
 void progress(Progress_t progress) {
 
     hkLog.info("Homekit progress callback: %d",progress);
@@ -40,15 +40,15 @@ void setup() {
   //HKPersistor().resetAll();
 
   //BEGIN MYHOME
-  //acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
-  //acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
-  //acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
   //END MYHOME
 
   acc->initAccessorySet();
 
-  hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+  //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
+  hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
   hkServer->start();

@@ -49,7 +49,8 @@ void WindowsShutterAccessory::setPosition(int newPosition) {
     }
 }
 
-void WindowsShutterAccessory::handle() {
+bool WindowsShutterAccessory::handle() {
+  bool result = false;
   int diff = abs(targetPosition - position);
   if(diff > 0) {
     setState(position < targetPosition ? 1 : 0);
@@ -70,6 +71,7 @@ void WindowsShutterAccessory::handle() {
             hkLog.info("Sending downCode: %d,repeats: %d, took: %d ms\n", downCode,transmit_repeats, millis() - start);
             RGB.control(false);
             newPosition -= diff;
+            result = true;
             break;
         case 1:
             RGB.control(true);
@@ -78,6 +80,7 @@ void WindowsShutterAccessory::handle() {
             hkLog.info("Sending upCode: %d,repeats: %d, took: %d ms\n", upCode,transmit_repeats,millis() - start);
             RGB.control(false);
             newPosition += diff;
+            result = true;
             break;
         case 2:
             break;
@@ -99,11 +102,13 @@ void WindowsShutterAccessory::handle() {
       delay(200);
       rcSwitch->setRepeatTransmit(TILT_OPEN_TO_CLOSE_TRANSMIT_REPEATS);
       rcSwitch->send(upCode, 24);
+      result = true;
     } else if(old_state == 0 && targetPosition == 0) { //just make sure to really close the shutters
       rcSwitch->setRepeatTransmit(COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS / 4);
       rcSwitch->send(downCode, 24);
     }
   }
+  return false;
 }
 
 void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKConnection *sender) {

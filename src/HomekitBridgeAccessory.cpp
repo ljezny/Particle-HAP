@@ -8,10 +8,13 @@
 
 #include "HomekitBridgeAccessory.h"
 
-void HomekitBridgeAccessory::handle() {
+bool HomekitBridgeAccessory::handle() {
+    bool result = false;
     for(int i = 0; i < descriptors.size(); i++) {
-        descriptors.at(i)->handle();
+        //process only one accessory per "loop" step. So we dont delay Particle connection, Bonjour so much. Never mind it will be process one step later
+        result |= descriptors.at(i)->handle();
     }
+    return result;
 }
 
 void HomekitBridgeAccessory::initAccessorySet(){

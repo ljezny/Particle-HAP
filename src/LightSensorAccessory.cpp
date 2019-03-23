@@ -31,11 +31,13 @@ std::string LightSensorAccessory::getCurrentAmbilightLevel (HKConnection *sender
 }
 
 
-void LightSensorAccessory::handle() {
+bool LightSensorAccessory::handle() {
     if((lastReportMS + 5000) < millis()) { //expired, stop
         lastReportMS = millis();
         currentAmbilightChar->notify(NULL);
+        return true;
     }
+    return false;
     //hkLog.info("photosensor: %d\n", analogRead(photosensor));
 }
 

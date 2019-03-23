@@ -26,7 +26,7 @@ public:
     virtual int getDeviceType(){
         return deviceType_sensor;
     }
-    virtual void handle();
+    virtual bool handle();
 };
 
 #endif /* LightSensorAccessory_hpp */

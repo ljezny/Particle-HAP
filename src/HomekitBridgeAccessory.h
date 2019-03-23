@@ -19,13 +19,13 @@ class HomekitBridgeAccessory: public HAPAccessoryDescriptor {
 private:
 public:
     std::vector<HAPAccessoryDescriptor*> descriptors;
-    
+
     virtual void initAccessorySet();
-    
+
     virtual int getDeviceType(){
         return deviceType_bridge;
     }
-    virtual void handle();
+    virtual bool handle();
 };
 
 #endif /* HomekitBridgeAccessory_hpp */

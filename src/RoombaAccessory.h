@@ -31,7 +31,7 @@ public:
   virtual int getDeviceType(){
       return deviceType_switch;
   }
-  virtual void handle();
+  virtual bool handle();
 };
 
 #endif

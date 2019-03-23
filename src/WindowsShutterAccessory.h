@@ -35,7 +35,7 @@ private:
     void setState(int newState);
     void setPosition(int newPosition);
     void setTargetPosition (int oldValue, int newValue, HKConnection *sender);
-  
+
 
 public:
     WindowsShutterAccessory(int upCode,int downCode,int eepromAddr){
@@ -49,7 +49,7 @@ public:
     virtual int getDeviceType(){
         return deviceType_windowCover;
     }
-    virtual void handle();
+    virtual bool handle();
 };
 
 #endif /* WindowsShutterAccessory_hpp */

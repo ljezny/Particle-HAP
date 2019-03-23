@@ -64,7 +64,7 @@ void RoombaAccessory::roombaIdentify(bool oldValue, bool newValue, HKConnection 
 }
 
 
-void RoombaAccessory::handle() {
+bool RoombaAccessory::handle() {
     //query state?
     if((millis() - lastMS) > REPORT_PERIOD) {
         lastMS = REPORT_PERIOD;
@@ -76,6 +76,8 @@ void RoombaAccessory::handle() {
       int v = Serial1.read();
 
     }
+
+    return false;
 }
 
 void RoombaAccessory::initAccessorySet() {

@@ -21,13 +21,13 @@ private:
     void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);
     bool motionDetected = true;
 public:
-    
+
     virtual void initAccessorySet();
-    
+
     virtual int getDeviceType(){
         return deviceType_sensor;
     }
-    virtual void handle();
+    virtual bool handle();
 };
 
 
