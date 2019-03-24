@@ -35,14 +35,14 @@ void HKServer::start () {
     hkLog.info("Server started at port %d", TCP_SERVER_PORT);
 
     bonjour.setUDP( &udp );
-    bonjour.begin(hapName.c_str());
+    //bonjour.begin(hapName.c_str());
     setPaired(false);
 }
 
 void HKServer::stop () {
     server.stop();
     hkLog.info("Server stopped");
-    bonjour.stop();
+    //bonjour.stop();
 }
 
 void HKServer::setPaired(bool p) {
@@ -83,7 +83,9 @@ void HKServer::setPaired(bool p) {
 
 void HKServer::handle() {
 
+    bonjour.begin(hapName.c_str());
     bonjour.run();
+    bonjour.stop();
 
     TCPClient newClient = server.available();
     if(newClient) {

@@ -193,12 +193,6 @@ int HKBonjour::remoteIP()
 // 0 otherwise
 int HKBonjour::begin(const char* bonjourName)
 {
-	// if we were called very soon after the board was booted, we need to give the
-	// EthernetShield (WIZnet) some time to come up. Hence, we delay until millis() is at
-	// least 5000. This is necessary, so that if we need to add a service record directly
-	// after begin, the announce packet does not get lost in the bowels of the WIZnet chip.
-	while (millis() < 5000) delay(100);
-
 	int statusCode = 0;
 	statusCode = this->setBonjourName(bonjourName);
 	if (statusCode)
