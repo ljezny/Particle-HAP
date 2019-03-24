@@ -123,11 +123,13 @@ public:
         read_buffer_offset = 0;
         return result;
     }
-    void write(unsigned char *buffer, size_t len) {
-        
+    int write(unsigned char *buffer, size_t len, int timeout) {
         send(socket, buffer, len, 0);
+        return len;
     }
-    
+    int getWriteError() {
+        return 0;
+    }
 };
 
 class TCPServer {
@@ -257,6 +259,27 @@ public:
         IPAddress a = IPAddress();
         a.load(address);;
         return a;
+    }
+};
+
+class Logger{
+public:
+    Logger(const char *name) {
+        
+    }
+    int info(const char *format, ...){
+        va_list argptr;
+        va_start(argptr, format);
+        vfprintf(stdout, format, argptr);
+        va_end(argptr);
+        return 0;
+    }
+    int warn(const char *format, ...){
+        va_list argptr;
+        va_start(argptr, format);
+        vfprintf(stdout, format, argptr);
+        va_end(argptr);
+        return 0;
     }
 };
 

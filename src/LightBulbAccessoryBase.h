@@ -45,7 +45,7 @@ public:
         return deviceType_lightBulb;
     }
     virtual bool handle(){
-
+        return false;
     }
 };
 #endif
