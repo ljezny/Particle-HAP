@@ -150,8 +150,8 @@ void HKConnection::readData(uint8_t** buffer,size_t *size) {
     int total = 0;
     int bufferSize = 0;
 
-    *buffer =(uint8_t *) malloc(bufferSize * sizeof(uint8_t));
     if(isConnected()) {
+        *buffer =(uint8_t *) malloc(bufferSize * sizeof(uint8_t));
         while (int availableBytes = client.available()) {
             bufferSize += availableBytes;
             *buffer = (uint8_t *) realloc(*buffer, bufferSize * sizeof(uint8_t));
@@ -209,7 +209,9 @@ void HKConnection::handleConnection() {
         }
         RGB.control(false);
     }
-    free(inputBuffer);
+    if(inputBuffer) {
+        free(inputBuffer);
+    }
     processPostedCharacteristics();
 }
 
