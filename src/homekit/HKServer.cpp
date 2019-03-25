@@ -55,10 +55,11 @@ void HKServer::stop () {
     server = NULL;
 
     hkLog.info("Server stopped");
+    paired = false;
 }
 
 void HKServer::setPaired(bool p) {
-    if(paired == p) {
+    if(paired) {
         return;
     }
     unsigned short configNumber = persistor->getAndUpdateConfigurationVersion();
