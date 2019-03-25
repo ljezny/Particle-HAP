@@ -19,7 +19,7 @@ class HKConnection;
 
 class HKServer {
 private:
-    TCPServer server = TCPServer(TCP_SERVER_PORT);
+    TCPServer *server = NULL;
     HKBonjour bonjour;
     UDP udp;
     bool paired = false;

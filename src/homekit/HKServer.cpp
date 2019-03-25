@@ -9,6 +9,9 @@
 #include "spark_wiring_thread.h"
 #endif
 
+//TCP for handling server port
+static int TCP_SERVER_PORT = 5556;
+
 HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void (*progressPtr)(Progress_t)) {
     this->hapName = hapName;
     this->deviceType = deviceType;
@@ -31,27 +34,36 @@ HKServer::~HKServer() {
 }
 
 void HKServer::start () {
-    server.begin();
+    TCP_SERVER_PORT++;
+    server = new TCPServer(TCP_SERVER_PORT);
+    server->begin();
     hkLog.info("Server started at port %d", TCP_SERVER_PORT);
-
     bonjour.setUDP( &udp );
-    //bonjour.begin(hapName.c_str());
     setPaired(false);
 }
 
 void HKServer::stop () {
-    server.stop();
+    for(int i = 0; i < clients.size(); i++) {
+      HKConnection *conn = clients.at(i);
+      conn->close();
+      delete conn;
+    }
+    clients.clear();
+
+    server->stop();
+    delete server;
+    server = NULL;
+
     hkLog.info("Server stopped");
-    //bonjour.stop();
 }
 
 void HKServer::setPaired(bool p) {
-    if(paired) {
+    if(paired == p) {
         return;
     }
     unsigned short configNumber = persistor->getAndUpdateConfigurationVersion();
-
     paired = p;
+
     bonjour.removeAllServiceRecords();
 
     char* configNumberStr = new char[32];
@@ -87,7 +99,7 @@ void HKServer::handle() {
     bonjour.run();
     bonjour.stop();
 
-    TCPClient newClient = server.available();
+    TCPClient newClient = server->available();
     if(newClient) {
         hkLog.info("Client connected.");
         clients.insert(clients.begin(),new HKConnection(this,newClient));
