@@ -44,7 +44,8 @@ void HKServer::start () {
     hkLog.info("Server started at port %d", TCP_SERVER_PORT);
     bonjour.setUDP( &udp );
     setPaired(false);
-    Particle.variable("hk_clients", &this->connections, INT);
+
+    Particle.variable("connections", &this->connections, INT);
 }
 
 void HKServer::stop () {
