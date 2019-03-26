@@ -12,6 +12,8 @@
 //TCP for handling server port
 static int TCP_SERVER_PORT = 5556;
 
+
+
 HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void (*progressPtr)(Progress_t)) {
     this->hapName = hapName;
     this->deviceType = deviceType;
@@ -26,6 +28,8 @@ HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void
 
     this->deviceIdentity = deviceIdentity; //std::string will copy
     free(deviceIdentity);
+
+
 }
 
 HKServer::~HKServer() {
@@ -40,6 +44,7 @@ void HKServer::start () {
     hkLog.info("Server started at port %d", TCP_SERVER_PORT);
     bonjour.setUDP( &udp );
     setPaired(false);
+    Particle.variable("hk_clients", &this->connections, INT);
 }
 
 void HKServer::stop () {
@@ -104,6 +109,7 @@ void HKServer::handle() {
     if(newClient) {
         hkLog.info("Client connected.");
         clients.insert(clients.begin(),new HKConnection(this,newClient));
+        Particle.publish("homekit/accept", String(newClient.remoteIP()), PUBLIC);
     }
 
     int i = clients.size() - 1;
@@ -113,14 +119,15 @@ void HKServer::handle() {
         conn->handleConnection();
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
-
+            Particle.publish("homekit/close", String(conn->remoteIP()), PUBLIC);
             conn->close();
             clients.erase(clients.begin() + i);
             delete conn;
+
         }
 
         i--;
     }
 
-
+    this->connections = clients.size();
 }

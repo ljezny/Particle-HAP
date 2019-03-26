@@ -193,10 +193,12 @@ void HKConnection::handleConnection() {
         HKNetworkMessage msg((const char *)inputBuffer);
         if (!strcmp(msg.directory, "pair-setup")){
             hkLog.info("Handling Pair Setup...");
+            Particle.publish("homekit/pair-setup", String(remoteIP()), PUBLIC);
             handlePairSetup((const char *)inputBuffer);
         }
         else if (!strcmp(msg.directory, "pair-verify")){
             hkLog.info("Handling Pair Verify...");
+            Particle.publish("homekit/pair-verify", String(remoteIP()), PUBLIC);
             if(handlePairVerify((const char *)inputBuffer)){
                 isEncrypted = true;
                 server->setPaired(true);
@@ -205,6 +207,7 @@ void HKConnection::handleConnection() {
             client.stop();
         } else if(isEncrypted) { //connection is secured
             hkLog.info("Handling message request: %s",msg.directory);
+            Particle.publish("homekit/accessory", String(remoteIP()), PUBLIC);
             handleAccessoryRequest((const char *)inputBuffer, len);
         }
         RGB.control(false);

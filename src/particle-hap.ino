@@ -16,19 +16,20 @@
 #include "NixieClockAccessory.h"
 #include "RoombaAccessory.h"
 
-SYSTEM_THREAD(ENABLED);
+//SYSTEM_MODE(SEMI_AUTOMATIC);
+//SYSTEM_THREAD(ENABLED);
+
 SerialLogHandler logHandler;
 
 HKServer *hkServer = NULL;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
+//HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
-//HAPAccessoryDescriptor *acc = new NixieClockAccessory();
+HAPAccessoryDescriptor *acc = new NixieClockAccessory();
 //HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 //HAPAccessoryDescriptor *acc = new RoombaAccessory();
 void progress(Progress_t progress) {
-
     hkLog.info("Homekit progress callback: %d",progress);
 }
 
@@ -50,18 +51,21 @@ void setup() {
   //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
-  //hkServer->start();
+  hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
+  hkServer->start();
+
+  //SEMI_AUTOMATIC
+  //Particle.connect();
 }
 
 // loop() runs over and over again, as quickly as it can execute.
 void loop() {
   //if SYSTEM_THREAD is enable use following code:
-  if(WiFi.ready()) { //wifi is ready
+  /*if(WiFi.ready()) { //wifi is ready
     if(!hkServer) { //start server
-      //hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+      hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
       //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
-      hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
+      //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
       //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
       hkServer->start();
     }
@@ -72,8 +76,8 @@ void loop() {
       delete hkServer;
       hkServer = NULL;
     }
-  }
+  }*/
 
-  //hkServer->handle(); //handle connections
+  hkServer->handle(); //handle connections
   acc->handle(); //handle accessory
 }

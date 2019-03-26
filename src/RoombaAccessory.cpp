@@ -40,6 +40,7 @@ std::string RoombaAccessory::getStatusLowBattery (HKConnection *sender){
 
 
 void RoombaAccessory::setPower (bool oldValue, bool newValue, HKConnection *sender){
+    Particle.publish("roomba/power", newValue ? "on" : "off", PUBLIC);
     on = newValue;
     if(on) {
       Serial1.write(OI_START_COMM);

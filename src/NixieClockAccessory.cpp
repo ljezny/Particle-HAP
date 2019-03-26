@@ -21,11 +21,13 @@ int MAX_BRIGHTNESS = 255;
 
 
 std::string NixieClockAccessory::getPower (HKConnection *sender){
-    return on ? "true" : "false";
+
+    return on == 1 ? "true" : "false";
 }
 
 void NixieClockAccessory::setPower (bool oldValue, bool newValue, HKConnection *sender){
-    on = newValue;
+    Particle.publish("nixie/power", newValue ? "on" : "off", PUBLIC);
+    on = newValue ? 1 : 0;
 }
 
 void NixieClockAccessory::lightIdentify(bool oldValue, bool newValue, HKConnection *sender) {
@@ -76,6 +78,7 @@ bool NixieClockAccessory::handle() {
 }
 
 void NixieClockAccessory::initAccessorySet() {
+  Particle.variable("nixie_on", &this->on, INT);
   pinMode(powerPIN, OUTPUT);
   for(int i = 0; i<10; i++) {
     pinMode(digitPINs[i], OUTPUT);

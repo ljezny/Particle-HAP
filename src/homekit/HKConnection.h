@@ -96,5 +96,8 @@ public:
   }
   void postCharacteristicsValue(characteristics *c);
   void addNotifiedCharacteristics(characteristics *c);
+  IPAddress remoteIP() {
+    return client.remoteIP();
+  }
 };
 #endif

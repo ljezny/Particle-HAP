@@ -28,7 +28,7 @@ private:
     std::string hapName;
     std::string deviceIdentity;
     std::string passcode;
-
+    int connections = 0;
 public:
     HKPersistor *persistor;
     void (*progressPtr)(Progress_t);
