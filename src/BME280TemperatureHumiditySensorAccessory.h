@@ -20,7 +20,7 @@ private:
     floatCharacteristics *currentHumidityChar;
     long lastReportMS = 0;
     long REPORT_PERIOD_MS = 1000;
-    float lastValueTemperature = 25;
+    float lastValueTemperature = 0;
     float lastValueHumidity = 50;
     void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);
     std::string getCurrentTemperature (HKConnection *sender);

@@ -25,11 +25,11 @@ void BME280TemperatureHumiditySensorAccessory::sensorIdentity(bool oldValue, boo
 
 
 std::string BME280TemperatureHumiditySensorAccessory::getCurrentTemperature (HKConnection *sender) {
-  return format("%d",lastValueTemperature);
+  return format("%d",(int) lastValueTemperature);
 }
 
 std::string BME280TemperatureHumiditySensorAccessory::getCurrentHumidity (HKConnection *sender){
-  return format("%d",lastValueHumidity);
+  return format("%d",(int) lastValueHumidity);
 }
 
 bool BME280TemperatureHumiditySensorAccessory::handle() {
@@ -40,7 +40,7 @@ bool BME280TemperatureHumiditySensorAccessory::handle() {
       lastValueHumidity = (float) sensor.readHumidity();
 
       currentTemperatureChar->notify(NULL);
-      //currentHumidityChar->notify(NULL);
+      currentHumidityChar->notify(NULL);
 
       Particle.publish("bme280/temperature", String(lastValueTemperature), PUBLIC);
       Particle.publish("bme280/humidity", String(lastValueHumidity), PUBLIC);
