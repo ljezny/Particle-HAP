@@ -16,7 +16,7 @@
 #include "NixieClockAccessory.h"
 #include "RoombaAccessory.h"
 #include "BH1750LightSensorAccessory.h"
-
+#include "BME280TemperatureHumiditySensorAccessory.h"
 //SYSTEM_MODE(SEMI_AUTOMATIC);
 //SYSTEM_THREAD(ENABLED);
 
@@ -28,9 +28,8 @@ HKServer *hkServer = NULL;
 //HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
 //HAPAccessoryDescriptor *acc = new NixieClockAccessory();
-//HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 //HAPAccessoryDescriptor *acc = new RoombaAccessory();
-HAPAccessoryDescriptor *acc = new BH1750LightSensorAccessory();
 
 void progress(Progress_t progress) {
     hkLog.info("Homekit progress callback: %d",progress);
@@ -49,6 +48,10 @@ void setup() {
   //acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
   //END MYHOME
 
+  //BEGIN WeatherStation
+  acc->descriptors.push_back(new BH1750LightSensorAccessory());
+  acc->descriptors.push_back(new BME280TemperatureHumiditySensorAccessory());
+  //END WeatherStation
   acc->initAccessorySet();
 
   //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);

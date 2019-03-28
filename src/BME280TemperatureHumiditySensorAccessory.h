@@ -11,15 +11,20 @@
 
 #include "homekit/HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
+#include "BME280/Adafruit_BME280.h"
 
 class BME280TemperatureHumiditySensorAccessory: public HAPAccessoryDescriptor {
 private:
-    floatCharacteristics *currentAmbilightChar;
-    int photosensor = A0;
+    Adafruit_BME280 sensor = Adafruit_BME280();
+    floatCharacteristics *currentTemperatureChar;
+    floatCharacteristics *currentHumidityChar;
     long lastReportMS = 0;
-    long REPORT_PERIOD_MS = 5000;
+    long REPORT_PERIOD_MS = 1000;
+    float lastValueTemperature = 25;
+    float lastValueHumidity = 50;
     void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);
-    std::string getCurrentAmbilightLevel (HKConnection *sender);
+    std::string getCurrentTemperature (HKConnection *sender);
+    std::string getCurrentHumidity (HKConnection *sender);
 public:
 
     virtual void initAccessorySet();
