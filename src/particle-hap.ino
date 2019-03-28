@@ -15,6 +15,7 @@
 #include "LEDStripLightBulbAccessory.h"
 #include "NixieClockAccessory.h"
 #include "RoombaAccessory.h"
+#include "BH1750LightSensorAccessory.h"
 
 //SYSTEM_MODE(SEMI_AUTOMATIC);
 //SYSTEM_THREAD(ENABLED);
@@ -26,9 +27,11 @@ HKServer *hkServer = NULL;
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
 //HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
-HAPAccessoryDescriptor *acc = new NixieClockAccessory();
+//HAPAccessoryDescriptor *acc = new NixieClockAccessory();
 //HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 //HAPAccessoryDescriptor *acc = new RoombaAccessory();
+HAPAccessoryDescriptor *acc = new BH1750LightSensorAccessory();
+
 void progress(Progress_t progress) {
     hkLog.info("Homekit progress callback: %d",progress);
 }
@@ -51,7 +54,8 @@ void setup() {
   //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
-  hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
+  //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
+  hkServer = new HKServer(acc->getDeviceType(),"WeatherStation","523-12-643",progress);
   hkServer->start();
 
   //SEMI_AUTOMATIC

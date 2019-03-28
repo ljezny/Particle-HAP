@@ -27,7 +27,7 @@ void BH1750LightSensorAccessory::sensorIdentity(bool oldValue, bool newValue, HK
 }
 
 std::string BH1750LightSensorAccessory::getCurrentAmbilightLevel (HKConnection *sender) {
-    return format("%d",lastValueLux);
+    return format("%.4f",lastValueLux);
 }
 
 
@@ -37,13 +37,18 @@ bool BH1750LightSensorAccessory::handle() {
 
         lastValueLux = (float) lightMeter.readLightLevel();
 
-        currentAmbilightChar->notify(NULL);
+        if(currentAmbilightChar!=NULL) {
+          currentAmbilightChar->notify(NULL);
+        }
+
         return true;
     }
     return false;
 }
 
 void BH1750LightSensorAccessory::initAccessorySet() {
+    lightMeter.begin();
+
     Accessory *BH1750LightSensorAccessory = new Accessory();
 
     AccessorySet *accSet = &AccessorySet::getInstance();
