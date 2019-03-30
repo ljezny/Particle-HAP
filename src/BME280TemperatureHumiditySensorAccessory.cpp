@@ -25,11 +25,11 @@ void BME280TemperatureHumiditySensorAccessory::sensorIdentity(bool oldValue, boo
 
 
 std::string BME280TemperatureHumiditySensorAccessory::getCurrentTemperature (HKConnection *sender) {
-  return format("%d",(int) lastValueTemperature);
+  return format("%.1f",lastValueTemperature);
 }
 
 std::string BME280TemperatureHumiditySensorAccessory::getCurrentHumidity (HKConnection *sender){
-  return format("%d",(int) lastValueHumidity);
+  return format("%.1f", lastValueHumidity);
 }
 
 bool BME280TemperatureHumiditySensorAccessory::handle() {
