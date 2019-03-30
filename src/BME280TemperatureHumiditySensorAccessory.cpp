@@ -36,8 +36,23 @@ bool BME280TemperatureHumiditySensorAccessory::handle() {
   if((lastReportMS + REPORT_PERIOD_MS) < millis()) { //expired, stop
       lastReportMS = millis();
 
-      lastValueTemperature = (float) sensor.readTemperature();
-      lastValueHumidity = (float) sensor.readHumidity();
+      float t = sensor.readTemperature();
+      if(t < -50){
+        t = -50;
+      }
+      if(t > 50) {
+        t = 50;
+      }
+      lastValueTemperature = t;
+
+      float h = sensor.readHumidity();
+      if(h < 0){
+        h = 0;
+      }
+      if(h > 100) {
+        h = 100;
+      }
+      lastValueHumidity = h;
 
       currentTemperatureChar->notify(NULL);
       currentHumidityChar->notify(NULL);
@@ -67,7 +82,7 @@ void BME280TemperatureHumiditySensorAccessory::initAccessorySet() {
     temperatureNameCharacteristic->characteristics::setValue("Temperature sensor");
     sensorAccessory->addCharacteristics(temperatureSensorService, temperatureNameCharacteristic);
 
-    currentTemperatureChar = new floatCharacteristics(charType_currentTemperature, premission_read|premission_notify,0, 100, 0.1, unit_celsius);
+    currentTemperatureChar = new floatCharacteristics(charType_currentTemperature, premission_read|premission_notify,-50, 50, 0.1, unit_celsius);
     currentTemperatureChar->perUserQuery = std::bind(&BME280TemperatureHumiditySensorAccessory::getCurrentTemperature, this, std::placeholders::_1);
     sensorAccessory->addCharacteristics(temperatureSensorService, currentTemperatureChar);
 

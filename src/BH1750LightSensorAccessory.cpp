@@ -35,8 +35,15 @@ bool BH1750LightSensorAccessory::handle() {
     if((lastReportMS + REPORT_PERIOD_MS) < millis()) { //expired, stop
         lastReportMS = millis();
 
-        lastValueLux = (float) lightMeter.readLightLevel();
-
+        int v = (float) lightMeter.readLightLevel();
+        if(v < 0.0001){
+          v = 0.0001;
+        }
+        if(v > 100000.0) {
+          v = 100000.0;
+        }
+        lastValueLux = v;
+        
         if(currentAmbilightChar!=NULL) {
           currentAmbilightChar->notify(NULL);
         }
