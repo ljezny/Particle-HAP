@@ -34,6 +34,11 @@ HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
 void progress(Progress_t progress) {
     hkLog.info("Homekit progress callback: %d",progress);
 }
+// Cloud functions must return int and take one String
+int restart(String extra) {
+  System.reset();
+  return 0;
+}
 
 // setup() runs once, when the device is first turned on.
 void setup() {
@@ -63,6 +68,10 @@ void setup() {
 
   //SEMI_AUTOMATIC
   //Particle.connect();
+
+  bool success = Particle.function("restart", restart);
+
+
 }
 
 // loop() runs over and over again, as quickly as it can execute.
