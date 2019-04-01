@@ -32,8 +32,6 @@ extern "C" {
 class HKServer;
 class characteristics;
 
-
-
 class HKConnection {
 
 private:
@@ -78,7 +76,7 @@ public:
 
   HKConnection(HKServer *s,TCPClient c);
   ~HKConnection();
-  void handleConnection();
+  bool handleConnection();
   void keepAlive();
   void announce(char* buffer);
   void writeData(uint8_t* buffer,size_t size);

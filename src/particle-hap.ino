@@ -22,6 +22,11 @@
 
 SerialLogHandler logHandler;
 
+bool SLEEP_ENABLED = false; //set to True for support better battery life, use only when you need a better power saving. Use only for sensor-like accessories i.e. weather station 
+bool SLEEP_AWAKE_PERIOD_MS = 2000;
+bool SLEEP_PERIOD_SEC = 30;
+bool to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
+
 HKServer *hkServer = NULL;
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
@@ -94,6 +99,17 @@ void loop() {
     }
   }*/
 
-  hkServer->handle(); //handle connections
-  acc->handle(); //handle accessory
+  //MAIN IDEA: if photon did nothing for some period of time (SLEEP_AWAKE_PERIOD_MS) put it in stop mode (sleep) for SLEEP_PERIOD_SEC
+  bool didAnything = false;
+  didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
+  didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
+
+  if(SLEEP_ENABLED) {
+    if(didAnything) {
+      to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
+    } else if(to_sleep_time_ms < millis()) {
+      System.sleep(D2,RISING,SLEEP_PERIOD_SEC);
+      to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
+    }
+  }
 }

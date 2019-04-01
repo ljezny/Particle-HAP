@@ -100,10 +100,10 @@ void HKServer::setPaired(bool p) {
     free(bonjourName);
 }
 
-void HKServer::handle() {
-
+bool HKServer::handle() {
+    bool result = false;
     bonjour.begin(hapName.c_str());
-    bonjour.run();
+    result |= bonjour.run();
     bonjour.stop();
 
     TCPClient newClient = server->available();
@@ -111,24 +111,27 @@ void HKServer::handle() {
         hkLog.info("Client connected.");
         clients.insert(clients.begin(),new HKConnection(this,newClient));
         Particle.publish("homekit/accept", String(newClient.remoteIP()), PUBLIC);
+        result |= true;
     }
 
     int i = clients.size() - 1;
     while(i >= 0) {
         HKConnection *conn = clients.at(i);
 
-        conn->handleConnection();
+        result |= conn->handleConnection();
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
             Particle.publish("homekit/close", String(conn->remoteIP()), PUBLIC);
             conn->close();
             clients.erase(clients.begin() + i);
             delete conn;
-
+            result |= true;
         }
 
         i--;
     }
 
     this->connections = clients.size();
+    
+    return result;
 }

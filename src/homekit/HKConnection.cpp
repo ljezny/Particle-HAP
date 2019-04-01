@@ -180,12 +180,12 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
     }
 }
 
-void HKConnection::handleConnection() {
+bool HKConnection::handleConnection() {
     uint8_t *inputBuffer = NULL;
     size_t len = 0;
 
     readData(&inputBuffer,&len);
-
+    bool result = false;
     if (len > 0) {
         RGB.control(true);
         RGB.color(255, 255, 0);
@@ -211,11 +211,13 @@ void HKConnection::handleConnection() {
             handleAccessoryRequest((const char *)inputBuffer, len);
         }
         RGB.control(false);
+        result = true;
     }
     if(inputBuffer) {
         free(inputBuffer);
     }
     processPostedCharacteristics();
+    return result;
 }
 
 void HKConnection::announce(char* desc){

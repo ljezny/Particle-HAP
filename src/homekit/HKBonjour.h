@@ -111,7 +111,7 @@ public:
 
    int begin();
    int begin(const char* bonjourName);
-   void run();
+   bool run();
 
    int setBonjourName(const char* bonjourName);
 

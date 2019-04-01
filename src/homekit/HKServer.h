@@ -37,7 +37,7 @@ public:
     void start ();
     void stop();
     void setPaired(bool paired);
-    void handle();
+    bool handle();
     std::string getDeviceIdentity() {
         return deviceIdentity;
     }
