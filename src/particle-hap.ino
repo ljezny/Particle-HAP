@@ -77,7 +77,6 @@ void setup() {
   bool success = Particle.function("restart", restart);
 
   to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
-  //pinMode(D2,INPUT);
 }
 
 // loop() runs over and over again, as quickly as it can execute.
