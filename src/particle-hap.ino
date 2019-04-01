@@ -22,10 +22,10 @@
 
 SerialLogHandler logHandler;
 
-bool SLEEP_ENABLED = false; //set to True for support better battery life, use only when you need a better power saving. Use only for sensor-like accessories i.e. weather station 
+bool SLEEP_ENABLED = true; //set to True for support better battery life, use only when you need a better power saving. Use only for sensor-like accessories i.e. weather station
 bool SLEEP_AWAKE_PERIOD_MS = 2000;
 bool SLEEP_PERIOD_SEC = 30;
-bool to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
+unsigned int to_sleep_time_ms = 0;
 
 HKServer *hkServer = NULL;
 
@@ -76,7 +76,8 @@ void setup() {
 
   bool success = Particle.function("restart", restart);
 
-
+  to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
+  //pinMode(D2,INPUT);
 }
 
 // loop() runs over and over again, as quickly as it can execute.
@@ -99,7 +100,7 @@ void loop() {
     }
   }*/
 
-  //MAIN IDEA: if photon did nothing for some period of time (SLEEP_AWAKE_PERIOD_MS) put it in stop mode (sleep) for SLEEP_PERIOD_SEC
+  //MAIN IDEA: if Photon did nothing for some period of time (SLEEP_AWAKE_PERIOD_MS) put it in stop mode (sleep) for SLEEP_PERIOD_SEC
   bool didAnything = false;
   didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
@@ -108,7 +109,8 @@ void loop() {
     if(didAnything) {
       to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
     } else if(to_sleep_time_ms < millis()) {
-      System.sleep(D2,RISING,SLEEP_PERIOD_SEC);
+      System.sleep(D2,RISING,10);
+      //System.sleep(SLEEP_PERIOD_SEC);
       to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
     }
   }
