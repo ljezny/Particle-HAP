@@ -108,10 +108,13 @@ void loop() {
   if(SLEEP_ENABLED) {
     if(didAnything) {
       to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
-    } else if(to_sleep_time_ms < millis()) {
-      System.sleep(D2,RISING,10);
-      //System.sleep(SLEEP_PERIOD_SEC);
-      to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
+    } else {
+      if(to_sleep_time_ms < millis()) {
+        System.sleep(D2,RISING,10);
+        //System.sleep(SLEEP_PERIOD_SEC);
+        to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
+      }
     }
+    
   }
 }
