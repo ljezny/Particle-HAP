@@ -19,7 +19,7 @@ private:
     floatCharacteristics *currentTemperatureChar;
     floatCharacteristics *currentHumidityChar;
     long lastReportMS = 0;
-    long REPORT_PERIOD_MS = 1000;
+    long REPORT_PERIOD_MS = 10000;
     float lastValueTemperature = 0;
     float lastValueHumidity = 50;
     void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);

@@ -18,7 +18,7 @@ private:
     BH1750 lightMeter = BH1750(0x23);
     floatCharacteristics *currentAmbilightChar;
     long lastReportMS = 0;
-    long REPORT_PERIOD_MS = 1000;
+    long REPORT_PERIOD_MS = 10000;
     float lastValueLux = 0.0001;
     void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);
     std::string getCurrentAmbilightLevel (HKConnection *sender);

@@ -44,5 +44,8 @@ public:
     std::string getPasscode() {
         return passcode;
     }
+    bool hasConnections() {
+      return connections > 0;
+    }
 };
 #endif /* end of include guard: HKServer */
