@@ -109,7 +109,7 @@ void loop() {
       to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
     } else {
       if(to_sleep_time_ms < millis()) {
-        System.sleep(D2,RISING,10);
+        System.sleep(D2,RISING,SLEEP_PERIOD_SEC);
         //System.sleep(SLEEP_PERIOD_SEC);
         to_sleep_time_ms = millis() + SLEEP_AWAKE_PERIOD_MS;
       }
