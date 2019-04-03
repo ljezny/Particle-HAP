@@ -32,6 +32,7 @@ std::string BH1750LightSensorAccessory::getCurrentAmbilightLevel (HKConnection *
 
 
 bool BH1750LightSensorAccessory::handle() {
+    bool result = false;
     if((lastReportMS + REPORT_PERIOD_MS) < millis()) { //expired, stop
         lastReportMS = millis();
 
@@ -48,9 +49,10 @@ bool BH1750LightSensorAccessory::handle() {
           currentAmbilightChar->notify(NULL);
         }
 
-        return true;
+        result = true;
     }
-    return false;
+    if(batteryService) result |= batteryService->handle();
+    return result;
 }
 
 void BH1750LightSensorAccessory::initAccessorySet() {
@@ -76,4 +78,6 @@ void BH1750LightSensorAccessory::initAccessorySet() {
     currentAmbilightChar = new floatCharacteristics(charType_currentAmbientLightLevel, premission_read|premission_notify, 0.0001, 100000.0, 0, unit_lux);
     currentAmbilightChar->perUserQuery = std::bind(&BH1750LightSensorAccessory::getCurrentAmbilightLevel, this, std::placeholders::_1);
     BH1750LightSensorAccessory->addCharacteristics(lightSensorService, currentAmbilightChar);
+
+    if(batteryService) batteryService->initService(BH1750LightSensorAccessory);
 };

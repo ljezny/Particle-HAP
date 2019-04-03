@@ -17,6 +17,7 @@
 #include "RoombaAccessory.h"
 #include "BH1750LightSensorAccessory.h"
 #include "BME280TemperatureHumiditySensorAccessory.h"
+#include "BatteryService.h"
 //SYSTEM_MODE(SEMI_AUTOMATIC);
 //SYSTEM_THREAD(ENABLED);
 
@@ -54,8 +55,8 @@ void setup() {
   //END MYHOME
 
   //BEGIN WeatherStation
-  acc->descriptors.push_back(new BH1750LightSensorAccessory());
-  acc->descriptors.push_back(new BME280TemperatureHumiditySensorAccessory());
+  acc->descriptors.push_back(new BH1750LightSensorAccessory(new BatteryService(D4,HIGH,A1,0, 4095)));
+  acc->descriptors.push_back(new BME280TemperatureHumiditySensorAccessory(new BatteryService(D4,HIGH,A1,0, 4095)));
   //END WeatherStation
   acc->initAccessorySet();
 

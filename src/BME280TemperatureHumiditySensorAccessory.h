@@ -12,6 +12,7 @@
 #include "homekit/HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 #include "BME280/Adafruit_BME280.h"
+#include "BatteryService.h"
 
 class BME280TemperatureHumiditySensorAccessory: public HAPAccessoryDescriptor {
 private:
@@ -25,7 +26,11 @@ private:
     void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);
     std::string getCurrentTemperature (HKConnection *sender);
     std::string getCurrentHumidity (HKConnection *sender);
+    BatteryService *batteryService = NULL;
 public:
+    BME280TemperatureHumiditySensorAccessory(BatteryService *batteryService){
+      this->batteryService = batteryService;
+    }
 
     virtual void initAccessorySet();
 
