@@ -34,7 +34,7 @@ std::string BME280TemperatureHumiditySensorAccessory::getCurrentHumidity (HKConn
 
 bool BME280TemperatureHumiditySensorAccessory::handle() {
   bool result = false;
-  if((lastReportMS + REPORT_PERIOD_MS) < millis()) { //expired, stop
+  if((lastReportMS + REPORT_PERIOD_MS) < millis()) { 
       lastReportMS = millis();
 
       float t = sensor.readTemperature();
@@ -62,8 +62,8 @@ bool BME280TemperatureHumiditySensorAccessory::handle() {
       Particle.publish("bme280/humidity", String(lastValueHumidity), PUBLIC);
 
       result = true;
+      if(batteryService) result |= batteryService->handle();
   }
-  if(batteryService) result |= batteryService->handle();
   return result;
 }
 

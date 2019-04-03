@@ -50,8 +50,9 @@ bool BH1750LightSensorAccessory::handle() {
         }
 
         result = true;
+        if(batteryService) result |= batteryService->handle();
     }
-    if(batteryService) result |= batteryService->handle();
+
     return result;
 }
 

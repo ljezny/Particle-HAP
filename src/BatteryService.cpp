@@ -51,8 +51,8 @@ bool BatteryService::handle() {
     result = true;
   }
 
-  if(newCharging != isCharging) {
-    newCharging = isCharging;
+  if(isCharging != newCharging) {
+    isCharging = newCharging;
     batteryChargingStateChar->notify(NULL);
     result = true;
   }
