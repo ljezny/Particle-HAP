@@ -107,7 +107,7 @@ void RoombaAccessory::initAccessorySet() {
   roombaAcc->addService(batteryService);
 
   intCharacteristics *batteryLevelChar = new intCharacteristics(charType_batteryLevel, premission_read|premission_notify, 0, 100, 1, unit_percentage);
-  batteryLevelChar->perUserQuery = std::bind(&RoombaAccessory::getBatteryLevel, this, std::placeholders::_1);  batteryLevelChar->valueChangeFunctionCall = std::bind(&RoombaAccessory::setPower, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
+  batteryLevelChar->perUserQuery = std::bind(&RoombaAccessory::getBatteryLevel, this, std::placeholders::_1);
   roombaAcc->addCharacteristics(batteryService, batteryLevelChar);
 
   intCharacteristics *chargingStateChar = new intCharacteristics(charType_sensorChargingState, premission_read|premission_notify, 0, 2, 1, unit_percentage);

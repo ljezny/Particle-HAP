@@ -33,7 +33,8 @@ std::string BME280TemperatureHumiditySensorAccessory::getCurrentHumidity (HKConn
 }
 
 bool BME280TemperatureHumiditySensorAccessory::handle() {
-  if((lastReportMS + REPORT_PERIOD_MS) < millis()) { //expired, stop
+  bool result = false;
+  if((lastReportMS + REPORT_PERIOD_MS) < millis()) {
       lastReportMS = millis();
 
       float t = sensor.readTemperature();
@@ -60,9 +61,10 @@ bool BME280TemperatureHumiditySensorAccessory::handle() {
       Particle.publish("bme280/temperature", String(lastValueTemperature), PUBLIC);
       Particle.publish("bme280/humidity", String(lastValueHumidity), PUBLIC);
 
-      return true;
+      result = true;
+      if(batteryService) batteryService->handle();
   }
-  return false;
+  return result;
 }
 
 void BME280TemperatureHumiditySensorAccessory::initAccessorySet() {
@@ -96,4 +98,6 @@ void BME280TemperatureHumiditySensorAccessory::initAccessorySet() {
     currentHumidityChar = new floatCharacteristics(charType_currentHumidity, premission_read|premission_notify, 0, 100, 1, unit_percentage);
     currentHumidityChar->perUserQuery = std::bind(&BME280TemperatureHumiditySensorAccessory::getCurrentHumidity, this, std::placeholders::_1);
     sensorAccessory->addCharacteristics(humiditySensorService, currentHumidityChar);
+
+    if(batteryService) batteryService->initService(sensorAccessory);
 };
