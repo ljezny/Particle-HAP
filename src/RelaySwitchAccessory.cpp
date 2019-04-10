@@ -44,9 +44,9 @@ void RelaySwitchAccessory::initAccessorySet() {
   Service *switchService = new Service(serviceType_switch);
   switchAcc->addService(switchService);
 
-  stringCharacteristics *roombaServiceName = new stringCharacteristics(charType_serviceName, premission_read, 0);
-  roombaServiceName->characteristics::setValue("Relay Switch");
-  switchAcc->addCharacteristics(switchService, roombaServiceName);
+  stringCharacteristics *switchServiceName = new stringCharacteristics(charType_serviceName, premission_read, 0);
+  switchServiceName->characteristics::setValue("Relay Switch");
+  switchAcc->addCharacteristics(switchService, switchServiceName);
 
   boolCharacteristics *powerState = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
   powerState->perUserQuery = std::bind(&RelaySwitchAccessory::getPower, this, std::placeholders::_1);

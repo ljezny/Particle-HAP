@@ -23,7 +23,7 @@
 #define COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS 1400 //100 repeat tooked 4500ms
 #define TILT_OPEN_TO_CLOSE_TRANSMIT_REPEATS 40 //100 repeat tooked 4500ms
 
-RCSwitch *rcSwitch = NULL; //this is static, it will be initialized one time
+
 
 void WindowsShutterAccessory::shutterIdentity(bool oldValue, bool newValue, HKConnection *sender) {
 
@@ -116,11 +116,10 @@ void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKC
 }
 
 void WindowsShutterAccessory::initAccessorySet() {
-    if(!rcSwitch) {
-      rcSwitch = new RCSwitch();
-      rcSwitch->enableTransmit(rcOutputPIN);
-      rcSwitch->setProtocol(1);
-    }
+    rcSwitch = new RCSwitch();
+    rcSwitch->enableTransmit(rcOutputPIN);
+    rcSwitch->setProtocol(1);
+
     EEPROM.get(this->eepromAddr, this->position);
     if(this->position < 0 ||this->position > 100) {
       this->position = 50;

@@ -18,6 +18,7 @@
 #include "BH1750LightSensorAccessory.h"
 #include "BME280TemperatureHumiditySensorAccessory.h"
 #include "BatteryService.h"
+#include "RFRelaySwitchAccessory.h"
 //SYSTEM_MODE(SEMI_AUTOMATIC);
 //SYSTEM_THREAD(ENABLED);
 
@@ -49,22 +50,25 @@ void setup() {
   //HKPersistor().resetAll();
 
   //BEGIN MYHOME
-  //acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
-  //acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
-  //acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
   //END MYHOME
 
   //BEGIN WeatherStation
-  acc->descriptors.push_back(new BH1750LightSensorAccessory(new BatteryService(D4,HIGH,A1,0, 4095)));
-  acc->descriptors.push_back(new BME280TemperatureHumiditySensorAccessory(new BatteryService(D4,HIGH,A1,0, 4095)));
+  //acc->descriptors.push_back(new BH1750LightSensorAccessory(new BatteryService(D4,HIGH,A1,0, 4095)));
+  //acc->descriptors.push_back(new BME280TemperatureHumiditySensorAccessory(new BatteryService(D4,HIGH,A1,0, 4095)));
   //END WeatherStation
+
   acc->initAccessorySet();
 
   //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+  hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
   //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
-  hkServer = new HKServer(acc->getDeviceType(),"WeatherStation","523-12-643",progress);
+  //hkServer = new HKServer(acc->getDeviceType(),"WeatherStation","523-12-643",progress);
   hkServer->start();
 
   //SEMI_AUTOMATIC

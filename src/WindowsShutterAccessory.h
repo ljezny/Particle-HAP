@@ -36,6 +36,7 @@ private:
     void setPosition(int newPosition);
     void setTargetPosition (int oldValue, int newValue, HKConnection *sender);
 
+    RCSwitch *rcSwitch = NULL; 
 
 public:
     WindowsShutterAccessory(int upCode,int downCode,int eepromAddr){
