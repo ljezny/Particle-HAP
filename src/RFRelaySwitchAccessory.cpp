@@ -20,7 +20,7 @@ std::string RFRelaySwitchAccessory::getPower (HKConnection *sender){
 
 void RFRelaySwitchAccessory::setPower (bool oldValue, bool newValue, HKConnection *sender){
     on = newValue;
-    rcSwitch->setRepeatTransmit(1);
+    rcSwitch->setRepeatTransmit(10);
     rcSwitch->send(code, 24);
 }
 
@@ -30,7 +30,6 @@ void RFRelaySwitchAccessory::identify(bool oldValue, bool newValue, HKConnection
 
 
 bool RFRelaySwitchAccessory::handle() {
-    digitalWrite(pin, on ? HIGH : LOW);
     return false;
 }
 

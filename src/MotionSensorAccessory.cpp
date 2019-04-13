@@ -19,7 +19,9 @@
 #endif
 #include "homekit/HKLog.h"
 
-
+std::string MotionSensorAccessory::getMotion (HKConnection *sender){
+  return motionDetected ? "true" : "false";
+}
 
 void MotionSensorAccessory::sensorIdentity(bool oldValue, bool newValue, HKConnection *sender) {
 
@@ -29,8 +31,6 @@ bool MotionSensorAccessory::handle() {
     int v = digitalRead(motionInputPin);
     if(v != motionDetected) {
         motionDetected = v;
-
-        motionDetectedChar->characteristics::setValue(motionDetected ? "true" : "false");
         motionDetectedChar->notify(NULL);//report value
         return true;
     }
@@ -54,6 +54,6 @@ void MotionSensorAccessory::initAccessorySet() {
     motionSensorAccessory->addCharacteristics(motionSensorService, nameCharacteristic);
 
     motionDetectedChar = new boolCharacteristics(charType_motionDetect, premission_read|premission_notify);
-    motionDetectedChar->characteristics::setValue("true");
+    motionDetectedChar->perUserQuery = std::bind(&MotionSensorAccessory::getMotion, this, std::placeholders::_1);
     motionSensorAccessory->addCharacteristics(motionSensorService, motionDetectedChar);
 };
