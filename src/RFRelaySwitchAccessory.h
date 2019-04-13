@@ -13,6 +13,8 @@ private:
   int pin = D0;
   int code = 0;
 
+  bool needsSendCode = false;
+
   RCSwitch *rcSwitch = NULL;
 
   void identify(bool oldValue, bool newValue, HKConnection *sender);

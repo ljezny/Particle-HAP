@@ -20,8 +20,9 @@ std::string RFRelaySwitchAccessory::getPower (HKConnection *sender){
 
 void RFRelaySwitchAccessory::setPower (bool oldValue, bool newValue, HKConnection *sender){
     on = newValue;
-    rcSwitch->setRepeatTransmit(10);
-    rcSwitch->send(code, 24);
+    needsSendCode = true;
+
+    Particle.publish("rfrelay/power", String(newValue), PUBLIC);
 }
 
 void RFRelaySwitchAccessory::identify(bool oldValue, bool newValue, HKConnection *sender) {
@@ -30,6 +31,16 @@ void RFRelaySwitchAccessory::identify(bool oldValue, bool newValue, HKConnection
 
 
 bool RFRelaySwitchAccessory::handle() {
+    if(needsSendCode) {
+      needsSendCode = false;
+
+      rcSwitch->setRepeatTransmit(10);
+      rcSwitch->send(code, 24);
+
+      Particle.publish("rfrelay/sendcode", String(code), PUBLIC);
+
+      return true;
+    }
     return false;
 }
 
