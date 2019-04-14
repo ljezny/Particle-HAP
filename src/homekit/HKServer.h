@@ -47,5 +47,6 @@ public:
     bool hasConnections() {
       return connections > 0;
     }
+    int getPort();
 };
 #endif /* end of include guard: HKServer */

@@ -347,7 +347,7 @@ public:
     Service(int _uuid): uuid(_uuid) {}
     virtual short numberOfCharacteristics() { return _characteristics.size(); }
     virtual characteristics *characteristicsAtIndex(int index) { return _characteristics[index]; }
-    string describe(HKConnection *sender);
+    void describe(HKConnection *sender, std::string &result);
 };
 
 class Accessory {
@@ -406,7 +406,7 @@ public:
         }
         return NULL;
     }
-    string describe(HKConnection *sender);
+    void describe(HKConnection *sender, std::string &result);
 };
 
 class AccessorySet {
@@ -452,7 +452,7 @@ public:
     ~AccessorySet() {
 
     }
-    string describe(HKConnection *sender);
+    void describe(HKConnection *sender, std::string &result);
 };
 typedef std::function<void(bool,bool,HKConnection *)> identifyFunction;
 

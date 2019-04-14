@@ -55,6 +55,14 @@ void setup() {
   acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
 
   //END MYHOME
 
@@ -76,6 +84,7 @@ void setup() {
   //Particle.connect();
 
   bool success = Particle.function("restart", restart);
+
 }
 
 // loop() runs over and over again, as quickly as it can execute.
@@ -101,5 +110,9 @@ void loop() {
   bool didAnything = !hkServer->hasConnections();
   didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
+
+  string desc = "";
+  AccessorySet::getInstance().describe(NULL,desc);
+  Serial.println(desc.c_str());
 
 }
