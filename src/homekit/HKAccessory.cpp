@@ -529,6 +529,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
         if(desc.c_str() == NULL) {
             hkLog.warn("Unable to describe Accessory. Possible out of memory occured.");
+            Particle.publish("homekit/accessory/problem/memory", "", PUBLIC);
         }
 
         replyDataLen = desc.length();
