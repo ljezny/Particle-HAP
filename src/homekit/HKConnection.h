@@ -70,6 +70,7 @@ private:
   void processPostedCharacteristics();
 
   char *c_ID;
+  int lastKeepAliveMs = 0;
 public:
   HKServer *server;
   bool relay = false;
