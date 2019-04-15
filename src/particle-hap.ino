@@ -54,7 +54,7 @@ void setup() {
   acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
   acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
+  /*acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
@@ -62,7 +62,7 @@ void setup() {
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));*/
 
   //END MYHOME
 

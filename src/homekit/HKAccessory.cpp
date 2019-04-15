@@ -524,6 +524,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         hkLog.info("Ask for accessories info");
         statusCode = 200;
         string desc = "";
+        desc.reserve(8192); //try prealloc memory
         AccessorySet::getInstance().describe(sender,desc);
         Serial.println(desc.c_str());
 
