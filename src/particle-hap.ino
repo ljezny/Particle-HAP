@@ -54,15 +54,15 @@ void setup() {
   acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
   acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  /*acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
   acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));*/
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
+  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
 
   //END MYHOME
 
@@ -111,8 +111,15 @@ void loop() {
   didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
 
+/*
   string desc = "";
+  desc.reserve(16000);
   AccessorySet::getInstance().describe(NULL,desc);
-  Serial.println(desc.c_str());
+  if(desc.c_str() == NULL) {
+    Serial.println("malloc error");
+  } else {
+    Serial.printf("%d\n", desc.length());
+  }
+*/
 
 }
