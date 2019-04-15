@@ -524,7 +524,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         hkLog.info("Ask for accessories info");
         statusCode = 200;
         string desc = "";
-        desc.reserve(8192); //8kB out to be enough for everyone :). This is ugly hack, prealloc memory, so no realloc will be called.
+        desc.reserve(8192); //8kB out to be enough for everyone :). This is ugly hack, prealloc memory, so no realloc won't be called during appending to string
         AccessorySet::getInstance().describe(sender,desc);
 
         if(desc.c_str() == NULL) {
