@@ -38,12 +38,15 @@ std::string BatteryService::getChargingState (HKConnection *sender){
 }
 
 bool BatteryService::handle() {
-  int newPercent = (100 * (analogRead(batteryAPIN) - batteryAPINMin)) / (batteryAPINMax - batteryAPINMin);
+  bool result = false;
+  int batteryAValue = analogRead(batteryAPIN);
+  int chargingValue = digitalRead(chargingDPIN);
+  int newPercent = (100 * (batteryAValue - batteryAPINMin)) / (batteryAPINMax - batteryAPINMin);
   if(newPercent > 100) newPercent = 100;
   if(newPercent < 0) newPercent = 0;
 
-  int newCharging  = digitalRead(chargingDPIN) == chargingPINValue;
-  bool result = false;
+  bool newCharging = chargingValue == chargingPINValue;
+
   if(levelPercent != newPercent) {
     levelPercent = newPercent;
     batteryLevelChar->notify(NULL);
@@ -57,12 +60,16 @@ bool BatteryService::handle() {
     result = true;
   }
 
+  //BEGIN BATTERY VALUE READING
+  Particle.publish("battery/value", String(batteryAValue), PUBLIC);
+  Particle.publish("battery/charging", String(chargingValue), PUBLIC);
+  //END BATTERY VALUE READING
+
   return result;
 }
 
 void BatteryService::initService(Accessory *accessory) {
     pinMode(chargingDPIN, INPUT);
-    pinMode(batteryAPIN, INPUT);
 
     Service *batteryService = new Service(serviceType_battery);
     accessory->addService(batteryService);
