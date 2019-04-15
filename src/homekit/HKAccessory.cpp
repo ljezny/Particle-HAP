@@ -406,8 +406,7 @@ string stringCharacteristics::describe(HKConnection *sender) {
     return result;
 }
 
-string Service::describe(HKConnection *sender) {
-    string result = "";
+void Service::describe(HKConnection *sender, std::string &result) {
     result+="{";
 
     char serviceIDStr[32];
@@ -431,19 +430,16 @@ string Service::describe(HKConnection *sender) {
     result+="]";
 
     result+="}";
-
-    return result;
 }
 
-string Accessory::describe(HKConnection *sender) {
-  string result = "";
+void Accessory::describe(HKConnection *sender, std::string &result) {
   result+="{";
 
   result+="\"services\":[";
 
   int len = numberOfService();
   for (int i = 0; i < len; i++) {
-      result+=_services[i]->describe(sender);
+      _services[i]->describe(sender,result);
       if(i != len - 1) { //ommit last ,
         result+=",";
       }
@@ -457,19 +453,16 @@ string Accessory::describe(HKConnection *sender) {
   result+=temp;
 
   result+="}";
-
-  return result;
 }
 
-string AccessorySet::describe(HKConnection *sender) {
-    string result = "";
+void AccessorySet::describe(HKConnection *sender, std::string &result) {
     result+="{";
 
     result+="\"accessories\":[";
 
     int numberOfAcc = numberOfAccessory();
     for (int i = 0; i < numberOfAcc; i++) {
-        result+=_accessories[i]->describe(sender);
+        _accessories[i]->describe(sender,result);
         if(i != numberOfAcc - 1) { //ommit last ,
           result+=",";
         }
@@ -479,8 +472,6 @@ string AccessorySet::describe(HKConnection *sender) {
 
     result+="}";
 
-    //hkLog.info("%s", result.c_str());
-    return result;
 }
 /*
 void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value) {
@@ -532,14 +523,21 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         //Publish the characterists of the accessories
         hkLog.info("Ask for accessories info");
         statusCode = 200;
-        string desc = AccessorySet::getInstance().describe(sender);
-        //hkLog.info(desc.c_str());
-        //Serial.printf("%s\n", desc.c_str());
-        //delay(100);
+        string desc = "";
+        desc.reserve(8192); //8kB out to be enough for everyone :). This is ugly hack, prealloc memory, so no realloc won't be called during appending to string
+        AccessorySet::getInstance().describe(sender,desc);
+
+        if(desc.c_str() == NULL) {
+            hkLog.warn("Unable to describe Accessory. Possible out of memory occured.");
+            Particle.publish("homekit/accessory/problem/memory", "", PUBLIC);
+        }
+
         replyDataLen = desc.length();
+        hkLog.info("Accessories description len:%d",replyDataLen);
         replyData = (char*) malloc((replyDataLen+1)*sizeof(char));//new char[replyDataLen+1];
         memset(replyData,0,replyDataLen+1);
-        memcpy(replyData,desc.c_str(),replyDataLen);
+        //memcpy(replyData,desc.c_str(),replyDataLen);
+        desc.copy(replyData,replyDataLen,0);
         replyData[replyDataLen] = 0;
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);

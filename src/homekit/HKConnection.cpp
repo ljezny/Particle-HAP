@@ -187,6 +187,7 @@ bool HKConnection::handleConnection() {
     readData(&inputBuffer,&len);
     bool result = false;
     if (len > 0) {
+        lastKeepAliveMs = millis();
         RGB.control(true);
         RGB.color(255, 255, 0);
         hkLog.info("Request Message read length: %d ", len);
@@ -217,7 +218,20 @@ bool HKConnection::handleConnection() {
         free(inputBuffer);
     }
     processPostedCharacteristics();
+    keepAlive();
     return result;
+}
+
+void HKConnection::keepAlive() {
+    if((millis() - lastKeepAliveMs) > 5000) {
+        lastKeepAliveMs = millis();
+        if(isConnected()) {
+            if(isEncrypted && readsCount > 0) {
+                hkLog.info("Keeping alive...");
+                announce("{\"characteristics\": []}");
+            }
+        }
+    }
 }
 
 void HKConnection::announce(char* desc){

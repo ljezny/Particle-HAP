@@ -32,6 +32,10 @@ HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void
 
 }
 
+int getPort() {
+    return TCP_SERVER_PORT;
+}
+
 HKServer::~HKServer() {
     delete persistor;
     hkLog.info("Server destructed");

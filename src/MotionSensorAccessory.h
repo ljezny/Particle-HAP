@@ -17,11 +17,15 @@
 class MotionSensorAccessory: public HAPAccessoryDescriptor {
 private:
     boolCharacteristics *motionDetectedChar = NULL;
-    int motionInputPin = D4;
+    int motionInputPin = D0;
     void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);
     bool motionDetected = true;
-public:
 
+    std::string getMotion (HKConnection *sender);
+public:
+    MotionSensorAccessory(int pin) {
+      this->motionInputPin = pin;
+    }
     virtual void initAccessorySet();
 
     virtual int getDeviceType(){
