@@ -218,20 +218,22 @@ bool HKConnection::handleConnection() {
         free(inputBuffer);
     }
     processPostedCharacteristics();
-    keepAlive();
+    result |= keepAlive();
     return result;
 }
 
-void HKConnection::keepAlive() {
+bool HKConnection::keepAlive() {
     if((millis() - lastKeepAliveMs) > 5000) {
         lastKeepAliveMs = millis();
         if(isConnected()) {
             if(isEncrypted && readsCount > 0) {
                 hkLog.info("Keeping alive...");
                 announce("{\"characteristics\": []}");
+                return true;
             }
         }
     }
+    return false;
 }
 
 void HKConnection::announce(char* desc){

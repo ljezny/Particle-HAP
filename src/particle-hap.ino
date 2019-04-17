@@ -100,7 +100,7 @@ void loop() {
     }
   }*/
 
-  bool didAnything = !hkServer->hasConnections();
+  bool didAnything = false; //!hkServer->hasConnections();
   didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
   if(didAnything) {

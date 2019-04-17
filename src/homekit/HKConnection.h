@@ -78,7 +78,7 @@ public:
   HKConnection(HKServer *s,TCPClient c);
   ~HKConnection();
   bool handleConnection();
-  void keepAlive();
+  bool keepAlive();
   void announce(char* buffer);
   void writeData(uint8_t* buffer,size_t size);
 
