@@ -237,13 +237,11 @@ bool HKConnection::keepAlive() {
 }
 
 void HKConnection::announce(char* desc){
-    char *reply = (char*)malloc(2048);
-    memset(reply,0,2048);
-    int len = snprintf(reply, 2048, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    char reply[1024] = {0};
+    int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
 
     hkLog.info("Announce: %s, data: %s",clientID(),reply);
     writeData((byte*)reply,len);
-    free(reply);
 }
 
 
