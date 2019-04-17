@@ -1,12 +1,13 @@
 {
     "particle.targetDevice": "Kit",
-    "particle.firmwareVersion": "1.0.1",
+    "particle.firmwareVersion": "1.1.0-rc.1",
     "particle.targetPlatform": "photon",
-    "cortex-debug.openocdPath": "/usr/local/bin/openocd",
+    "cortex-debug.openocdPath": "/Users/ljezny/.particle/toolchains/openocd/0.10.0-particle.1/bin/openocd",
     "cortex-debug.armToolchainPath": "/Users/ljezny/.particle/toolchains/gcc-arm/5.3.1/bin/",
     "files.associations": {
         "__split_buffer": "cpp",
         "string": "cpp",
         "vector": "cpp"
     },
+    "C_Cpp.default.configurationProvider": "particle.particle-vscode-core",
 }

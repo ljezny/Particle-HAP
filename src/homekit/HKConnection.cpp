@@ -38,10 +38,8 @@ HKConnection::~HKConnection() {
 
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     hkLog.info("writeEncryptedData responseLen:%d", size);
-    byte nonce[12];
-    memset(nonce, 0, sizeof(nonce));
-
-    byte *tempBuffer = new byte[1024+2+18];
+    byte[12] nonce = {0};
+    byte[1024+2+18] tempBuffer = {0};
 
     int payload_offset = 0;
     int part = 0;
@@ -85,8 +83,6 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
             }
         }
     }
-
-    free(tempBuffer);
 }
 
 void HKConnection::decryptData(uint8_t* payload,size_t *size) {
