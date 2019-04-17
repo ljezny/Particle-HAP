@@ -62,7 +62,7 @@ private:
 
   void writeEncryptedData(uint8_t* payload,size_t size);
   void decryptData(uint8_t* buffer,size_t *size);
-  void readData(uint8_t** buffer,size_t *size);
+  void readData(uint8_t* buffer,size_t *size);
 
   void handlePairSetup(const char *buffer);
   bool handlePairVerify(const char *buffer);

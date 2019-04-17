@@ -5,6 +5,10 @@
 
 int connectionID = 0;
 
+uint8_t SHARED_REQUEST_BUFFER[SHARED_REQUEST_BUFFER_LEN] = {0};
+uint8_t SHARED_RESPONSE_BUFFER[SHARED_RESPONSE_BUFFER_LEN] = {0};
+uint8_t SHARED_TEMP_CRYPTO_BUFFER[SHARED_TEMP_CRYPTO_BUFFER_LEN] = {0};
+
 void generateAccessoryKey(ed25519_key *key) {
     int r = wc_ed25519_init(key);
     hkLog.info("wc_ed25519_init key: r:%d",r);
@@ -38,8 +42,9 @@ HKConnection::~HKConnection() {
 
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     hkLog.info("writeEncryptedData responseLen:%d", size);
-    byte[12] nonce = {0};
-    byte[1024+2+18] tempBuffer = {0};
+    byte nonce[12] = {0};
+
+    memset(SHARED_TEMP_CRYPTO_BUFFER,0,SHARED_TEMP_CRYPTO_BUFFER_LEN);
 
     int payload_offset = 0;
     int part = 0;
@@ -50,7 +55,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
             chunk_size = 1024;
         byte aead[2] = {(byte) (chunk_size % 256), (byte)(chunk_size / 256)};
 
-        memcpy(tempBuffer, aead, 2);
+        memcpy(SHARED_TEMP_CRYPTO_BUFFER, aead, 2);
 
         byte i = 4;
         int x = readsCount++;
@@ -63,8 +68,8 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
                                             nonce,
                                             aead, 2,
                                             (const byte *)payload+payload_offset, chunk_size,
-                                            (byte *) tempBuffer + 2,
-                                            (byte *) (tempBuffer + chunk_size + 2)
+                                            (byte *) SHARED_TEMP_CRYPTO_BUFFER + 2,
+                                            (byte *) (SHARED_TEMP_CRYPTO_BUFFER + chunk_size + 2)
                                             );
         if (r) {
             hkLog.info("Failed to chacha encrypt payload (code %d)", r);
@@ -76,7 +81,7 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
         part++;
 
         if(isConnected()){
-            int bytes = client.write(tempBuffer,chunk_size + 16 + 2,3000);
+            int bytes = client.write(SHARED_TEMP_CRYPTO_BUFFER,chunk_size + 16 + 2,3000);
             int err = client.getWriteError();
             if (err != 0) {
               hkLog.warn("writeEncryptedData:: failed (error = %d), number of bytes written: %d", err, bytes);
@@ -86,7 +91,8 @@ void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
 }
 
 void HKConnection::decryptData(uint8_t* payload,size_t *size) {
-    uint8_t *decryptedData =(uint8_t *) malloc((*size) * sizeof(uint8_t));
+    memset(SHARED_TEMP_CRYPTO_BUFFER,0,SHARED_REQUEST_BUFFER_LEN);
+    uint8_t *decryptedData = SHARED_TEMP_CRYPTO_BUFFER;
     size_t decryptedTotalSize = 0;
     size_t payload_size = *size;
     size_t *decrypted_size = size;
@@ -139,19 +145,16 @@ void HKConnection::decryptData(uint8_t* payload,size_t *size) {
     memset(payload,0,*size);
     memcpy(payload,decryptedData,decryptedTotalSize);
     *size = decryptedTotalSize;
-    free(decryptedData);
 }
 
-void HKConnection::readData(uint8_t** buffer,size_t *size) {
+void HKConnection::readData(uint8_t* buffer,size_t *size) {
     int total = 0;
     int bufferSize = 0;
 
     if(isConnected()) {
-        *buffer =(uint8_t *) malloc(bufferSize * sizeof(uint8_t));
         while (int availableBytes = client.available()) {
             bufferSize += availableBytes;
-            *buffer = (uint8_t *) realloc(*buffer, bufferSize * sizeof(uint8_t));
-            int len = client.read(*buffer + total,availableBytes);
+            int len = client.read(buffer + total,availableBytes);
             total += len;
         }
     }
@@ -159,7 +162,7 @@ void HKConnection::readData(uint8_t** buffer,size_t *size) {
     *size = total;
 
     if(isEncrypted && total > 0) {
-        decryptData(*buffer,size);
+        decryptData(buffer,size);
     }
 
 }
@@ -177,26 +180,25 @@ void HKConnection::writeData(uint8_t* responseBuffer,size_t responseLen) {
 }
 
 bool HKConnection::handleConnection() {
-    uint8_t *inputBuffer = NULL;
     size_t len = 0;
-
-    readData(&inputBuffer,&len);
+    memset(SHARED_REQUEST_BUFFER,0,SHARED_REQUEST_BUFFER_LEN);
+    readData(SHARED_REQUEST_BUFFER,&len);
     bool result = false;
     if (len > 0) {
         lastKeepAliveMs = millis();
         RGB.control(true);
         RGB.color(255, 255, 0);
         hkLog.info("Request Message read length: %d ", len);
-        HKNetworkMessage msg((const char *)inputBuffer);
+        HKNetworkMessage msg((const char *)SHARED_REQUEST_BUFFER);
         if (!strcmp(msg.directory, "pair-setup")){
             hkLog.info("Handling Pair Setup...");
             Particle.publish("homekit/pair-setup", String(remoteIP()), PUBLIC);
-            handlePairSetup((const char *)inputBuffer);
+            handlePairSetup((const char *)SHARED_REQUEST_BUFFER);
         }
         else if (!strcmp(msg.directory, "pair-verify")){
             hkLog.info("Handling Pair Verify...");
             Particle.publish("homekit/pair-verify", String(remoteIP()), PUBLIC);
-            if(handlePairVerify((const char *)inputBuffer)){
+            if(handlePairVerify((const char *)SHARED_REQUEST_BUFFER)){
                 isEncrypted = true;
                 server->setPaired(true);
             }
@@ -205,14 +207,12 @@ bool HKConnection::handleConnection() {
         } else if(isEncrypted) { //connection is secured
             hkLog.info("Handling message request: %s",msg.directory);
             Particle.publish("homekit/accessory", String(remoteIP()), PUBLIC);
-            handleAccessoryRequest((const char *)inputBuffer, len);
+            handleAccessoryRequest((const char *)SHARED_REQUEST_BUFFER, len);
         }
         RGB.control(false);
         result = true;
     }
-    if(inputBuffer) {
-        free(inputBuffer);
-    }
+
     processPostedCharacteristics();
     result |= keepAlive();
     return result;
@@ -741,13 +741,12 @@ void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
 }
 
 void HKConnection::processPostedCharacteristics() {
+    char broadcastTemp[1024] = {0};
     for(int i = 0; i < postedCharacteristics.size(); i++) {
         characteristics *c = postedCharacteristics.at(i);
-        char* broadcastTemp = new char[1024];
         memset(broadcastTemp,0,1024);
         snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
         announce(broadcastTemp);
-        free(broadcastTemp);
     }
     postedCharacteristics.clear();
 

@@ -9,6 +9,10 @@
 //if you are using EEPROM, you can set offset for Homekit to store pairings
 #define EEPROM_STORAGE_ADDRESS_OFFSET 512
 
+#define SHARED_REQUEST_BUFFER_LEN 1024 //buffer for incomming requests from Homekit controllers, should be enough
+#define SHARED_RESPONSE_BUFFER_LEN 4096 //buffer for generating response JSON,TLV - can overflow when there's a lot of services and accessories
+#define SHARED_TEMP_CRYPTO_BUFFER_LEN 1024+18+2 //1024 - is crypto chunk size, 18+2 is crypto headers
+
 #define CUSTOM_RAND_GENERATE_BLOCK customRngFunc
 extern int customRngFunc(byte* output, word32 sz);
 
