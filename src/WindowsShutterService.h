@@ -11,8 +11,10 @@
 
 #include "homekit/HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
+#include "ServiceDescriptor.h"
 #include "rcswitch/RCSwitch.h"
-class WindowsShutterAccessory: public HAPAccessoryDescriptor {
+
+class WindowsShutterService: public ServiceDescriptor {
 private:
     int rcOutputPIN = D6;
     int upCode = 0;
@@ -31,25 +33,20 @@ private:
 
     long endMS = LONG_MAX;
 
-    void shutterIdentity(bool oldValue, bool newValue, HKConnection *sender);
     void setState(int newState);
     void setPosition(int newPosition);
     void setTargetPosition (int oldValue, int newValue, HKConnection *sender);
 
-    RCSwitch *rcSwitch = NULL; 
+    RCSwitch *rcSwitch = NULL;
 
 public:
-    WindowsShutterAccessory(int upCode,int downCode,int eepromAddr){
+    WindowsShutterService(int upCode,int downCode,int eepromAddr){
         this->upCode = upCode;
         this->downCode = downCode;
         this->eepromAddr = eepromAddr;
     }
 
-    virtual void initAccessorySet();
-
-    virtual int getDeviceType(){
-        return deviceType_windowCover;
-    }
+    virtual void initService(Accessory *accessory);
     virtual bool handle();
 };
 

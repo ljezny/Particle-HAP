@@ -8,7 +8,7 @@
 #include "homekit/HKServer.h"
 #include "homekit/HKLog.h"
 
-#include "WindowsShutterAccessory.h"
+#include "WindowsShutterService.h"
 #include "LightSensorAccessory.h"
 #include "MotionSensorAccessory.h"
 #include "HomekitBridgeAccessory.h"
@@ -18,7 +18,8 @@
 #include "BH1750LightSensorAccessory.h"
 #include "BME280TemperatureHumiditySensorAccessory.h"
 #include "BatteryService.h"
-#include "RFRelaySwitchAccessory.h"
+#include "RFRelaySwitchService.h"
+#include "CompositeAccessory.h"
 //SYSTEM_MODE(SEMI_AUTOMATIC);
 //SYSTEM_THREAD(ENABLED);
 
@@ -30,7 +31,7 @@ HKServer *hkServer = NULL;
 //HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
 //HAPAccessoryDescriptor *acc = new NixieClockAccessory();
-HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+CompositeAccessory *acc = new CompositeAccessory();
 //HAPAccessoryDescriptor *acc = new RoombaAccessory();
 
 void progress(Progress_t progress) {
@@ -50,19 +51,11 @@ void setup() {
   //HKPersistor().resetAll();
 
   //BEGIN MYHOME
-  acc->descriptors.push_back(new WindowsShutterAccessory(14678913,14678916,1 * sizeof(int)));
-  acc->descriptors.push_back(new WindowsShutterAccessory(4102033,4102036,2 * sizeof(int)));
-  acc->descriptors.push_back(new WindowsShutterAccessory(4102034,4102040,3 * sizeof(int)));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
-  /*acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchAccessory(D6, 4102039));*/
+  acc->descriptors.push_back(new WindowsShutterService(14678913,14678916,1 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterService(4102033,4102036,2 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterService(4102034,4102040,3 * sizeof(int)));
+  acc->descriptors.push_back(new RFRelaySwitchService(D6, 4102038));
+  acc->descriptors.push_back(new RFRelaySwitchService(D6, 4102039));
 
   //END MYHOME
 

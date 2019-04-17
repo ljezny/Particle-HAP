@@ -9,9 +9,9 @@
 #ifndef BatteryService_hpp
 #define BatteryService_hpp
 
-#include "homekit/HKAccessory.h"
+#include "ServiceDescriptor.h"
 
-class BatteryService {
+class BatteryService : public ServiceDescriptor {
 private:
     intCharacteristics *batteryLevelChar;
     intCharacteristics *batteryStatusLowChar;//0-normal,1-low
@@ -40,9 +40,9 @@ public:
         this->batteryAPINMax = batteryAPINMax;
     }
 
-    void initService(Accessory *accessory);
+    virtual void initService(Accessory *accessory);
 
-    bool handle();
+    virtual bool handle();
 };
 
 #endif /* BatteryService_hpp */

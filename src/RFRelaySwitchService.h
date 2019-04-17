@@ -1,12 +1,12 @@
-#ifndef RFRelaySwitchAccessory_hpp
-#define RFRelaySwitchAccessory_hpp
+#ifndef RFRelaySwitchService_hpp
+#define RFRelaySwitchService_hpp
 
 #include "homekit/HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-
+#include "ServiceDescriptor.h"
 #include "rcswitch/RCSwitch.h"
 
-class RFRelaySwitchAccessory: public HAPAccessoryDescriptor {
+class RFRelaySwitchService: public ServiceDescriptor {
 private:
   bool on = false;
 
@@ -17,21 +17,15 @@ private:
 
   RCSwitch *rcSwitch = NULL;
 
-  void identify(bool oldValue, bool newValue, HKConnection *sender);
-
   std::string getPower (HKConnection *sender);
   void setPower (bool oldValue, bool newValue, HKConnection *sender);
 public:
-  RFRelaySwitchAccessory(int rcPinOutput, int code) {
+  RFRelaySwitchService(int rcPinOutput, int code) {
     this->pin = rcPinOutput;
     this->code = code;
   }
 
-  virtual void initAccessorySet();
-
-  virtual int getDeviceType(){
-      return deviceType_switch;
-  }
+  virtual void initService(Accessory *accessory);
   virtual bool handle();
 };
 

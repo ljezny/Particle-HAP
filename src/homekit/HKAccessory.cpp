@@ -485,7 +485,6 @@ void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value
 }
 */
 
-std::string accessoryResponseContentString = "";
 
 void handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender) {
     int index = 5;
@@ -527,25 +526,24 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         hkLog.info("Ask for accessories info");
         statusCode = 200;
 
-        if(accessoryResponseContentString.capacity() != 8192) {
-          accessoryResponseContentString.reserve(8192); //8kB out to be enough for everyone :). This is ugly hack, prealloc memory, so no realloc won't be called during appending to string
-        }
+        string desc = "";
+        desc.reserve(4069); //4kB out to be enough for everyone :). This is ugly hack, prealloc memory, so no realloc won't be called during appending to string
 
-        AccessorySet::getInstance().describe(sender,accessoryResponseContentString);
+        AccessorySet::getInstance().describe(sender,desc);
 
-        if(accessoryResponseContentString.c_str() == NULL) {
+        if(desc.c_str() == NULL) {
             hkLog.warn("Unable to describe Accessory. Possible out of memory occured.");
             Particle.publish("homekit/accessory/problem/memory", "", PUBLIC);
         }
 
-        replyDataLen = accessoryResponseContentString.length();
+        replyDataLen = desc.length();
         hkLog.info("Accessories description len:%d",replyDataLen);
         replyData = (char*) malloc((replyDataLen+1)*sizeof(char));
         memset(replyData,0,replyDataLen+1);
-        accessoryResponseContentString.copy(replyData,replyDataLen,0);
+        desc.copy(replyData,replyDataLen,0);
         replyData[replyDataLen] = 0;
 
-        accessoryResponseContentString.clear();
+        desc.clear();
 
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);

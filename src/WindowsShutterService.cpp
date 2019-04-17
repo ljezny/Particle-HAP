@@ -6,7 +6,7 @@
 //  Copyright © 2019 Lukas Jezny. All rights reserved.
 //
 
-#include "WindowsShutterAccessory.h"
+#include "WindowsShutterService.h"
 
 #include "homekit/HKConnection.h"
 
@@ -24,12 +24,7 @@
 #define TILT_OPEN_TO_CLOSE_TRANSMIT_REPEATS 40 //100 repeat tooked 4500ms
 
 
-
-void WindowsShutterAccessory::shutterIdentity(bool oldValue, bool newValue, HKConnection *sender) {
-
-}
-
-void WindowsShutterAccessory::setState(int newState) {
+void WindowsShutterService::setState(int newState) {
     if(state != newState) {
       state = newState;
       positionStateChar->characteristics::setValue(format("%d",state)); //report state
@@ -39,7 +34,7 @@ void WindowsShutterAccessory::setState(int newState) {
     }
 }
 
-void WindowsShutterAccessory::setPosition(int newPosition) {
+void WindowsShutterService::setPosition(int newPosition) {
     if(newPosition != position) {
       position = newPosition;
       currentPositionChar->characteristics::setValue(format("%d",position));//report position
@@ -49,7 +44,7 @@ void WindowsShutterAccessory::setPosition(int newPosition) {
     }
 }
 
-bool WindowsShutterAccessory::handle() {
+bool WindowsShutterService::handle() {
   bool result = false;
   int diff = abs(targetPosition - position);
   if(diff > 0) {
@@ -111,11 +106,11 @@ bool WindowsShutterAccessory::handle() {
   return false;
 }
 
-void WindowsShutterAccessory::setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
+void WindowsShutterService::setTargetPosition (int oldValue, int newValue, HKConnection *sender) {
   targetPosition = newValue;
 }
 
-void WindowsShutterAccessory::initAccessorySet() {
+void WindowsShutterService::initService(Accessory *accessory) {
     rcSwitch = new RCSwitch();
     rcSwitch->enableTransmit(rcOutputPIN);
     rcSwitch->setProtocol(1);
@@ -126,30 +121,24 @@ void WindowsShutterAccessory::initAccessorySet() {
     }
     this->targetPosition = this->position;
 
-    Accessory *shutterAccessory = new Accessory();
-
-    AccessorySet *accSet = &AccessorySet::getInstance();
-    addInfoServiceToAccessory(shutterAccessory, "Shutter name", "Vendor name", "Model  name", "1","1.0.0", std::bind(&WindowsShutterAccessory::shutterIdentity, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3));
-    accSet->addAccessory(shutterAccessory);
-
     Service *windowsCoverService = new Service(serviceType_windowCover);
-    shutterAccessory->addService(windowsCoverService);
+    accessory->addService(windowsCoverService);
 
     stringCharacteristics *nameCharacteristic = new stringCharacteristics(charType_serviceName, premission_read, 0);
     nameCharacteristic->characteristics::setValue("Window name");
-    shutterAccessory->addCharacteristics(windowsCoverService, nameCharacteristic);
+    accessory->addCharacteristics(windowsCoverService, nameCharacteristic);
 
     intCharacteristics *targetPositionChar = new intCharacteristics(charType_targetPosition, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
     targetPositionChar->characteristics::setValue(format("%d",targetPosition));
-    targetPositionChar->valueChangeFunctionCall = std::bind(&WindowsShutterAccessory::setTargetPosition, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
-    shutterAccessory->addCharacteristics(windowsCoverService, targetPositionChar);
+    targetPositionChar->valueChangeFunctionCall = std::bind(&WindowsShutterService::setTargetPosition, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
+    accessory->addCharacteristics(windowsCoverService, targetPositionChar);
 
     currentPositionChar = new intCharacteristics(charType_currentPosition, premission_read|premission_notify, 0, 100, 1, unit_percentage);
     currentPositionChar->characteristics::setValue(format("%d",position));
-    shutterAccessory->addCharacteristics(windowsCoverService, currentPositionChar);
+    accessory->addCharacteristics(windowsCoverService, currentPositionChar);
 
     positionStateChar = new intCharacteristics(charType_positionState, premission_read|premission_notify, 0, 2, 1, unit_percentage);
     positionStateChar->characteristics::setValue(format("%d",state));
-    shutterAccessory->addCharacteristics(windowsCoverService, positionStateChar);
+    accessory->addCharacteristics(windowsCoverService, positionStateChar);
 
 };
