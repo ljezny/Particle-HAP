@@ -110,7 +110,9 @@ void loop() {
   bool didAnything = !hkServer->hasConnections();
   didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
-
+  if(didAnything) {
+    hkLog.info("Free memory %lu",System.freeMemory());
+  }
 /*
   string desc = "";
   desc.reserve(16000);

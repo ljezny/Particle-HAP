@@ -484,6 +484,9 @@ void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value
     announce(info);
 }
 */
+
+std::string accessoryResponseContentString = "";
+
 void handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender) {
     int index = 5;
     char method[5];
@@ -523,22 +526,27 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         //Publish the characterists of the accessories
         hkLog.info("Ask for accessories info");
         statusCode = 200;
-        string desc = "";
-        desc.reserve(8192); //8kB out to be enough for everyone :). This is ugly hack, prealloc memory, so no realloc won't be called during appending to string
-        AccessorySet::getInstance().describe(sender,desc);
 
-        if(desc.c_str() == NULL) {
+        if(accessoryResponseContentString.capacity() != 8192) {
+          accessoryResponseContentString.reserve(8192); //8kB out to be enough for everyone :). This is ugly hack, prealloc memory, so no realloc won't be called during appending to string
+        }
+
+        AccessorySet::getInstance().describe(sender,accessoryResponseContentString);
+
+        if(accessoryResponseContentString.c_str() == NULL) {
             hkLog.warn("Unable to describe Accessory. Possible out of memory occured.");
             Particle.publish("homekit/accessory/problem/memory", "", PUBLIC);
         }
 
-        replyDataLen = desc.length();
+        replyDataLen = accessoryResponseContentString.length();
         hkLog.info("Accessories description len:%d",replyDataLen);
-        replyData = (char*) malloc((replyDataLen+1)*sizeof(char));//new char[replyDataLen+1];
+        replyData = (char*) malloc((replyDataLen+1)*sizeof(char));
         memset(replyData,0,replyDataLen+1);
-        //memcpy(replyData,desc.c_str(),replyDataLen);
-        desc.copy(replyData,replyDataLen,0);
+        accessoryResponseContentString.copy(replyData,replyDataLen,0);
         replyData[replyDataLen] = 0;
+
+        accessoryResponseContentString.clear();
+
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);
         statusCode = 200;
