@@ -71,20 +71,16 @@ void HKServer::setPaired(bool p) {
 
     bonjour.removeServiceRecord();
 
-    char* configNumberStr = new char[32];
-    memset(configNumberStr, 0, 6);
+    char configNumberStr[32] = {0};
     int configNumberLen = sprintf(configNumberStr, "%d",configNumber);
 
-    char* deviceTypeStr = new char[6];
-    memset(deviceTypeStr, 0, 6);
+    char deviceTypeStr[6] = {0};
     sprintf(deviceTypeStr, "%d",deviceType);
 
-    char* recordTxt = new char[512];
-    memset(recordTxt, 0, 512);
+    char recordTxt[160] = {0};
     int len = sprintf(recordTxt, "%csf=%d%cid=%s%cpv=1.0%cc#=%s%cs#=1%cff=0%cmd=%s%cci=%s",4, p ? 0 : 1,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,3+configNumberLen,configNumberStr,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
 
-    char* bonjourName = new char[128];
-    memset(bonjourName, 0, 128);
+    char bonjourName[128] = {0};
 
     sprintf(bonjourName, "%s._hap",hapName.c_str());
     bonjour.setBonjourName(bonjourName);
@@ -92,10 +88,6 @@ void HKServer::setPaired(bool p) {
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
                              recordTxt);
-
-    free(deviceTypeStr);
-    free(recordTxt);
-    free(bonjourName);
 }
 
 bool HKServer::handle() {
