@@ -311,6 +311,7 @@ string attribute(unsigned int type, unsigned short acclaim, int p, float value, 
 
     return "{"+result+"}";
 }
+
 string attribute(unsigned int type, unsigned short acclaim, int p, string value, unsigned short len) {
     string result;
     char tempStr[4];
@@ -360,6 +361,7 @@ string arrayWrap(string *s, unsigned short len) {
 
     return result;
 }
+
 string dictionaryWrap(string *key, string *value, unsigned short len) {
   string result = "";
   result+="{";
@@ -473,20 +475,15 @@ void AccessorySet::describe(HKConnection *sender, std::string &result) {
     result+="}";
 
 }
-/*
-void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value) {
-    c->setValue(value);
-    char *broadcastTemp = new char[1024];
-    snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\":%d,\"iid\":%d,\"value\":%s}]}", aid, iid, value.c_str());
-    broadcastInfo * info = new broadcastInfo;
-    info->sender = c;
-    info->desc = broadcastTemp;
-    announce(info);
-}
-*/
 
-
-void handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender) {
+const int HEADER_SIZE = 128;
+char header[HEADER_SIZE] = {0}; //preallocate header with spaces
+void handleAccessory(const char *request, unsigned int requestLen, char *responseBuffer,int responseBufferLen, unsigned int *replyLen, HKConnection *sender) {
+    //reply should add '\0', or the printf is incorrect
+    memset(responseBuffer, 0, responseBufferLen);
+    memset(header, ' ', HEADER_SIZE); //initialize with empty spaces
+    memcpy(header + HEADER_SIZE - 4, "\r\n\r\n", 4); //add empty line to end of header
+    
     int index = 5;
     char method[5];
 
@@ -514,7 +511,8 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
     dataPtr += 4;
 
-    char *replyData = NULL;  unsigned short replyDataLen = 0;
+    char *replyData = responseBuffer + HEADER_SIZE;
+    unsigned short replyDataLen = 0;
 
     int statusCode = 0;
 
@@ -531,18 +529,10 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
 
         AccessorySet::getInstance().describe(sender,desc);
 
-        if(desc.c_str() == NULL) {
-            hkLog.warn("Unable to describe Accessory. Possible out of memory occured.");
-            Particle.publish("homekit/accessory/problem/memory", "", PUBLIC);
-        }
-
         replyDataLen = desc.length();
         hkLog.info("Accessories description len:%d",replyDataLen);
-        replyData = (char*) malloc((replyDataLen+1)*sizeof(char));
-        memset(replyData,0,replyDataLen+1);
         desc.copy(replyData,replyDataLen,0);
-        replyData[replyDataLen] = 0;
-
+        
         desc.clear();
 
     } else if (strcmp(path, "/pairings") == 0) {
@@ -593,13 +583,13 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
             char indexBuffer[1000];
             sscanf(path, "/characteristics?id=%[^\n]", indexBuffer);
 
-
             hkLog.info("Get characteristics %s with len %d", indexBuffer, strlen(indexBuffer));
 
             statusCode = 404;
 
-            string result = "[";
-
+            HKStringBuffer result = HKStringBuffer(replyData,responseBufferLen - HEADER_SIZE);
+            result.append("{\"characteristics\":[");
+            int i = 0;
             while (strlen(indexBuffer) > 0) {
 
                 hkLog.info("Get characteristics %s with len %d", indexBuffer, strlen(indexBuffer));
@@ -617,6 +607,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                 }
 
                 Accessory *a = AccessorySet::getInstance().accessoryAtIndex(aid);
+                
                 if (a != NULL) {
                     characteristics *c = a->characteristicsAtIndex(iid);
                     if (c != NULL) {
@@ -626,28 +617,19 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
                         sprintf(c2, "%d", iid);
                         string s[3] = {string(c1), string(c2), c->value(sender)};
                         string k[3] = {"aid", "iid", "value"};
-                        if (result.length() != 1) {
-                            result += ",";
+                        if (i++ != 0) {
+                            result.append(",");
                         }
 
-                        string _result = dictionaryWrap(k, s, 3);
-                        result += _result;
-
+                       result.append(dictionaryWrap(k, s, 3));
                     }
 
                 }
             }
 
-            result += "]";
+            result.append("]}");
 
-            string d = "characteristics";
-            result = dictionaryWrap(&d, &result, 1);
-
-            replyDataLen = result.length();
-            replyData = new char[replyDataLen+1];
-            replyData[replyDataLen] = 0;
-            memset(replyData,0,replyDataLen+1);
-            bcopy(result.c_str(), replyData, replyDataLen);
+            replyDataLen = result.size();
             statusCode = 200;
 
         } else if (strncmp(method, "PUT", 3) == 0) {
@@ -731,27 +713,11 @@ void handleAccessory(const char *request, unsigned int requestLen, char **reply,
         hkLog.info("%s", path);
         statusCode = 404;
     }
-
-    //Calculate the length of header
-    char * tmp = new char[256];
-    bzero(tmp, 256);
-    int len = snprintf(tmp, 256, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u\r\n\r\n", protocol, statusCode, returnType, replyDataLen);
-    delete [] tmp;
-
-    //replyLen should omit the '\0'.
-    (*replyLen) = len+replyDataLen;
-    //reply should add '\0', or the printf is incorrect
-    *reply = new char[*replyLen + 1];
-    bzero(*reply, *replyLen + 1);
-    snprintf(*reply, len + 1, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u\r\n\r\n", protocol, statusCode, returnType, replyDataLen);
-
-    if (replyData) {
-        bcopy(replyData, &(*reply)[len], replyDataLen);
-        delete [] replyData;
-    }
-
-    //hkLog.info("Reply: %s", *reply);
-
+    int len =snprintf(header, HEADER_SIZE, "%s %d OK\r\nContent-Type: %s\r\nContent-Length: %u", protocol, statusCode, returnType, replyDataLen);
+    header[len] = ' ';
+    memcpy(responseBuffer, header, HEADER_SIZE);
+    //memcpy(responseBuffer + len, replyData, replyDataLen);
+    (*replyLen) = HEADER_SIZE+replyDataLen;
 }
 
 void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber,string firmware, identifyFunction identifyCallback) {

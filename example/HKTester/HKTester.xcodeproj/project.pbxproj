@@ -42,6 +42,7 @@
 		56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A432208D06300DCFA13 /* fe_low_mem.cpp */; };
 		56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A462208D0FE00DCFA13 /* ge_operations.cpp */; };
 		56125A492208D0FE00DCFA13 /* fe_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A472208D0FE00DCFA13 /* fe_operations.cpp */; };
+		562778F82269E2B20004939B /* HKStringBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 562778F62269E2B20004939B /* HKStringBuffer.cpp */; };
 		56450936222A77BE00054765 /* HomekitBridgeAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */; };
 		5645093B222A82B600054765 /* RCSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56450939222A82B600054765 /* RCSwitch.cpp */; };
 		5645093E222A93CA00054765 /* MotionSensorAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5645093C222A93CA00054765 /* MotionSensorAccessory.cpp */; };
@@ -142,6 +143,8 @@
 		56125A462208D0FE00DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
 		56125A472208D0FE00DCFA13 /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
 		56125A4F22103E9900DCFA13 /* HAPAccessoryDescriptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HAPAccessoryDescriptor.h; path = ../../../src/HAPAccessoryDescriptor.h; sourceTree = "<group>"; };
+		562778F62269E2B20004939B /* HKStringBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HKStringBuffer.cpp; sourceTree = "<group>"; };
+		562778F72269E2B20004939B /* HKStringBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HKStringBuffer.hpp; sourceTree = "<group>"; };
 		56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HomekitBridgeAccessory.cpp; path = ../../../src/HomekitBridgeAccessory.cpp; sourceTree = "<group>"; };
 		56450935222A77BE00054765 /* HomekitBridgeAccessory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HomekitBridgeAccessory.h; path = ../../../src/HomekitBridgeAccessory.h; sourceTree = "<group>"; };
 		56450939222A82B600054765 /* RCSwitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RCSwitch.cpp; sourceTree = "<group>"; };
@@ -260,6 +263,8 @@
 				56125A122206F24600DCFA13 /* HKStringUtils.h */,
 				56947C8A220AEFF300767C5A /* HKLog.cpp */,
 				56947C8B220AEFF300767C5A /* HKLog.h */,
+				562778F62269E2B20004939B /* HKStringBuffer.cpp */,
+				562778F72269E2B20004939B /* HKStringBuffer.hpp */,
 			);
 			name = homekit;
 			path = ../../src/homekit;
@@ -420,6 +425,7 @@
 				56125A2C2206F24600DCFA13 /* HKServer.cpp in Sources */,
 				56125A272206F24600DCFA13 /* HKAccessory.cpp in Sources */,
 				56125A222206F24600DCFA13 /* wc_port.cpp in Sources */,
+				562778F82269E2B20004939B /* HKStringBuffer.cpp in Sources */,
 				56125A252206F24600DCFA13 /* hash.cpp in Sources */,
 				56125A2B2206F24600DCFA13 /* HKNetworkMessageData.cpp in Sources */,
 				56125A192206F24600DCFA13 /* chacha20_poly1305.cpp in Sources */,

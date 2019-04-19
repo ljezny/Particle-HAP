@@ -19,6 +19,8 @@
 #include "HKConnection.h"
 #include <functional>
 
+#include "HKStringBuffer.hpp"
+
 typedef enum {
     charType_adminOnlyAccess    = 0x1,
     charType_audioChannels      = 0x2,
@@ -459,7 +461,7 @@ typedef std::function<void(bool,bool,HKConnection *)> identifyFunction;
 //Since Info Service contains only constant, only add method will be provided
 void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber,string firmware, identifyFunction identifyCallback);
 
-void handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender);
+void handleAccessory(const char *request, unsigned int requestLen, char *responseBuffer,int responseBufferLen, unsigned int *replyLen, HKConnection *sender);
 
 void updateValueFromDeviceEnd(characteristics *c, int aid, int iid, string value);
 

@@ -726,22 +726,18 @@ void HKConnection::handlePairSetup(const char *buffer) {
 }
 
 void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
-    char *resultData = 0; unsigned int resultLen = 0;
-    //hkLog.info("Request from: %s, data:%s",clientID(),buffer);
+    unsigned int resultLen = 0;
     server->progressPtr(Progress_AccessoryRequest);
-    handleAccessory(buffer, size, &resultData, &resultLen, this);
+    handleAccessory(buffer, size,(char*) SHARED_RESPONSE_BUFFER,SHARED_RESPONSE_BUFFER_LEN, &resultLen, this);
     server->progressPtr(Progress_AccessoryRespond);
     if(resultLen > 0) {
-        writeData((byte*)resultData,resultLen);
-        hkLog.info("Response to: %s, data:%s",clientID(),resultData);
-    }
-    if(resultData) {
-        free(resultData);
+        writeData(SHARED_RESPONSE_BUFFER,resultLen);
+        hkLog.info("Response to: %s, data:%s",clientID(),SHARED_RESPONSE_BUFFER);
     }
 }
 
+char broadcastTemp[1024] = {0}; //make it global, so it wont count to stack size limit
 void HKConnection::processPostedCharacteristics() {
-    char broadcastTemp[1024] = {0};
     for(int i = 0; i < postedCharacteristics.size(); i++) {
         characteristics *c = postedCharacteristics.at(i);
         memset(broadcastTemp,0,1024);
