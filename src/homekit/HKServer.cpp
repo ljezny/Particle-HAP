@@ -35,8 +35,7 @@ HKServer::~HKServer() {
 }
 
 void HKServer::start () {
-    server = new TCPServer(TCP_SERVER_PORT);
-    server->begin();
+    server.begin();
     hkLog.info("Server started at port %d", TCP_SERVER_PORT);
     bonjour.setUDP( &udp );
     setPaired(false);
@@ -54,9 +53,7 @@ void HKServer::stop () {
     }
     clients.clear();
 
-    server->stop();
-    delete server;
-    server = NULL;
+    server.stop();
 
     hkLog.info("Server stopped");
     paired = false;
@@ -94,7 +91,7 @@ bool HKServer::handle() {
     bool result = false;
     result |= bonjour.run();
 
-    TCPClient newClient = server->available();
+    TCPClient newClient = server.available();
     if(newClient) {
         hkLog.info("Client connected.");
         HKConnection *c = new HKConnection(this,newClient);
