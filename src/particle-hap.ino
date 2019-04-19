@@ -20,12 +20,10 @@
 #include "BatteryService.h"
 #include "RFRelaySwitchService.h"
 #include "CompositeAccessory.h"
-//SYSTEM_MODE(SEMI_AUTOMATIC);
-//SYSTEM_THREAD(ENABLED);
 
 SerialLogHandler logHandler;
 
-HKServer *hkServer = NULL;
+
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
 //HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
@@ -33,6 +31,11 @@ HKServer *hkServer = NULL;
 //HAPAccessoryDescriptor *acc = new NixieClockAccessory();
 CompositeAccessory *acc = new CompositeAccessory();
 //HAPAccessoryDescriptor *acc = new RoombaAccessory();
+
+HKServer hkServer = HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+//hkServer = HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
+//hkServer = HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
+//hkServer = HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
 
 void progress(Progress_t progress) {
     hkLog.info("Homekit progress callback: %d",progress);
@@ -66,55 +69,18 @@ void setup() {
 
   acc->initAccessorySet();
 
-  //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
-  hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"WeatherStation","523-12-643",progress);
-  hkServer->start();
+  hkServer.start();
 
-  //SEMI_AUTOMATIC
-  //Particle.connect();
-
-  bool success = Particle.function("restart", restart);
+  Particle.function("restart", restart);
 
 }
 
 // loop() runs over and over again, as quickly as it can execute.
 void loop() {
-  //if SYSTEM_THREAD is enable use following code:
-  /*if(WiFi.ready()) { //wifi is ready
-    if(!hkServer) { //start server
-      hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
-      //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
-      //hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
-      //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
-      hkServer->start();
-    }
-    hkServer->handle(); //handle connections
-  } else { //wifi has been lost
-    if(hkServer) { //stop server and do cleanup
-      hkServer->stop();
-      delete hkServer;
-      hkServer = NULL;
-    }
-  }*/
-
   bool didAnything = false; //!hkServer->hasConnections();
-  didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
+  didAnything |= hkServer.handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
   if(didAnything) {
     hkLog.info("Free memory %lu",System.freeMemory());
   }
-/*
-  string desc = "";
-  desc.reserve(16000);
-  AccessorySet::getInstance().describe(NULL,desc);
-  if(desc.c_str() == NULL) {
-    Serial.println("malloc error");
-  } else {
-    Serial.printf("%d\n", desc.length());
-  }
-*/
-
 }
