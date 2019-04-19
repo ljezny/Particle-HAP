@@ -16,6 +16,7 @@ UDP udp;
 EEPROMClass EEPROM;
 SerialLink Serial;
 RGBClass RGB;
+ParticleClass Particle;
 
 HKStorage EEPROMClass::get(int address, HKStorage storage){
     char file[256];

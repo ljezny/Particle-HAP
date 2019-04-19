@@ -283,6 +283,18 @@ public:
     }
 };
 
+class ParticleClass {
+public:
+    void variable(const char *format, ...){
+       
+    }
+    
+    void publish(const char *format, ...){
+        
+    }
+   
+};
+
 //typedef std::function<void()> wiring_interrupt_handler_t;
 
 void delay(int ms);
@@ -300,6 +312,10 @@ extern UDP udp;
 extern EEPROMClass EEPROM;
 extern SerialLink Serial;
 extern RGBClass RGB;
+extern ParticleClass Particle;
+
+#define INT 0
+#define PUBLIC 0
 
 #define A0 0
 #define D0 0

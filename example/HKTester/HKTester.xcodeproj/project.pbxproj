@@ -42,12 +42,13 @@
 		56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A432208D06300DCFA13 /* fe_low_mem.cpp */; };
 		56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A462208D0FE00DCFA13 /* ge_operations.cpp */; };
 		56125A492208D0FE00DCFA13 /* fe_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A472208D0FE00DCFA13 /* fe_operations.cpp */; };
-		56125A4D2210313E00DCFA13 /* WindowsShutterAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A4B2210313E00DCFA13 /* WindowsShutterAccessory.cpp */; };
 		56450936222A77BE00054765 /* HomekitBridgeAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */; };
 		5645093B222A82B600054765 /* RCSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56450939222A82B600054765 /* RCSwitch.cpp */; };
 		5645093E222A93CA00054765 /* MotionSensorAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5645093C222A93CA00054765 /* MotionSensorAccessory.cpp */; };
 		5675A7302221647D00942207 /* LightSensorAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5675A72E2221647D00942207 /* LightSensorAccessory.cpp */; };
 		56947C8C220AEFF300767C5A /* HKLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56947C8A220AEFF300767C5A /* HKLog.cpp */; };
+		56B4693C2269C5AB001A600A /* RelaySwitchAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56B469332269C5AA001A600A /* RelaySwitchAccessory.cpp */; };
+		56B4693E2269C5AB001A600A /* WindowsShutterService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56B469372269C5AB001A600A /* WindowsShutterService.cpp */; };
 		56D840CE223910480061092A /* LEDStripLightBulbAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */; };
 		56D840CF223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */; };
 /* End PBXBuildFile section */
@@ -140,8 +141,6 @@
 		56125A432208D06300DCFA13 /* fe_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_low_mem.cpp; sourceTree = "<group>"; };
 		56125A462208D0FE00DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
 		56125A472208D0FE00DCFA13 /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
-		56125A4B2210313E00DCFA13 /* WindowsShutterAccessory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowsShutterAccessory.cpp; path = ../../../src/WindowsShutterAccessory.cpp; sourceTree = "<group>"; };
-		56125A4C2210313E00DCFA13 /* WindowsShutterAccessory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WindowsShutterAccessory.h; path = ../../../src/WindowsShutterAccessory.h; sourceTree = "<group>"; };
 		56125A4F22103E9900DCFA13 /* HAPAccessoryDescriptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HAPAccessoryDescriptor.h; path = ../../../src/HAPAccessoryDescriptor.h; sourceTree = "<group>"; };
 		56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HomekitBridgeAccessory.cpp; path = ../../../src/HomekitBridgeAccessory.cpp; sourceTree = "<group>"; };
 		56450935222A77BE00054765 /* HomekitBridgeAccessory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HomekitBridgeAccessory.h; path = ../../../src/HomekitBridgeAccessory.h; sourceTree = "<group>"; };
@@ -153,6 +152,11 @@
 		5675A72F2221647D00942207 /* LightSensorAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightSensorAccessory.h; path = ../../../src/LightSensorAccessory.h; sourceTree = "<group>"; };
 		56947C8A220AEFF300767C5A /* HKLog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HKLog.cpp; sourceTree = "<group>"; };
 		56947C8B220AEFF300767C5A /* HKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKLog.h; sourceTree = "<group>"; };
+		56B469332269C5AA001A600A /* RelaySwitchAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RelaySwitchAccessory.cpp; path = ../../../src/RelaySwitchAccessory.cpp; sourceTree = "<group>"; };
+		56B469352269C5AB001A600A /* WindowsShutterService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WindowsShutterService.h; path = ../../../src/WindowsShutterService.h; sourceTree = "<group>"; };
+		56B469372269C5AB001A600A /* WindowsShutterService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WindowsShutterService.cpp; path = ../../../src/WindowsShutterService.cpp; sourceTree = "<group>"; };
+		56B469382269C5AB001A600A /* RelaySwitchAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RelaySwitchAccessory.h; path = ../../../src/RelaySwitchAccessory.h; sourceTree = "<group>"; };
+		56B4693B2269C5AB001A600A /* ServiceDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServiceDescriptor.h; path = ../../../src/ServiceDescriptor.h; sourceTree = "<group>"; };
 		56D840CA223910480061092A /* LEDStripLightBulbAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LEDStripLightBulbAccessory.h; path = ../../../src/LEDStripLightBulbAccessory.h; sourceTree = "<group>"; };
 		56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LEDStripLightBulbAccessory.cpp; path = ../../../src/LEDStripLightBulbAccessory.cpp; sourceTree = "<group>"; };
 		56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhotoSystemLEDLightBulbAccessory.cpp; path = ../../../src/PhotoSystemLEDLightBulbAccessory.cpp; sourceTree = "<group>"; };
@@ -193,6 +197,11 @@
 		561259B62206E95600DCFA13 /* HKTester */ = {
 			isa = PBXGroup;
 			children = (
+				56B469332269C5AA001A600A /* RelaySwitchAccessory.cpp */,
+				56B469382269C5AB001A600A /* RelaySwitchAccessory.h */,
+				56B4693B2269C5AB001A600A /* ServiceDescriptor.h */,
+				56B469372269C5AB001A600A /* WindowsShutterService.cpp */,
+				56B469352269C5AB001A600A /* WindowsShutterService.h */,
 				56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */,
 				56D840CA223910480061092A /* LEDStripLightBulbAccessory.h */,
 				56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */,
@@ -205,8 +214,6 @@
 				56125A3B2208C29900DCFA13 /* LightBulbAccessoryBase.h */,
 				561259B72206E95600DCFA13 /* main.cpp */,
 				561259BF2206E9E100DCFA13 /* Particle_Compat */,
-				56125A4B2210313E00DCFA13 /* WindowsShutterAccessory.cpp */,
-				56125A4C2210313E00DCFA13 /* WindowsShutterAccessory.h */,
 				56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */,
 				56450935222A77BE00054765 /* HomekitBridgeAccessory.h */,
 				5645093C222A93CA00054765 /* MotionSensorAccessory.cpp */,
@@ -395,6 +402,7 @@
 				56125A2F2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp in Sources */,
 				56125A1F2206F24600DCFA13 /* hmac.cpp in Sources */,
 				56125A492208D0FE00DCFA13 /* fe_operations.cpp in Sources */,
+				56B4693C2269C5AB001A600A /* RelaySwitchAccessory.cpp in Sources */,
 				56125A2A2206F24600DCFA13 /* HKNetworkMessage.cpp in Sources */,
 				56125A292206F24600DCFA13 /* HKNetworkResponse.cpp in Sources */,
 				56125A182206F24600DCFA13 /* random.cpp in Sources */,
@@ -402,7 +410,6 @@
 				5645093E222A93CA00054765 /* MotionSensorAccessory.cpp in Sources */,
 				5645093B222A82B600054765 /* RCSwitch.cpp in Sources */,
 				56125A1A2206F24600DCFA13 /* ed25519.cpp in Sources */,
-				56125A4D2210313E00DCFA13 /* WindowsShutterAccessory.cpp in Sources */,
 				56125A3D2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp in Sources */,
 				56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */,
 				56125A232206F24600DCFA13 /* curve25519.cpp in Sources */,
@@ -420,6 +427,7 @@
 				56125A262206F24600DCFA13 /* chacha.cpp in Sources */,
 				56947C8C220AEFF300767C5A /* HKLog.cpp in Sources */,
 				56125A152206F24600DCFA13 /* memory.cpp in Sources */,
+				56B4693E2269C5AB001A600A /* WindowsShutterService.cpp in Sources */,
 				56125A172206F24600DCFA13 /* misc.cpp in Sources */,
 				56125A162206F24600DCFA13 /* logging.cpp in Sources */,
 				56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */,

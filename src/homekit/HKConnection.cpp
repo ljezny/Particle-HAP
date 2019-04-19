@@ -192,12 +192,12 @@ bool HKConnection::handleConnection() {
         HKNetworkMessage msg((const char *)SHARED_REQUEST_BUFFER);
         if (!strcmp(msg.directory, "pair-setup")){
             hkLog.info("Handling Pair Setup...");
-            Particle.publish("homekit/pair-setup", String(remoteIP()), PUBLIC);
+            Particle.publish("homekit/pair-setup", remoteIP(), PUBLIC);
             handlePairSetup((const char *)SHARED_REQUEST_BUFFER);
         }
         else if (!strcmp(msg.directory, "pair-verify")){
             hkLog.info("Handling Pair Verify...");
-            Particle.publish("homekit/pair-verify", String(remoteIP()), PUBLIC);
+            Particle.publish("homekit/pair-verify", remoteIP(), PUBLIC);
             if(handlePairVerify((const char *)SHARED_REQUEST_BUFFER)){
                 isEncrypted = true;
                 server->setPaired(true);
@@ -206,7 +206,7 @@ bool HKConnection::handleConnection() {
             client.stop();
         } else if(isEncrypted) { //connection is secured
             hkLog.info("Handling message request: %s",msg.directory);
-            Particle.publish("homekit/accessory", String(remoteIP()), PUBLIC);
+            Particle.publish("homekit/accessory", remoteIP(), PUBLIC);
             handleAccessoryRequest((const char *)SHARED_REQUEST_BUFFER, len);
         }
         RGB.control(false);

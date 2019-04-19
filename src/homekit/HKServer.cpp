@@ -9,11 +9,6 @@
 #include "spark_wiring_thread.h"
 #endif
 
-//TCP for handling server port
-static int TCP_SERVER_PORT = 5556;
-
-
-
 HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void (*progressPtr)(Progress_t)) {
     this->hapName = hapName;
     this->deviceType = deviceType;
@@ -42,7 +37,6 @@ HKServer::~HKServer() {
 }
 
 void HKServer::start () {
-    TCP_SERVER_PORT++;
     server = new TCPServer(TCP_SERVER_PORT);
     server->begin();
     hkLog.info("Server started at port %d", TCP_SERVER_PORT);
@@ -93,7 +87,7 @@ void HKServer::setPaired(bool p) {
     memset(bonjourName, 0, 128);
 
     sprintf(bonjourName, "%s._hap",hapName.c_str());
-
+    bonjour.setBonjourName(bonjourName);
     bonjour.addServiceRecord(bonjourName,
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
@@ -114,7 +108,7 @@ bool HKServer::handle() {
     if(newClient) {
         hkLog.info("Client connected.");
         clients.insert(clients.begin(),new HKConnection(this,newClient));
-        Particle.publish("homekit/accept", String(newClient.remoteIP()), PUBLIC);
+        Particle.publish("homekit/accept", newClient.remoteIP(), PUBLIC);
         result |= true;
     }
 
@@ -125,7 +119,7 @@ bool HKServer::handle() {
         result |= conn->handleConnection();
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
-            Particle.publish("homekit/close", String(conn->remoteIP()), PUBLIC);
+            Particle.publish("homekit/close", conn->remoteIP(), PUBLIC);
             conn->close();
             clients.erase(clients.begin() + i);
             delete conn;
