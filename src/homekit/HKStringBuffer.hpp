@@ -59,6 +59,18 @@ public:
     int size() {
         return position;
     }
+    
+    HKStringBuffer& operator+=(char* rhs)
+    {
+        this->append(rhs);
+        return *this; // return the result by reference
+    }
+    
+    HKStringBuffer& operator+=(std::string rhs)
+    {
+        this->append(rhs);
+        return *this; // return the result by reference
+    }
 };
 
 #endif /* HKStringBuffer_hpp */

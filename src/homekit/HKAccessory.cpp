@@ -408,7 +408,7 @@ string stringCharacteristics::describe(HKConnection *sender) {
     return result;
 }
 
-void Service::describe(HKConnection *sender, std::string &result) {
+void Service::describe(HKConnection *sender, HKStringBuffer &result) {
     result+="{";
 
     char serviceIDStr[32];
@@ -434,7 +434,7 @@ void Service::describe(HKConnection *sender, std::string &result) {
     result+="}";
 }
 
-void Accessory::describe(HKConnection *sender, std::string &result) {
+void Accessory::describe(HKConnection *sender, HKStringBuffer &result) {
   result+="{";
 
   result+="\"services\":[";
@@ -457,7 +457,7 @@ void Accessory::describe(HKConnection *sender, std::string &result) {
   result+="}";
 }
 
-void AccessorySet::describe(HKConnection *sender, std::string &result) {
+void AccessorySet::describe(HKConnection *sender, HKStringBuffer &result) {
     result+="{";
 
     result+="\"accessories\":[";
@@ -524,17 +524,11 @@ void handleAccessory(const char *request, unsigned int requestLen, char *respons
         hkLog.info("Ask for accessories info");
         statusCode = 200;
 
-        string desc = "";
-        desc.reserve(4069); //4kB out to be enough for everyone :). This is ugly hack, prealloc memory, so no realloc won't be called during appending to string
-
-        AccessorySet::getInstance().describe(sender,desc);
-
-        replyDataLen = desc.length();
+        HKStringBuffer buffer = HKStringBuffer(replyData,responseBufferLen - HEADER_SIZE);
+      
+        AccessorySet::getInstance().describe(sender,buffer);
+        replyDataLen = buffer.size();
         hkLog.info("Accessories description len:%d",replyDataLen);
-        desc.copy(replyData,replyDataLen,0);
-        
-        desc.clear();
-
     } else if (strcmp(path, "/pairings") == 0) {
         HKNetworkMessage msg(request);
         statusCode = 200;
@@ -623,7 +617,6 @@ void handleAccessory(const char *request, unsigned int requestLen, char *respons
 
                        result.append(dictionaryWrap(k, s, 3));
                     }
-
                 }
             }
 
