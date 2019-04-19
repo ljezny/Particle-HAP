@@ -95,8 +95,5 @@ public:
   }
   void postCharacteristicsValue(characteristics *c);
   void addNotifiedCharacteristics(characteristics *c);
-  char* remoteIP() {
-    return client.remoteIP();
-  }
 };
 #endif

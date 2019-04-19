@@ -19,7 +19,7 @@
 #include "HKConnection.h"
 #include <functional>
 
-#include "HKStringBuffer.hpp"
+#include "HKStringBuffer.h"
 
 typedef enum {
     charType_adminOnlyAccess    = 0x1,

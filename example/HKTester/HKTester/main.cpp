@@ -20,7 +20,6 @@
 
 
 #include "../../../src/LightBulbAccessoryBase.h"
-#include "../../../src/WindowsShutterAccessory.h"
 #include "../../../src/LightSensorAccessory.h"
 #include "../../../src/HomekitBridgeAccessory.h"
 #include "../../../src/MotionSensorAccessory.h"

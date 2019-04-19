@@ -107,8 +107,9 @@ bool HKServer::handle() {
     TCPClient newClient = server->available();
     if(newClient) {
         hkLog.info("Client connected.");
-        clients.insert(clients.begin(),new HKConnection(this,newClient));
-        Particle.publish("homekit/accept", newClient.remoteIP(), PUBLIC);
+        HKConnection *c = new HKConnection(this,newClient);
+        clients.insert(clients.begin(),c);
+        Particle.publish("homekit/accept", c->clientID(), PUBLIC);
         result |= true;
     }
 
@@ -119,7 +120,7 @@ bool HKServer::handle() {
         result |= conn->handleConnection();
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
-            Particle.publish("homekit/close", conn->remoteIP(), PUBLIC);
+            Particle.publish("homekit/close", conn->clientID(), PUBLIC);
             conn->close();
             clients.erase(clients.begin() + i);
             delete conn;
@@ -130,6 +131,6 @@ bool HKServer::handle() {
     }
 
     this->connections = clients.size();
-    
+
     return result;
 }
