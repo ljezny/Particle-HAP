@@ -63,12 +63,13 @@ typedef void (*BonjourServiceFoundCallback)(const char*, MDNSServiceProtocol_t, 
                                             const byte[4], unsigned short, const char*);
 
 #define  NumMDNSServiceRecords   (8)
+#define BONJOUR_NAME_MAX_LENGTH 128
 
 class HKBonjour {
 private:
    MDNSDataInternal_t    _mdnsData;
    MDNSState_t           _state;
-   uint8_t*             _bonjourName;
+   uint8_t            _bonjourName[BONJOUR_NAME_MAX_LENGTH];
    MDNSServiceRecord_t* _serviceRecords[NumMDNSServiceRecords];
    unsigned long        _lastAnnounceMillis;
 
@@ -123,19 +124,6 @@ public:
    void removeServiceRecord(const char* name, uint16_t port, MDNSServiceProtocol_t proto);
 
    void removeAllServiceRecords();
-
-   void setNameResolvedCallback(BonjourNameFoundCallback newCallback);
-   int resolveName(const char* name, unsigned long timeout);
-   void cancelResolveName();
-   int isResolvingName();
-
-   void setServiceFoundCallback(BonjourServiceFoundCallback newCallback);
-   int startDiscoveringService(const char* serviceName, MDNSServiceProtocol_t proto,
-                               unsigned long timeout);
-   void stopDiscoveringService();
-   int isDiscoveringService();
-
-
 
    // Particle compilation errors
    UDP* _localUDP;
