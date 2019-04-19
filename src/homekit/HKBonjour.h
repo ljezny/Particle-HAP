@@ -50,95 +50,81 @@ typedef enum _MDNSServiceProtocol_t {
 
 typedef MDNSServiceProtocol_t MDNSServiceProtocol;
 
+#define MNDS_NAME_MAX_LENGTH 64
+#define MNDS_SRV_NAME_MAX_LENGTH 64
+#define MNDS_TEXT_CONTENT_MAX_LENGTH 512
 typedef struct _MDNSServiceRecord_t {
    uint16_t                port;
    MDNSServiceProtocol_t   proto;
-   uint8_t*                name;
-   uint8_t*                servName;
-   uint8_t*                textContent;
+   uint8_t                name[MNDS_NAME_MAX_LENGTH];
+   uint8_t                servName[MNDS_SRV_NAME_MAX_LENGTH];
+   uint8_t                textContent[MNDS_TEXT_CONTENT_MAX_LENGTH];
 } MDNSServiceRecord_t;
 
-typedef void (*BonjourNameFoundCallback)(const char*, const byte[4]);
-typedef void (*BonjourServiceFoundCallback)(const char*, MDNSServiceProtocol_t, const char*,
-                                            const byte[4], unsigned short, const char*);
 
-#define  NumMDNSServiceRecords   (8)
 #define BONJOUR_NAME_MAX_LENGTH 128
 
 class HKBonjour {
 private:
-   MDNSDataInternal_t    _mdnsData;
-   MDNSState_t           _state;
-   uint8_t            _bonjourName[BONJOUR_NAME_MAX_LENGTH];
-   MDNSServiceRecord_t* _serviceRecords[NumMDNSServiceRecords];
-   unsigned long        _lastAnnounceMillis;
+    MDNSDataInternal_t    _mdnsData;
+    MDNSState_t           _state;
+    uint8_t            _bonjourName[BONJOUR_NAME_MAX_LENGTH];
+    bool hasServiceRecord = false;
+    MDNSServiceRecord_t _serviceRecord;
+    unsigned long        _lastAnnounceMillis;
 
-   uint8_t*             _resolveNames[2];
-   unsigned long        _resolveLastSendMillis[2];
-   unsigned long        _resolveTimeouts[2];
+    uint8_t*             _resolveNames[2];
+    unsigned long        _resolveLastSendMillis[2];
+    unsigned long        _resolveTimeouts[2];
 
-   MDNSServiceProtocol_t _resolveServiceProto;
+    MDNSServiceProtocol_t _resolveServiceProto;
 
-   BonjourNameFoundCallback      _nameFoundCallback;
-   BonjourServiceFoundCallback   _serviceFoundCallback;
-
-   MDNSError_t _processMDNSQuery();
-   MDNSError_t _sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int type, int serviceRecord);
+    MDNSError_t _processMDNSQuery();
+    MDNSError_t _sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int type);
 
 
-   void _writeDNSName(const uint8_t* name, uint16_t* pPtr, uint8_t* buf, int bufSize,
+    void _writeDNSName(const uint8_t* name, uint16_t* pPtr, uint8_t* buf, int bufSize,
                       int zeroTerminate);
-   void _writeMyIPAnswerRecord(uint16_t* pPtr, uint8_t* buf, int bufSize);
-   void _writeServiceRecordName(int recordIndex, uint16_t* pPtr, uint8_t* buf, int bufSize, int tld);
-   void _writeServiceRecordPTR(int recordIndex, uint16_t* pPtr, uint8_t* buf, int bufSize,
+    void _writeMyIPAnswerRecord(uint16_t* pPtr, uint8_t* buf, int bufSize);
+    void _writeServiceRecordName(uint16_t* pPtr, uint8_t* buf, int bufSize, int tld);
+    void _writeServiceRecordPTR(uint16_t* pPtr, uint8_t* buf, int bufSize,
                                uint32_t ttl);
+    uint8_t* _findFirstDotFromRight(const uint8_t* str);
 
-   int _initQuery(uint8_t idx, const char* name, unsigned long timeout);
-   void _cancelQuery(uint8_t idx);
-
-   uint8_t* _findFirstDotFromRight(const uint8_t* str);
-
-   void _removeServiceRecord(int idx);
-
-   int _matchStringPart(const uint8_t** pCmpStr, int* pCmpLen, const uint8_t* buf,
+    int _matchStringPart(const uint8_t** pCmpStr, int* pCmpLen, const uint8_t* buf,
                         int dataLen);
 
-   const uint8_t* _postfixForProtocol(MDNSServiceProtocol_t proto);
+    const uint8_t* _postfixForProtocol(MDNSServiceProtocol_t proto);
 
-   void _finishedResolvingName(char* name, const byte ipAddr[4]);
+    void _finishedResolvingName(char* name, const byte ipAddr[4]);
 public:
-   HKBonjour();
-   ~HKBonjour();
+    HKBonjour();
+    ~HKBonjour();
 
-   int begin();
-   int begin(const char* bonjourName);
-   bool run();
+    void begin();
+    void begin(const char* bonjourName);
+    bool run();
 
-   int setBonjourName(const char* bonjourName);
+    void setBonjourName(const char* bonjourName);
 
-   int addServiceRecord(const char* name, uint16_t port, MDNSServiceProtocol_t proto);
-   int addServiceRecord(const char* name, uint16_t port, MDNSServiceProtocol_t proto,
-                        const char* textContent);
+    void setServiceRecord(const char* name, uint16_t port, MDNSServiceProtocol_t proto,
+                    const char* textContent);
 
-   void removeServiceRecord(uint16_t port, MDNSServiceProtocol_t proto);
-   void removeServiceRecord(const char* name, uint16_t port, MDNSServiceProtocol_t proto);
+    void removeServiceRecord();
 
-   void removeAllServiceRecords();
-
-   // Particle compilation errors
-   UDP* _localUDP;
-   int setUDP( UDP * localUDP );
-   int stop();
-   int beginMulticast(uint8_t *IPAddr, uint16_t port);
-   int write(uint8_t *buf, int size);
-   int read(uint8_t *buf, int size);
-   int beginPacket(uint8_t * IPAddr, uint16_t port);
-   int endPacket();
-   int parsePacket();
-   int flush();
-   int remotePort();
-   int remoteIP();
-   //unsigned long localIP();
+    // Particle compilation errors
+    UDP* _localUDP;
+    int setUDP( UDP * localUDP );
+    int stop();
+    int beginMulticast(uint8_t *IPAddr, uint16_t port);
+    int write(uint8_t *buf, int size);
+    int read(uint8_t *buf, int size);
+    int beginPacket(uint8_t * IPAddr, uint16_t port);
+    int endPacket();
+    int parsePacket();
+    int flush();
+    int remotePort();
+    int remoteIP();
 
 };
 

@@ -23,8 +23,6 @@ HKServer::HKServer(int deviceType, std::string hapName,std::string passcode,void
 
     this->deviceIdentity = deviceIdentity; //std::string will copy
     free(deviceIdentity);
-
-
 }
 
 int getPort() {
@@ -44,6 +42,8 @@ void HKServer::start () {
     setPaired(false);
 
     Particle.variable("connections", &this->connections, INT);
+
+    bonjour.begin(hapName.c_str());
 }
 
 void HKServer::stop () {
@@ -69,7 +69,7 @@ void HKServer::setPaired(bool p) {
     unsigned short configNumber = persistor->getAndUpdateConfigurationVersion();
     paired = p;
 
-    bonjour.removeAllServiceRecords();
+    bonjour.removeServiceRecord();
 
     char* configNumberStr = new char[32];
     memset(configNumberStr, 0, 6);
@@ -88,7 +88,7 @@ void HKServer::setPaired(bool p) {
 
     sprintf(bonjourName, "%s._hap",hapName.c_str());
     bonjour.setBonjourName(bonjourName);
-    bonjour.addServiceRecord(bonjourName,
+    bonjour.setServiceRecord(bonjourName,
                              TCP_SERVER_PORT,
                              MDNSServiceTCP,
                              recordTxt);
@@ -100,9 +100,7 @@ void HKServer::setPaired(bool p) {
 
 bool HKServer::handle() {
     bool result = false;
-    bonjour.begin(hapName.c_str());
     result |= bonjour.run();
-    bonjour.stop();
 
     TCPClient newClient = server->available();
     if(newClient) {
