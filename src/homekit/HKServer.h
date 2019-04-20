@@ -20,7 +20,7 @@ private:
     HKBonjour bonjour;
     UDP udp;
     bool paired = false;
-    HKConnection clients[MAX_PAIRINGS];
+    std::vector<HKConnection*> clients;
     int deviceType;
     std::string hapName;
     std::string deviceIdentity;

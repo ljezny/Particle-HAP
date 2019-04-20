@@ -32,10 +32,10 @@ SerialLogHandler logHandler;
 CompositeAccessory *acc = new CompositeAccessory();
 //HAPAccessoryDescriptor *acc = new RoombaAccessory();
 
-HKServer hkServer = HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
-//hkServer = HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
-//hkServer = HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
-//HKServer hkServer = HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
+HKServer *hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+//HKServer *hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
+//HKServer *hkServer = new HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
+//HKServer *hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
 
 void progress(Progress_t progress) {
     hkLog.info("Homekit progress callback: %d",progress);
@@ -69,7 +69,7 @@ void setup() {
 
   acc->initAccessorySet();
 
-  hkServer.start();
+  hkServer->start();
 
   Particle.function("restart", restart);
 
@@ -78,7 +78,7 @@ void setup() {
 // loop() runs over and over again, as quickly as it can execute.
 void loop() {
   bool didAnything = false; //!hkServer->hasConnections();
-  didAnything |= hkServer.handle(); //handle connections, did anything (i.e processed some requests etc.)
+  didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
   if(didAnything) {
     hkLog.info("Free memory %lu",System.freeMemory());
