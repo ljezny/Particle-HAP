@@ -6,16 +6,13 @@
 #include "HKNetworkMessageData.h"
 #include "HKPersistor.h"
 #include "HKConfig.h"
-
+#include "HKConnection.h"
 #ifdef PARTICLE_COMPAT
 #include "../../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
 #else
 #include <Particle.h>
 #endif
 
-#include <vector>
-
-class HKConnection;
 
 class HKServer {
 private:
@@ -23,7 +20,7 @@ private:
     HKBonjour bonjour;
     UDP udp;
     bool paired = false;
-    std::vector<HKConnection*> clients;
+    HKConnection clients[MAX_PAIRINGS];
     int deviceType;
     std::string hapName;
     std::string deviceIdentity;

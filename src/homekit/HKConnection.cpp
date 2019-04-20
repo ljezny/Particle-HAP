@@ -3,8 +3,6 @@
 #include "HKAccessory.h"
 #include "HKLog.h"
 
-int connectionID = 0;
-
 uint8_t SHARED_REQUEST_BUFFER[SHARED_REQUEST_BUFFER_LEN] = {0};
 uint8_t SHARED_RESPONSE_BUFFER[SHARED_RESPONSE_BUFFER_LEN] = {0};
 uint8_t SHARED_TEMP_CRYPTO_BUFFER[SHARED_TEMP_CRYPTO_BUFFER_LEN] = {0};
@@ -22,28 +20,24 @@ HKConnection::HKConnection(HKServer *s,TCPClient c) {
     client =  c;
     server = s;
     //generateAccessoryKey(&accessoryKey);
-    c_ID = new char[32];
-    memset(c_ID,0,32);
-    snprintf(c_ID,32,"%d/%d.%d.%d.%d",connectionID,client.remoteIP()[0],client.remoteIP()[1],client.remoteIP()[2],client.remoteIP()[3]);
-
-    connectionID++;
-
+    snprintf(c_ID,CLIENT_ID_MAX_LENGTH,"%d.%d.%d.%d",client.remoteIP()[0],client.remoteIP()[1],client.remoteIP()[2],client.remoteIP()[3]);
 }
 
 HKConnection::~HKConnection() {
-    hkLog.info("HKConnection: destructor");
     for (int i = 0; i < notifiableCharacteristics.size(); i++) {
         notifiableCharacteristics.at(i)->removeNotifiedConnection(this);
     }
-    free(c_ID);
-    free(publicKey);
-    free(response);
+}
+
+HKConnection::operator bool()
+{
+    return client;
 }
 
 void HKConnection::writeEncryptedData(uint8_t* payload,size_t size) {
     hkLog.info("writeEncryptedData responseLen:%d", size);
     byte nonce[12] = {0};
-
+    delay(100);
     memset(SHARED_TEMP_CRYPTO_BUFFER,0,SHARED_TEMP_CRYPTO_BUFFER_LEN);
 
     int payload_offset = 0;
@@ -556,12 +550,14 @@ void HKConnection::handlePairSetup(const char *buffer) {
                 wc_SrpTerm(&srp);
                 server->progressPtr(Progress_Error);
             } else { //success
-                wc_SrpGetProof(&srp, (byte *)response,&responseLength);
+                unsigned int srpResponseLength = SRP_RESPONSE_LENGTH;
+                char response[SRP_RESPONSE_LENGTH] = {0};
+                wc_SrpGetProof(&srp, (byte *)response,&srpResponseLength);
                 //SRP_respond(srp, &response);
                 HKNetworkMessageDataRecord responseRecord;
                 responseRecord.activate = true;
                 responseRecord.index = 4;
-                responseRecord.length = responseLength;
+                responseRecord.length = srpResponseLength;
                 responseRecord.data = new char[responseRecord.length];
                 memcpy(responseRecord.data,response, responseRecord.length);
 

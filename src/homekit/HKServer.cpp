@@ -46,12 +46,11 @@ void HKServer::start () {
 }
 
 void HKServer::stop () {
-    for(int i = 0; i < clients.size(); i++) {
-      HKConnection *conn = clients.at(i);
-      conn->close();
-      delete conn;
+    for(int i = 0; i < MAX_PAIRINGS; i++) {
+        if(clients[i]) {
+            clients[i].close();
+        }
     }
-    clients.clear();
 
     server.stop();
 
@@ -94,30 +93,40 @@ bool HKServer::handle() {
     TCPClient newClient = server.available();
     if(newClient) {
         hkLog.info("Client connected.");
-        HKConnection *c = new HKConnection(this,newClient);
-        clients.insert(clients.begin(),c);
-        Particle.publish("homekit/accept", c->clientID(), PUBLIC);
-        result |= true;
-    }
-
-    int i = clients.size() - 1;
-    while(i >= 0) {
-        HKConnection *conn = clients.at(i);
-
-        result |= conn->handleConnection();
-        if(!conn->isConnected()) {
-            hkLog.info("Client removed.");
-            Particle.publish("homekit/close", conn->clientID(), PUBLIC);
-            conn->close();
-            clients.erase(clients.begin() + i);
-            delete conn;
-            result |= true;
+        bool added = false;
+        for(int i = 0; i < MAX_PAIRINGS; i++){
+            if(!clients[i]){
+                hkLog.info("Client will be added.");
+                clients[i] = HKConnection(this,newClient);
+                added = true;
+                Particle.publish("homekit/accept", clients[i].clientID(), PUBLIC);
+                break;
+            }
         }
 
-        i--;
+        if(!added) {
+            hkLog.info("Unable to add client and will be closed.");
+            newClient.stop();
+        }
+
+        result |= true; //anyway return true, because something happend
     }
 
-    this->connections = clients.size();
+    int count = 0;
+    for(int i = 0; i < MAX_PAIRINGS; i++){
+        if(clients[i]){
+            if(clients[i].isConnected()){
+                result |= clients[i].handleConnection();
+                count++;
+            } else{
+                hkLog.info("Client removed.");
+                Particle.publish("homekit/close", clients[i].clientID(), PUBLIC);
+                clients[i].close();
+            }
+        }
+    }
+
+    this->connections = count;
 
     return result;
 }

@@ -28,72 +28,76 @@ extern "C" {
   #include "crypto/curve25519.h"
   #include "crypto/hmac.h"
 }
-
+#define CLIENT_ID_MAX_LENGTH 15
+#define PUBLIC_KEY_LENGTH 384
+#define SRP_RESPONSE_LENGTH 128
 class HKServer;
 class characteristics;
 
 class HKConnection {
 
 private:
-  TCPClient client;
-  Srp srp;
+    TCPClient client = TCPClient();
+    Srp srp;
 
-  byte controllerKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
-  byte sessionKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
-  byte publicSecretKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
+    byte controllerKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
+    byte sessionKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
+    byte publicSecretKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
 
-  ed25519_key *accessoryKey = (ed25519_key*) ACESSORY_KEY;
+    ed25519_key *accessoryKey = (ed25519_key*) ACESSORY_KEY;
 
-  word32 publicKeyLength = 384;
-  char* publicKey = new char[publicKeyLength];
+    word32 publicKeyLength = PUBLIC_KEY_LENGTH;
+    char publicKey[PUBLIC_KEY_LENGTH] = {0};
 
-  word32 responseLength = 128;
-  char* response = new char[responseLength];
+    byte sharedKey[CURVE25519_KEYSIZE];
+    byte readKey[CHACHA20_POLY1305_AEAD_KEYSIZE];
+    int readsCount = 0;
+    byte writeKey[CHACHA20_POLY1305_AEAD_KEYSIZE];
+    int writesCount = 0;
+    bool isEncrypted = false;
 
-  byte sharedKey[CURVE25519_KEYSIZE];
-  byte readKey[CHACHA20_POLY1305_AEAD_KEYSIZE];
-  int readsCount = 0;
-  byte writeKey[CHACHA20_POLY1305_AEAD_KEYSIZE];
-  int writesCount = 0;
-  bool isEncrypted = false;
+    std::vector<characteristics *> notifiableCharacteristics;
+    std::vector<characteristics *> postedCharacteristics;
 
-  std::vector<characteristics *> notifiableCharacteristics;
-  std::vector<characteristics *> postedCharacteristics;
+    void writeEncryptedData(uint8_t* payload,size_t size);
+    void decryptData(uint8_t* buffer,size_t *size);
+    void readData(uint8_t* buffer,size_t *size);
 
-  void writeEncryptedData(uint8_t* payload,size_t size);
-  void decryptData(uint8_t* buffer,size_t *size);
-  void readData(uint8_t* buffer,size_t *size);
+    void handlePairSetup(const char *buffer);
+    bool handlePairVerify(const char *buffer);
+    void handleAccessoryRequest(const char *buffer,size_t size);
+    void processPostedCharacteristics();
 
-  void handlePairSetup(const char *buffer);
-  bool handlePairVerify(const char *buffer);
-  void handleAccessoryRequest(const char *buffer,size_t size);
-  void processPostedCharacteristics();
-
-  char *c_ID;
-  int lastKeepAliveMs = 0;
+    char c_ID[CLIENT_ID_MAX_LENGTH] = {0};
+    int lastKeepAliveMs = 0;
 public:
-  HKServer *server;
-  bool relay = false;
+    HKServer *server = NULL;
+    bool relay = false;
 
-  HKConnection(HKServer *s,TCPClient c);
-  ~HKConnection();
-  bool handleConnection();
-  bool keepAlive();
-  void announce(char* buffer);
-  void writeData(uint8_t* buffer,size_t size);
+    HKConnection(HKServer *s,TCPClient c);
+    HKConnection() {
 
-  bool isConnected(){
-    return client.status();
-  }
+    }
+    ~HKConnection();
+    bool handleConnection();
+    bool keepAlive();
+    void announce(char* buffer);
+    void writeData(uint8_t* buffer,size_t size);
 
-  char* clientID(){
-    return c_ID;
-  }
+    bool isConnected(){
+        return client.status();
+    }
 
-  void close(){
-    client.stop();
-  }
-  void postCharacteristicsValue(characteristics *c);
-  void addNotifiedCharacteristics(characteristics *c);
+    char* clientID(){
+        return c_ID;
+    }
+
+    void close(){
+        client.stop();
+    }
+    void postCharacteristicsValue(characteristics *c);
+    void addNotifiedCharacteristics(characteristics *c);
+
+    operator bool();
 };
 #endif

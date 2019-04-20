@@ -35,7 +35,7 @@ CompositeAccessory *acc = new CompositeAccessory();
 HKServer hkServer = HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
 //hkServer = HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
 //hkServer = HKServer(acc->getDeviceType(),"Moon","523-12-643",progress);
-//hkServer = HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
+//HKServer hkServer = HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
 
 void progress(Progress_t progress) {
     hkLog.info("Homekit progress callback: %d",progress);
