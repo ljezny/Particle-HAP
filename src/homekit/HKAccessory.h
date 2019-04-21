@@ -227,7 +227,6 @@ public:
       notifiedConnections.push_back(c);
 
       c->addNotifiedCharacteristics(this);
-      c->postCharacteristicsValue(this);
     }
     void removeNotifiedConnection(HKConnection *c){
       int i = notifiedConnections.size() - 1;
