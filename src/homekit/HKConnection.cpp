@@ -208,28 +208,13 @@ bool HKConnection::handleConnection() {
     }
 
     processPostedCharacteristics();
-    result |= keepAlive();
     return result;
 }
 
-bool HKConnection::keepAlive() {
-    if((millis() - lastKeepAliveMs) > 5000) {
-        lastKeepAliveMs = millis();
-        if(isConnected()) {
-            if(isEncrypted && readsCount > 0) {
-                hkLog.info("Keeping alive...");
-                announce("{\"characteristics\": []}");
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
+char reply[1024] = {0};
 void HKConnection::announce(char* desc){
-    char reply[1024] = {0};
+    memset(reply,0,1024);
     int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
-
     hkLog.info("Announce: %s, data: %s",clientID(),reply);
     writeData((byte*)reply,len);
 }
@@ -734,6 +719,7 @@ void HKConnection::handleAccessoryRequest(const char *buffer,size_t size){
 
 char broadcastTemp[1024] = {0}; //make it global, so it wont count to stack size limit
 void HKConnection::processPostedCharacteristics() {
+    memset(broadcastTemp,0,1024);
     for(int i = 0; i < postedCharacteristics.size(); i++) {
         characteristics *c = postedCharacteristics.at(i);
         memset(broadcastTemp,0,1024);

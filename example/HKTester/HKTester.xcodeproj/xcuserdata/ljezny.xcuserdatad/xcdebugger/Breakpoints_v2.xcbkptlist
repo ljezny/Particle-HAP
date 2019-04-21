@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "145"
             endingLineNumber = "145"
-            landmarkName = "TCPServer(int port)"
+            landmarkName = "write(unsigned char *buffer, size_t len, int timeout)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -31,8 +31,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
-            landmarkName = "TCPServer(int port)"
-            landmarkType = "7">
+            landmarkName = "TCPClient"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -47,7 +47,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "540"
             endingLineNumber = "540"
-            landmarkName = "handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender)"
+            landmarkName = "handleAccessory(const char *request, unsigned int requestLen, char *responseBuffer,int responseBufferLen, unsigned int *replyLen, HKConnection *sender)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -63,7 +63,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "534"
             endingLineNumber = "534"
-            landmarkName = "handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender)"
+            landmarkName = "handleAccessory(const char *request, unsigned int requestLen, char *responseBuffer,int responseBufferLen, unsigned int *replyLen, HKConnection *sender)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -79,7 +79,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "722"
             endingLineNumber = "722"
-            landmarkName = "handleAccessory(const char *request, unsigned int requestLen, char **reply, unsigned int *replyLen, HKConnection *sender)"
+            landmarkName = "addInfoServiceToAccessory(Accessory *acc, string accName, string manufactuerName, string modelName, string serialNumber,string firmware, identifyFunction identifyCallback)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -95,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "471"
             endingLineNumber = "471"
-            landmarkName = "AccessorySet::describe(HKConnection *sender)"
+            landmarkName = "AccessorySet::describe(HKConnection *sender, HKStringBuffer &amp;result)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -111,7 +111,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "409"
             endingLineNumber = "409"
-            landmarkName = "Service::describe(HKConnection *sender)"
+            landmarkName = "stringCharacteristics::describe(HKConnection *sender)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -127,7 +127,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "434"
             endingLineNumber = "434"
-            landmarkName = "Service::describe(HKConnection *sender)"
+            landmarkName = "Service::describe(HKConnection *sender, HKStringBuffer &amp;result)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -143,7 +143,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "385"
             endingLineNumber = "385"
-            landmarkName = "boolCharacteristics::describe(HKConnection *sender)"
+            landmarkName = "characteristics::notify(HKConnection* conn)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -159,7 +159,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "391"
             endingLineNumber = "391"
-            landmarkName = "floatCharacteristics::describe(HKConnection *sender)"
+            landmarkName = "boolCharacteristics::describe(HKConnection *sender)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -175,7 +175,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "397"
             endingLineNumber = "397"
-            landmarkName = "intCharacteristics::describe(HKConnection *sender)"
+            landmarkName = "floatCharacteristics::describe(HKConnection *sender)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -191,7 +191,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "403"
             endingLineNumber = "403"
-            landmarkName = "stringCharacteristics::describe(HKConnection *sender)"
+            landmarkName = "intCharacteristics::describe(HKConnection *sender)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
