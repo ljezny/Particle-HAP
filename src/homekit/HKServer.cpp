@@ -42,7 +42,7 @@ void HKServer::start () {
 
     Particle.variable("connections", &this->connections, INT);
 
-    bonjour.begin(hapName.c_str());
+
 }
 
 void HKServer::stop () {
@@ -89,7 +89,9 @@ void HKServer::setPaired(bool p) {
 
 bool HKServer::handle() {
     bool result = false;
+    bonjour.begin(hapName.c_str());
     result |= bonjour.run();
+    bonjour.stop();
 
     TCPClient newClient = server.available();
     if(newClient) {
