@@ -35,7 +35,9 @@
 #define  MDNS_SERVER_PORT        5353
 #define  MDNS_NQUERY_RESEND_TIME 1000   // 1 second, name query resend timeout
 #define  MDNS_SQUERY_RESEND_TIME 1000  // 10 seconds, service query resend timeout
-#define  MDNS_RESPONSE_TTL       120    //120 two minutes (in seconds)
+#define  MDNS_SRV_TTL       120
+#define  MDNS_TXT_TTL       1400
+#define  MDNS_PTR_TTL       1400
 
 #define  MDNS_MAX_SERVICES_PER_PACKET  6
 #define  MSNS_ANNOUNCE_TIME_SEC  10 //Send announce packet every 5 seconds
@@ -267,7 +269,7 @@ MDNSError_t HKBonjour::_sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int 
          buf[3] = 0x01;    // class IN
 
          // ttl
-         *((uint32_t*)&buf[4]) = ethutil_htonl(MDNS_RESPONSE_TTL);
+         *((uint32_t*)&buf[4]) = ethutil_htonl(MDNS_SRV_TTL);
 
          // data length
          *((uint16_t*)&buf[8]) = ethutil_htons(8 + strlen((char*)this->_bonjourName));
@@ -294,7 +296,7 @@ MDNSError_t HKBonjour::_sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int 
          buf[3] = 0x01;    // class IN
 
          // ttl
-         *((uint32_t*)&buf[4]) = ethutil_htonl(MDNS_RESPONSE_TTL);
+         *((uint32_t*)&buf[4]) = ethutil_htonl(MDNS_TXT_TTL);
 
          this->write((uint8_t*)buf,8);
          ptr += 8;
@@ -327,7 +329,7 @@ MDNSError_t HKBonjour::_sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int 
          buf[3] = 0x01;    // class IN
 
          // ttl
-         *((uint32_t*)&buf[4]) = ethutil_htonl(MDNS_RESPONSE_TTL);
+         *((uint32_t*)&buf[4]) = ethutil_htonl(MDNS_PTR_TTL);
 
          // data length.
          uint16_t dlen = strlen((char*)this->_serviceRecord.servName) + 2;
@@ -340,7 +342,7 @@ MDNSError_t HKBonjour::_sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int 
 
          // PTR record (our service)
          this->_writeServiceRecordPTR(&ptr, buf, sizeof(DNSHeader_t),
-                                      MDNS_RESPONSE_TTL);
+                                      MDNS_PTR_TTL);
 
          // finally, our IP address as additional record
          this->_writeMyIPAnswerRecord(&ptr, buf, sizeof(DNSHeader_t));
@@ -416,7 +418,7 @@ bool HKBonjour::run()
    // now, should we re-announce our services again?
    if ((now - this->_lastAnnounceMillis) > 1000*MSNS_ANNOUNCE_TIME_SEC) {
       (void)this->_sendMDNSMessage(0, 0, (int)MDNSPacketTypeServiceRecord);
-   
+
       this->_lastAnnounceMillis = now;
       result = true;
    }
@@ -433,27 +435,27 @@ void HKBonjour::setBonjourName(const char* bonjourName)
 void HKBonjour::setServiceRecord(const char* name, uint16_t port,
                                            MDNSServiceProtocol_t proto, const char* textContent)
 {
-  
+
    memset(this->_serviceRecord.name, 0, MNDS_NAME_MAX_LENGTH);
    strcpy((char*)this->_serviceRecord.name, name);
    if (NULL != textContent) {
        memset(_serviceRecord.textContent, 0, MNDS_TEXT_CONTENT_MAX_LENGTH);
        strcpy((char*)_serviceRecord.textContent, textContent);
    }
-   
+
    _serviceRecord.port = port;
    _serviceRecord.proto = proto;
-   
+
    uint8_t* s = this->_findFirstDotFromRight(_serviceRecord.name);
    memset(_serviceRecord.servName, 0,MNDS_SRV_NAME_MAX_LENGTH);
    strcpy((char*)_serviceRecord.servName, (const char*)s);
-   
+
    const uint8_t* srv_type = this->_postfixForProtocol(proto);
    if (srv_type)
        strcat((char*)_serviceRecord.servName, (const char*)srv_type);
-   
+
    this->_sendMDNSMessage(0, 0, (int)MDNSPacketTypeServiceRecord);
-   
+
    hasServiceRecord = true;
 }
 
