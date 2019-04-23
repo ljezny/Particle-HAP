@@ -523,7 +523,7 @@ void HKBonjour::_writeMyIPAnswerRecord(uint16_t* pPtr, uint8_t* buf, int bufSize
    this->write((uint8_t*)buf, 4);
    ptr += 4;
 
-   *((uint32_t*)buf) = ethutil_htonl(MDNS_RESPONSE_TTL);
+   *((uint32_t*)buf) = ethutil_htonl(MDNS_PTR_TTL);
    *((uint16_t*)&buf[4]) = ethutil_htons(4);      // data length
 
    uint8_t myIp[4];
