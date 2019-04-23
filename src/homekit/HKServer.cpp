@@ -41,8 +41,6 @@ void HKServer::start () {
     setPaired(false);
 
     Particle.variable("connections", &this->connections, INT);
-
-
 }
 
 void HKServer::stop () {
@@ -99,14 +97,16 @@ bool HKServer::handle() {
         HKConnection *c = new HKConnection(this,newClient);
         clients.insert(clients.begin(),c);
         Particle.publish("homekit/accept", c->clientID(), PUBLIC);
-        result |= true;
+        result = true;
     }
 
     int i = clients.size() - 1;
     while(i >= 0) {
         HKConnection *conn = clients.at(i);
 
-        result |= conn->handleConnection();
+        if(conn->handleConnection()) {
+          result = true;
+        }
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
             Particle.publish("homekit/close", conn->clientID(), PUBLIC);
