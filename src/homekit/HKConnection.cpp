@@ -204,12 +204,13 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim) {
               Particle.publish("homekit/accessory", clientID(), PUBLIC);
               handleAccessoryRequest((const char *)SHARED_REQUEST_BUFFER, len);
             } else {
-              //max connections has been reached.
-              memset(SHARED_RESPONSE_BUFFER,0,SHARED_RESPONSE_BUFFER_LEN);
-              int len = snprintf((char*)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "HTTP/1.1 503 Service Unavailable\r\n\r\n");
-              hkLog.info("Max connections reached, sending response to %s data: %s",clientID(),SHARED_RESPONSE_BUFFER);
-              writeData((byte*)SHARED_RESPONSE_BUFFER,len);
-              close();
+                Particle.publish("homekit/connection-limit", clientID(), PUBLIC);
+                //max connections has been reached.
+                memset(SHARED_RESPONSE_BUFFER,0,SHARED_RESPONSE_BUFFER_LEN);
+                int len = snprintf((char*)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "HTTP/1.1 503 Service Unavailable\r\n\r\n");
+                hkLog.info("Max connections reached, sending response to %s data: %s",clientID(),SHARED_RESPONSE_BUFFER);
+                writeData((byte*)SHARED_RESPONSE_BUFFER,len);
+                close();
             }
 
 

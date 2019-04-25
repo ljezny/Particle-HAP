@@ -104,7 +104,7 @@ bool HKServer::handle() {
     while(i >= 0) {
         HKConnection *conn = clients.at(i);
 
-        if(conn->handleConnection(i == MAX_CONNECTIONS)) {
+        if(conn->handleConnection(i >= MAX_CONNECTIONS)) {
           result = true;
         }
         
