@@ -79,7 +79,7 @@ public:
 
     }
     ~HKConnection();
-    bool handleConnection();
+    bool handleConnection(bool maxConnectionsVictim);
     bool keepAlive();
     void announce(char* buffer);
     void writeData(uint8_t* buffer,size_t size);

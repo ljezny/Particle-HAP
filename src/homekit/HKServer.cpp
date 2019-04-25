@@ -104,9 +104,10 @@ bool HKServer::handle() {
     while(i >= 0) {
         HKConnection *conn = clients.at(i);
 
-        if(conn->handleConnection()) {
+        if(conn->handleConnection(i == MAX_CONNECTIONS)) {
           result = true;
         }
+        
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
             Particle.publish("homekit/close", conn->clientID(), PUBLIC);

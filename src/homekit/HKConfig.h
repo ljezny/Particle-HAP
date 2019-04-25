@@ -11,7 +11,7 @@
 
 //Apple requires 8 connections at least and must accomodate new one. Photon can handle up to 10 connections, but one is cloud connection.
 //So allow 8 connections, every 9th will be closed send HTTP 503 and closed.
-#define MAX_CONNECTIONS 8
+#define MAX_CONNECTIONS 4
 
 //if you are using EEPROM, you can set offset for Homekit to store pairings
 #define EEPROM_STORAGE_ADDRESS_OFFSET 512
