@@ -26,15 +26,15 @@ SerialLogHandler logHandler;
 
 
 //HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
+//HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
 //HAPAccessoryDescriptor *acc = new LightSensorAccessory();
 //HAPAccessoryDescriptor *acc = new NixieClockAccessory();
-//CompositeAccessory *acc = new CompositeAccessory();
+CompositeAccessory *acc = new CompositeAccessory();
 //HAPAccessoryDescriptor *acc = new RoombaAccessory();
 
-//HKServer *hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
+HKServer *hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
 //HKServer *hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
-HKServer *hkServer = new HKServer(acc->getDeviceType(),"Moon1","523-12-643",progress);
+//HKServer *hkServer = new HKServer(acc->getDeviceType(),"Moon1","523-12-643",progress);
 //HKServer *hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
 
 void progress(Progress_t progress) {
@@ -54,11 +54,11 @@ void setup() {
   //HKPersistor().resetAll();
 
   //BEGIN MYHOME
-  /*acc->descriptors.push_back(new WindowsShutterService(14678913,14678916,1 * sizeof(int)));
+  acc->descriptors.push_back(new WindowsShutterService(14678913,14678916,1 * sizeof(int)));
   acc->descriptors.push_back(new WindowsShutterService(4102033,4102036,2 * sizeof(int)));
   acc->descriptors.push_back(new WindowsShutterService(4102034,4102040,3 * sizeof(int)));
   acc->descriptors.push_back(new RFRelaySwitchService(D6, 4102038));
-  acc->descriptors.push_back(new RFRelaySwitchService(D6, 4102039));*/
+  acc->descriptors.push_back(new RFRelaySwitchService(D6, 4102039));
 
   //END MYHOME
 
