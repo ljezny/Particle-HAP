@@ -95,7 +95,7 @@ bool HKServer::handle() {
     if(newClient) {
         hkLog.info("Client connected.");
         HKConnection *c = new HKConnection(this,newClient);
-        clients.insert(clients.begin(),c);
+        clients.insert(clients.end(),c);
         Particle.publish("homekit/accept", c->clientID(), PUBLIC);
         result = true;
     }
@@ -103,7 +103,7 @@ bool HKServer::handle() {
     int i = clients.size() - 1;
     while(i >= 0) {
         HKConnection *conn = clients.at(i);
-
+       
         if(conn->handleConnection(i >= MAX_CONNECTIONS)) {
           result = true;
         }
