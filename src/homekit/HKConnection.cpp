@@ -822,6 +822,7 @@ void HKConnection::handleAccessoryRequest(const char *buffer, size_t size)
     {
         writeData(SHARED_RESPONSE_BUFFER, resultLen);
         hkLog.info("Response to: %s, data:%s", clientID(), SHARED_RESPONSE_BUFFER);
+        Serial.println((const char*)SHARED_RESPONSE_BUFFER);
     }
 }
 
