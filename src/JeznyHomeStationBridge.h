@@ -10,6 +10,7 @@
 #include "CompositeAccessory.h"
 #include "RemoteWeatherStationAccessory.h"
 #include "RFRelaySwitchService.h"
+#include "MotionSensorService.h"
 
 class JeznyHomeStationBridge: public HomekitBridgeAccessory {
 private:
@@ -23,7 +24,7 @@ public:
         windowShuttersAndSwitches->descriptors.push_back(new WindowsShutterService(4102034,4102040,3 * sizeof(int)));
         windowShuttersAndSwitches->descriptors.push_back(new RFRelaySwitchService(D6, 4102038));
         windowShuttersAndSwitches->descriptors.push_back(new RFRelaySwitchService(D6, 4102039));
-
+        
         this->descriptors.push_back(windowShuttersAndSwitches);
         this->descriptors.push_back(weatherStation);
     }    

@@ -10,7 +10,6 @@
 
 #include "JeznyHomeStationBridge.h"
 #include "LightSensorAccessory.h"
-#include "MotionSensorAccessory.h"
 #include "HomekitBridgeAccessory.h"
 #include "LEDStripLightBulbAccessory.h"
 #include "NixieClockAccessory.h"
@@ -69,6 +68,6 @@ void loop() {
   didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
   if(didAnything) {
-    hkLog.info("Free memory %lu",System.freeMemory());
+    //hkLog.info("Free memory %lu",System.freeMemory());
   }
 }
