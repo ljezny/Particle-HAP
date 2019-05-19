@@ -15,7 +15,6 @@
 class JeznyHomeStationBridge: public HomekitBridgeAccessory {
 private:
     CompositeAccessory *windowShuttersAndSwitches = new CompositeAccessory();
-    RemoteWeatherStationAccessory *weatherStation = new RemoteWeatherStationAccessory();
     
 public:
     JeznyHomeStationBridge() {
@@ -26,7 +25,6 @@ public:
         windowShuttersAndSwitches->descriptors.push_back(new RFRelaySwitchService(D6, 4102039));
         
         this->descriptors.push_back(windowShuttersAndSwitches);
-        this->descriptors.push_back(weatherStation);
     }    
 };
 
