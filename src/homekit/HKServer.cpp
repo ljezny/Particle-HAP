@@ -104,7 +104,7 @@ bool HKServer::handle() {
     while(i >= 0) {
         HKConnection *conn = clients.at(i);
 
-        result |= conn->handleConnection(i >= MAX_CONNECTIONS));
+        result |= conn->handleConnection(i >= MAX_CONNECTIONS);
 
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
