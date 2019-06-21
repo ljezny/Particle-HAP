@@ -7,6 +7,8 @@ uint8_t SHARED_REQUEST_BUFFER[SHARED_REQUEST_BUFFER_LEN] = {0};
 uint8_t SHARED_RESPONSE_BUFFER[SHARED_RESPONSE_BUFFER_LEN] = {0};
 uint8_t SHARED_TEMP_CRYPTO_BUFFER[SHARED_TEMP_CRYPTO_BUFFER_LEN] = {0};
 
+LEDStatus RGB_STATUS_YELLOW(RGB_COLOR_YELLOW, LED_PATTERN_FADE, LED_PRIORITY_IMPORTANT);
+
 void generateAccessoryKey(ed25519_key *key)
 {
     int r = wc_ed25519_init(key);
@@ -204,8 +206,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
     if (len > 0)
     {
         lastKeepAliveMs = millis();
-        RGB.control(true);
-        RGB.color(255, 255, 0);
+        RGB_STATUS_YELLOW.setActive(true);
         hkLog.info("Request Message read length: %d ", len);
         HKNetworkMessage msg((const char *)SHARED_REQUEST_BUFFER);
         if (!strcmp(msg.directory, "pair-setup"))
@@ -247,7 +248,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
           Particle.publish("homekit/accessory", clientID(), PUBLIC);
           handleAccessoryRequest((const char *)SHARED_REQUEST_BUFFER, len);
 
-          RGB.control(false);
+          RGB_STATUS_YELLOW.setActive(false);
           result = true;
         }
     }
