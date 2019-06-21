@@ -23,6 +23,7 @@
 #define COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS 1400 //100 repeat tooked 4500ms
 #define TILT_OPEN_TO_CLOSE_TRANSMIT_REPEATS 40 //100 repeat tooked 4500ms
 
+LEDStatus RGB_STATUS_BLUE(RGB_COLOR_BLUE, LED_PATTERN_SOLID, LED_SPEED_NORMAL, LED_PRIORITY_IMPORTANT);
 
 void WindowsShutterService::setState(int newState) {
     if(state != newState) {
@@ -60,20 +61,18 @@ bool WindowsShutterService::handle() {
     rcSwitch->setRepeatTransmit(transmit_repeats);
     switch (state) {
         case 0:
-            RGB.control(true);
-            RGB.color(0, 0, 255);
+            RGB_STATUS_BLUE.setActive(true);
             rcSwitch->send(downCode, 24);
             hkLog.info("Sending downCode: %d,repeats: %d, took: %d ms\n", downCode,transmit_repeats, millis() - start);
-            RGB.control(false);
+            RGB_STATUS_BLUE.setActive(false);
             newPosition -= diff;
             result = true;
             break;
         case 1:
-            RGB.control(true);
-            RGB.color(0, 0, 255);
+            RGB_STATUS_BLUE.setActive(true);
             rcSwitch->send(upCode, 24);
             hkLog.info("Sending upCode: %d,repeats: %d, took: %d ms\n", upCode,transmit_repeats,millis() - start);
-            RGB.control(false);
+            RGB_STATUS_BLUE.setActive(false);
             newPosition += diff;
             result = true;
             break;
