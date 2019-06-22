@@ -1,11 +1,11 @@
 #ifndef SerialModemSwitchService_hpp
 #define SerialModemSwitchService_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-#include "ServiceDescriptor.h"
+#include "HAPServiceDescriptor.h"
 
-class SerialModemSwitchService: public ServiceDescriptor {
+class SerialModemSwitchService: public HAPServiceDescriptor {
 private:
   bool on = false;
   const char* openATCommand;

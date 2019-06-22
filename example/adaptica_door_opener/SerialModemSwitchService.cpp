@@ -1,16 +1,13 @@
 
 #include "SerialModemSwitchService.h"
 
-#include "homekit/HKConnection.h"
+#include "HKConnection.h"
 
 #include <set>
 
-#ifdef PARTICLE_COMPAT
-#include "../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
-#else
 #include <Particle.h>
-#endif
-#include "homekit/HKLog.h"
+
+#include "HKLog.h"
 
 
 std::string SerialModemSwitchService::getPower (HKConnection *sender){

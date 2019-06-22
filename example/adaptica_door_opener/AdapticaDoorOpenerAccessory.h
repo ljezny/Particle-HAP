@@ -11,13 +11,14 @@
 
 #include <stdio.h>
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-#include "ServiceDescriptor.h"
+#include "HAPServiceDescriptor.h"
 #include <vector>
 #include "SerialModemSwitchService.h"
+#include "HAPCompositeAccessory.h"
 
-class AdapticaDoorOpenerAccessory: public CompositeAccessory {
+class AdapticaDoorOpenerAccessory: public HAPCompositeAccessory {
 private:
     SerialModemSwitchService *gateService = new SerialModemSwitchService("ATD,42,,,T44,,;\r");
     SerialModemSwitchService *doorService = new SerialModemSwitchService("ATD,42,,,T55,,;\r");
@@ -30,7 +31,7 @@ public:
     }
 
     virtual bool handle() {
-        bool b = CompositeAccessory::handle();
+        bool b = HAPCompositeAccessory::handle();
 
         return b;
     }
