@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 #include "HomekitBridgeAccessory.h"
 #include "WindowsShutterService.h"

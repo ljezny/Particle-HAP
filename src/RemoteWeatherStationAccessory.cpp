@@ -8,7 +8,7 @@
 
 #include "RemoteWeatherStationAccessory.h"
 
-#include "homekit/HKConnection.h"
+#include "HKConnection.h"
 
 #include <set>
 
@@ -17,7 +17,7 @@
 #else
 #include <Particle.h>
 #endif
-#include "homekit/HKLog.h"
+#include "HKLog.h"
 
 void RemoteWeatherStationAccessory::sensorIdentity(bool oldValue, bool newValue, HKConnection *sender) {
 }

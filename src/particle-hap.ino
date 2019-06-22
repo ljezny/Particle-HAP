@@ -5,8 +5,8 @@
  * Date:
  */
 
-#include "homekit/HKServer.h"
-#include "homekit/HKLog.h"
+#include "HKServer.h"
+#include "HKLog.h"
 
 #include "JeznyHomeStationBridge.h"
 #include "LightSensorAccessory.h"

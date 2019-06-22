@@ -8,7 +8,7 @@
 
 #include "BME280TemperatureHumiditySensorAccessory.h"
 
-#include "homekit/HKConnection.h"
+#include "HKConnection.h"
 
 #include <set>
 
@@ -17,7 +17,7 @@
 #else
 #include <Particle.h>
 #endif
-#include "homekit/HKLog.h"
+#include "HKLog.h"
 
 void BME280TemperatureHumiditySensorAccessory::sensorIdentity(bool oldValue, bool newValue, HKConnection *sender) {
 

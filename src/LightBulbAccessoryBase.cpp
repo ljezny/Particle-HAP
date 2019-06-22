@@ -1,8 +1,8 @@
 #include "LightBulbAccessoryBase.h"
 
 
-#include "homekit/HKConnection.h"
-#include "homekit/HKLog.h"
+#include "HKConnection.h"
+#include "HKLog.h"
 
 
 #include <set>

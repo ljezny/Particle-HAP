@@ -2,7 +2,7 @@
 #ifndef LightBulbAccessoryBase_hpp
 #define LightBulbAccessoryBase_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 
 

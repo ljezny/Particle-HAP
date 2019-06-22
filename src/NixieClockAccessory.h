@@ -1,7 +1,7 @@
 #ifndef NixieClockAccessory_hpp
 #define NixieClockAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 
 #include "time/Timezone.h"

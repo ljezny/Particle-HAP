@@ -9,7 +9,7 @@
 #ifndef LightSensorAccessory_hpp
 #define LightSensorAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 
 class LightSensorAccessory: public HAPAccessoryDescriptor {

@@ -9,7 +9,7 @@
 #ifndef WindowsShutterAccessory_hpp
 #define WindowsShutterAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 #include "ServiceDescriptor.h"
 #include "rcswitch/RCSwitch.h"

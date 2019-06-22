@@ -1,7 +1,7 @@
 #ifndef RelaySwitchAccessory_hpp
 #define RelaySwitchAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 
 

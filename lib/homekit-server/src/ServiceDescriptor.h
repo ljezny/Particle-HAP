@@ -10,7 +10,7 @@
 #define ServiceDescriptor_hpp
 
 #include <stdio.h>
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 
 class ServiceDescriptor {
 private:

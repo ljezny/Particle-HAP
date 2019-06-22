@@ -1,7 +1,7 @@
 
 #include "RoombaAccessory.h"
 
-#include "homekit/HKConnection.h"
+#include "HKConnection.h"
 
 #include <set>
 
@@ -10,7 +10,7 @@
 #else
 #include <Particle.h>
 #endif
-#include "homekit/HKLog.h"
+#include "HKLog.h"
 
 #define OI_START_COMM 128
 #define OI_STOP_COMM 173

@@ -9,9 +9,9 @@
 #ifndef BH1750LightSensorAccessory_hpp
 #define BH1750LightSensorAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-#include "BH1750/BH1750.h"
+#include "BH1750.h"
 #include "BatteryService.h"
 class BH1750LightSensorAccessory: public HAPAccessoryDescriptor {
 private:

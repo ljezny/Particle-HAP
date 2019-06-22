@@ -8,7 +8,7 @@
 
 #include "BH1750LightSensorAccessory.h"
 
-#include "homekit/HKConnection.h"
+#include "HKConnection.h"
 
 #include <set>
 
@@ -17,7 +17,7 @@
 #else
 #include <Particle.h>
 #endif
-#include "homekit/HKLog.h"
+#include "HKLog.h"
 
 
 
@@ -36,7 +36,7 @@ bool BH1750LightSensorAccessory::handle() {
     if((lastReportMS + REPORT_PERIOD_MS) < millis()) { //expired, stop
         lastReportMS = millis();
 
-        int v = (float) lightMeter.readLightLevel();
+        int v = (float) lightMeter.get_light_level();
         if(v < 0.0001){
           v = 0.0001;
         }

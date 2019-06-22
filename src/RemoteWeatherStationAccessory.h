@@ -9,7 +9,7 @@
 #ifndef RemoteWeatherStationAccessory_hpp
 #define RemoteWeatherStationAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 
 

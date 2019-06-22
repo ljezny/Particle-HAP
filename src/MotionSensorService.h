@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "ServiceDescriptor.h"
 
 class MotionSensorService: public ServiceDescriptor {

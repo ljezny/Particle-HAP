@@ -1,7 +1,7 @@
 #ifndef SerialModemSwitchService_hpp
 #define SerialModemSwitchService_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 #include "ServiceDescriptor.h"
 

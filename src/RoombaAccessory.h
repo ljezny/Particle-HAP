@@ -1,7 +1,7 @@
 #ifndef RoombaAccessory_hpp
 #define RoombaAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 
 

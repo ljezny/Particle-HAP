@@ -9,9 +9,9 @@
 #ifndef BME280TemperatureHumiditySensorAccessory_hpp
 #define BME280TemperatureHumiditySensorAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-#include "BME280/Adafruit_BME280.h"
+#include "Adafruit_BME280.h"
 #include "BatteryService.h"
 
 class BME280TemperatureHumiditySensorAccessory: public HAPAccessoryDescriptor {
