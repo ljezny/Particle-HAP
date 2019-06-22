@@ -1,17 +1,14 @@
 #include "LightBulbAccessoryBase.h"
 
 
-#include "homekit/HKConnection.h"
-#include "homekit/HKLog.h"
+#include "HKConnection.h"
+#include "HKLog.h"
 
 
 #include <set>
 
-#ifdef PARTICLE_COMPAT
-#include "../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
-#else
+
 #include <Particle.h>
-#endif
 
 
 std::string LightBulbAccessoryBase::getPower (HKConnection *sender) {
