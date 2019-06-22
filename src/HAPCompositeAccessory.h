@@ -6,21 +6,21 @@
 //  Copyright © 2019 Lukas Jezny. All rights reserved.
 //
 
-#ifndef CompositeAccessory_hpp
-#define CompositeAccessory_hpp
+#ifndef HAPCompositeAccessory_hpp
+#define HAPCompositeAccessory_hpp
 
 #include <stdio.h>
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-#include "ServiceDescriptor.h"
+#include "HAPServiceDescriptor.h"
 #include <vector>
 
-class CompositeAccessory: public HAPAccessoryDescriptor {
+class HAPCompositeAccessory: public HAPAccessoryDescriptor {
 private:
   void identity(bool oldValue, bool newValue, HKConnection *sender);
 public:
-    std::vector<ServiceDescriptor*> descriptors;
+    std::vector<HAPServiceDescriptor*> descriptors;
 
     virtual void initAccessorySet();
 
@@ -30,4 +30,4 @@ public:
     virtual bool handle();
 };
 
-#endif /* CompositeAccessory_hpp */
+#endif /* HAPCompositeAccessory_hpp */

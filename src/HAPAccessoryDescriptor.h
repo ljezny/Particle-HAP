@@ -6,8 +6,8 @@
 //  Copyright © 2019 Lukas Jezny. All rights reserved.
 //
 
-#ifndef Accessory_hpp
-#define Accessory_hpp
+#ifndef HAPAccessoryDescriptor_hpp
+#define HAPAccessoryDescriptor_hpp
 
 #include <stdio.h>
 
@@ -19,4 +19,4 @@ public:
     virtual bool handle() = 0;
 };
 
-#endif /* Accessory_hpp */
+#endif /* HAPAccessoryDescriptor_hpp */

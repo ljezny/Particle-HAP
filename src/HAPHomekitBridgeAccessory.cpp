@@ -6,9 +6,9 @@
 //  Copyright © 2019 Lukas Jezny. All rights reserved.
 //
 
-#include "HomekitBridgeAccessory.h"
+#include "HAPHomekitBridgeAccessory.h"
 
-bool HomekitBridgeAccessory::handle() {
+bool HAPHomekitBridgeAccessory::handle() {
     bool result = false;
     for(int i = 0; i < descriptors.size(); i++) {
         //process only one accessory per "loop" step. So we dont delay Particle connection, Bonjour so much. Never mind it will be process one step later
@@ -17,7 +17,7 @@ bool HomekitBridgeAccessory::handle() {
     return result;
 }
 
-void HomekitBridgeAccessory::initAccessorySet(){
+void HAPHomekitBridgeAccessory::initAccessorySet(){
     for(int i = 0; i < descriptors.size(); i++) {
         descriptors.at(i)->initAccessorySet();
     }
