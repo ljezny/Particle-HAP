@@ -41,6 +41,12 @@ int restart(String extra) {
   return 0;
 }
 
+int resetAll(String extra) {
+  HKPersistor().resetAll();
+  System.reset();
+  return 0;
+}
+
 // setup() runs once, when the device is first turned on.
 void setup() {
 	randomSeed(Time.now());//we need to somehow init random seed, so device identity will be unique
@@ -59,6 +65,7 @@ void setup() {
   hkServer->start();
 
   Particle.function("restart", restart);
+  Particle.function("resetAll", resetAll);
 
 }
 
