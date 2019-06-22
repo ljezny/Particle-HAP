@@ -5,30 +5,13 @@
  * Date:
  */
 
-#include "homekit/HKServer.h"
-#include "homekit/HKLog.h"
+#include "HKServer.h"
+#include "HKLog.h"
 
 #include "JeznyHomeStationBridge.h"
-#include "LightSensorAccessory.h"
-#include "HomekitBridgeAccessory.h"
-#include "LEDStripLightBulbAccessory.h"
-#include "NixieClockAccessory.h"
-#include "RoombaAccessory.h"
-#include "BH1750LightSensorAccessory.h"
-#include "BME280TemperatureHumiditySensorAccessory.h"
-#include "BatteryService.h"
-#include "RFRelaySwitchService.h"
-#include "CompositeAccessory.h"
-
-SerialLogHandler logHandler;
 
 
 JeznyHomeStationBridge *acc = new JeznyHomeStationBridge();
-//HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); //Moon project wiring
-//HAPAccessoryDescriptor *acc = new LightSensorAccessory();
-//HAPAccessoryDescriptor *acc = new NixieClockAccessory();
-//CompositeAccessory *acc = new CompositeAccessory();
-//HAPAccessoryDescriptor *acc = new RoombaAccessory();
 
 HKServer *hkServer = NULL;
 
@@ -48,10 +31,6 @@ void setup() {
 
   //HKPersistor().resetAll();
   
-  //hkServer = new HKServer(acc->getDeviceType(),"Windows","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"Roomba","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"Moon1","523-12-643",progress);
-  //hkServer = new HKServer(acc->getDeviceType(),"SingleNixie","523-12-643",progress);
   hkServer = new HKServer(acc->getDeviceType(),"Homestation","523-12-643",progress);
 
   acc->initAccessorySet();

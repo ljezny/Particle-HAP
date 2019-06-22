@@ -8,16 +8,13 @@
 
 #include "WindowsShutterService.h"
 
-#include "homekit/HKConnection.h"
+#include "HKConnection.h"
 
 #include <set>
 
-#ifdef PARTICLE_COMPAT
-#include "../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
-#else
+
 #include <Particle.h>
-#endif
-#include "homekit/HKLog.h"
+#include "HKLog.h"
 
 #define COVER_OPEN_TO_CLOSE_MS 56000
 #define COVER_OPEN_TO_CLOSE_TRANSMIT_REPEATS 1400 //100 repeat tooked 4500ms

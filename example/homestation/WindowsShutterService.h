@@ -9,12 +9,12 @@
 #ifndef WindowsShutterAccessory_hpp
 #define WindowsShutterAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-#include "ServiceDescriptor.h"
+#include "HAPServiceDescriptor.h"
 #include "rcswitch/RCSwitch.h"
 
-class WindowsShutterService: public ServiceDescriptor {
+class WindowsShutterService: public HAPServiceDescriptor {
 private:
     int rcOutputPIN = D6;
     int upCode = 0;

@@ -3,18 +3,16 @@
 
 #include <stdio.h>
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-#include "HomekitBridgeAccessory.h"
+#include "HAPHomekitBridgeAccessory.h"
 #include "WindowsShutterService.h"
-#include "CompositeAccessory.h"
-#include "RemoteWeatherStationAccessory.h"
+#include "HAPCompositeAccessory.h"
 #include "RFRelaySwitchService.h"
-#include "MotionSensorService.h"
 
-class JeznyHomeStationBridge: public HomekitBridgeAccessory {
+class JeznyHomeStationBridge: public HAPHomekitBridgeAccessory {
 private:
-    CompositeAccessory *windowShuttersAndSwitches = new CompositeAccessory();
+    HAPCompositeAccessory *windowShuttersAndSwitches = new HAPCompositeAccessory();
     
 public:
     JeznyHomeStationBridge() {

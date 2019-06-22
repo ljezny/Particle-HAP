@@ -1,12 +1,12 @@
 #ifndef RFRelaySwitchService_hpp
 #define RFRelaySwitchService_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
-#include "ServiceDescriptor.h"
+#include "HAPServiceDescriptor.h"
 #include "rcswitch/RCSwitch.h"
 
-class RFRelaySwitchService: public ServiceDescriptor {
+class RFRelaySwitchService: public HAPServiceDescriptor {
 private:
   bool on = false;
 
