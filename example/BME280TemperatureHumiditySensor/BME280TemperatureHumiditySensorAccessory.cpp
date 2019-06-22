@@ -8,16 +8,12 @@
 
 #include "BME280TemperatureHumiditySensorAccessory.h"
 
-#include "homekit/HKConnection.h"
+#include "HKConnection.h"
 
 #include <set>
 
-#ifdef PARTICLE_COMPAT
-#include "../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
-#else
 #include <Particle.h>
-#endif
-#include "homekit/HKLog.h"
+#include "HKLog.h"
 
 void BME280TemperatureHumiditySensorAccessory::sensorIdentity(bool oldValue, bool newValue, HKConnection *sender) {
 
@@ -62,7 +58,6 @@ bool BME280TemperatureHumiditySensorAccessory::handle() {
       Particle.publish("bme280/humidity", String(lastValueHumidity), PUBLIC);
 
       result = true;
-      if(batteryService) batteryService->handle();
   }
   return result;
 }
@@ -99,5 +94,4 @@ void BME280TemperatureHumiditySensorAccessory::initAccessorySet() {
     currentHumidityChar->perUserQuery = std::bind(&BME280TemperatureHumiditySensorAccessory::getCurrentHumidity, this, std::placeholders::_1);
     sensorAccessory->addCharacteristics(humiditySensorService, currentHumidityChar);
 
-    if(batteryService) batteryService->initService(sensorAccessory);
 };
