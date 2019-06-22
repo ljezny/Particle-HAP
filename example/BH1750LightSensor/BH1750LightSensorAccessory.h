@@ -9,10 +9,10 @@
 #ifndef BH1750LightSensorAccessory_hpp
 #define BH1750LightSensorAccessory_hpp
 
-#include "homekit/HKAccessory.h"
+#include "HKAccessory.h"
 #include "HAPAccessoryDescriptor.h"
 #include "BH1750/BH1750.h"
-#include "BatteryService.h"
+
 class BH1750LightSensorAccessory: public HAPAccessoryDescriptor {
 private:
     BH1750 lightMeter = BH1750(0x23);
@@ -22,10 +22,9 @@ private:
     float lastValueLux = 0.0001;
     void sensorIdentity(bool oldValue, bool newValue, HKConnection *sender);
     std::string getCurrentAmbilightLevel (HKConnection *sender);
-    BatteryService *batteryService = NULL;
+
 public:
-    BH1750LightSensorAccessory(BatteryService *batteryService){
-      this->batteryService = batteryService;
+    BH1750LightSensorAccessory(){
     }
 
     virtual void initAccessorySet();

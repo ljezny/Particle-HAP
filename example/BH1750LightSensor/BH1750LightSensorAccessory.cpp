@@ -8,18 +8,12 @@
 
 #include "BH1750LightSensorAccessory.h"
 
-#include "homekit/HKConnection.h"
+#include "HKConnection.h"
 
 #include <set>
 
-#ifdef PARTICLE_COMPAT
-#include "../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
-#else
 #include <Particle.h>
-#endif
-#include "homekit/HKLog.h"
-
-
+#include "HKLog.h"
 
 
 void BH1750LightSensorAccessory::sensorIdentity(bool oldValue, bool newValue, HKConnection *sender) {
@@ -50,7 +44,6 @@ bool BH1750LightSensorAccessory::handle() {
         }
 
         result = true;
-        if(batteryService) batteryService->handle();
     }
 
     return result;
@@ -80,5 +73,4 @@ void BH1750LightSensorAccessory::initAccessorySet() {
     currentAmbilightChar->perUserQuery = std::bind(&BH1750LightSensorAccessory::getCurrentAmbilightLevel, this, std::placeholders::_1);
     BH1750LightSensorAccessory->addCharacteristics(lightSensorService, currentAmbilightChar);
 
-    if(batteryService) batteryService->initService(BH1750LightSensorAccessory);
 };
