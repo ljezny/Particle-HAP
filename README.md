@@ -1,9 +1,9 @@
 # particle-hap
 
-Particle HAP is proof of concept to connection Photon to Homekit, directly, without any in-the-middle HAP JS server.
+Particle HAP is a proof-of-concept to connect Particle devices to Homekit, directly, without any in-the-middle HAP JS server.
 
 ## BIG THANKS TO:
-I've used lot of inspiration and code from this repositories. I would really thanks.
+I've used lot of inspiration and code from this repositories. I would really like to thank:
 
 - [Crypto inspiration](https://github.com/maximkulkin/esp-homekit-demo)
 - [Accessory handling inspiration](https://github.com/etwmc/Personal-HomeKit-HAP)
@@ -17,50 +17,36 @@ Example video of pairing and handling.
 
 ## Configuration
 
-```
+```cpp
 //TCP for handling server port
 #define TCP_SERVER_PORT 5115
-//Maximum pairings available. Apple recommends 16. But be aware, one pairings needs (36+32)B of your EEPROM
+//Maximum pairings available. Apple recommends 16. But be aware, one pairing needs (36+32)B of your EEPROM
 #define MAX_PAIRINGS 16
 //if you are using EEPROM, you can set offset for Homekit to store pairings
 #define EEPROM_STORAGE_ADDRESS_OFFSET 512
-
-//ID of device, must be unique per device
-#define deviceIdentity "5D:C6:5E:50:CE:38"
-//Device name, which will be visible during pairing. Should be unique per device, so user can distinguish devices.
-#define deviceName "particle"
-//Pairing code, should be unique per device
-#define devicePassword "523-12-643"
 ```
 
-Also be aware that there's constant ACCESSORY_KEY (in HKConsts.h). Should be unique per device. I've used constant just to save memory. But it can be a security leak.
+Also be aware that there's constant `ACCESSORY_KEY` (in `HKConsts.h`). Should be unique per device. I've used constant just to save memory. But it can be a security leak.
 
 ## Integration
-For integration with your project, look in particle-hap.ino.
 
+This project is available as a Community Library, `particle-hap`, which you can [import into your project](https://docs.particle.io/tutorials/device-os/libraries/#using-libraries).
+
+Please see the example projects in the `examples` folder for a better idea of how to use `particle-hap` in your project.
+
+## Troubleshooting
+
+If your Particle device isn't showing up in Homekit, try resetting the `HKPersistor`.
+
+```cpp
+HKPersistor().resetAll();
+System.reset();
 ```
-HKServer hkServer;
 
-void setup() {
-  //call to setup TCP Server, Bonjour etc.
-  hkServer.setup();
-  //implement this method to create custom accessory
-  initAccessorySet();
-
-  //uncomment this to clean all paired devices, you will need this a lot when you will debug homekit ;)
-  //hkServer.persistor->resetPersistor();
-}
-
-// loop() runs over and over again, as quickly as it can execute.
-void loop() {
-  //call this to handle incoming TCP connections
-  hkServer.handle();
-}
-
-```
+If there are too many instances of your Particle device showing up in Homekit, you may want to flush your iOS device's DNS cache. Unfortunately, this also means you will lose any WiFi networks you have set up, and you'll need to re-enter those passwords. Go to _Settings_, _General_, _Reset_ and choose _Reset Network Settings_.
 
 ## Dependencies
-There are no library dependencies. All the crypto is based on WolfSSL, but highly customized to work on Photon.
+There are no library dependencies. All the crypto is based on WolfSSL, but highly customized to work on DeviceOS.
 
 ## Known major issues
 - no major issues currently known
@@ -76,6 +62,7 @@ There are no library dependencies. All the crypto is based on WolfSSL, but highl
 When you're ready to compile your project, make sure you have the correct Particle device target selected and run `particle compile <platform>` in the CLI or click the Compile button in the Desktop IDE. The following files in your project folder will be sent to the compile service:
 
 - Everything in the `/src` folder, including your `.ino` application file
+- Everything in the `/lib` folder (which includes the `particle-hap` library)
 - The `project.properties` file for your project
 
 # Contribution
