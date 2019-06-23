@@ -44,7 +44,7 @@ private:
     byte sessionKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
     byte publicSecretKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
 
-    ed25519_key *accessoryKey = (ed25519_key*) ACESSORY_KEY;
+    ed25519_key *accessoryKey = (ed25519_key*) ACCESSORY_KEY;
 
     word32 publicKeyLength = PUBLIC_KEY_LENGTH;
     char publicKey[PUBLIC_KEY_LENGTH] = {0};
