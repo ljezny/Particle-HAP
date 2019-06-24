@@ -1,6 +1,6 @@
 # particle-hap
 
-Particle HAP is a -[proof-of-concept] tested and working tcp server, which allows you to connect Particle devices to Homekit, directly, without any in-the-middle HAP JS server.
+Particle HAP is a ~~proof-of-concept~~ tested and working tcp server, which allows you to connect Particle devices to Homekit, directly, without any in-the-middle HAP JS server.
 
 ## BIG THANKS TO:
 I've used lot of inspiration and code from this repositories. I would really like to thank:
