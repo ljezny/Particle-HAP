@@ -24,6 +24,11 @@ Example video of pairing and handling.
 #define MAX_PAIRINGS 16
 //if you are using EEPROM, you can set offset for Homekit to store pairings
 #define EEPROM_STORAGE_ADDRESS_OFFSET 512
+//Apple requires 8 connections at least and must accomodate a new ones. Photon can handle up to 10 connections, but one is cloud connection.
+//So allow 8 connections, every 9th will be closed send HTTP 503 and closed.
+//It seems that even 2 connections is working just fine, if you need to use sockets for something else.
+#define MAX_CONNECTIONS 8
+
 ```
 
 Also be aware that there's constant `ACCESSORY_KEY` (in `HKConsts.h`). Should be unique per device. I've used constant just to save memory. But it can be a security leak.
