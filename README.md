@@ -58,17 +58,20 @@ There are no library dependencies. All the crypto is based on WolfSSL, but highl
 - no major issues currently known
 
 ## Limitations
-I had to use static shared memory buffers for processing request and response of Homekit TCP server. Dynamic allocations of memory causes fragmentation and unstability. So currently SHARED_REQUEST_BUFFER_LEN=1024 bytes and SHARED_RESPONSE_BUFFER_LEN=5000 bytes is used. You may reached response buffer limit, if you create some complex composite accessory (more than 5 services).
+I had to use static shared memory buffers for processing request and response of Homekit TCP server. Dynamic allocations of memory causes fragmentation and unstability. So currently SHARED_REQUEST_BUFFER_LEN=1024 bytes and SHARED_RESPONSE_BUFFER_LEN=5000 bytes is used. You may reache response buffer limit if you create some complex composite accessory (more than 5 services).
 
 ## Troubleshooting
 Q: I am not able to see a device in pairing. Why?
-A: You need to be on same Wifi network. Photon connects to 2.4Ghz and your iPhone connects to 5Ghz network by default. Devices not see each other.
+A: You need to be exactly on same Wifi network. Photon connects to 2.4Ghz and your iPhone connects to 5Ghz network by default. Devices not see each other.
 
-Q: How to debug homekit accessory discovery?
+Q: How to debug Homekit accessory discovery?
 A: Download Discovery app from AppStore (Bonjour Discovery) and look for _hap._tcp node in that app. You should see your device in there.
 
 Q: Is there any logs?
 A: Yes, of course. I am using standard Serial log. I log only the warnings (let's say, the negative branches of IFs :-) )
+
+Q: I can see device ready for pairing, but pairing fails.
+A: Mostly you have an error in describing your devices or characteristics values are bad/not in range etc. Homekit accessory must be described using Apple defined Services. Each service must be described using mandatory and optional characteristics. All can be found in `HAP-Specification-Non-Commercial-Version.pdf` document.
 
 ## What's planned:
 - more accessory types in examples (programmable switch, sensors). What do you need?
