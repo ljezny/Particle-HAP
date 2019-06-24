@@ -43,7 +43,7 @@ HKPersistor().resetAll();
 System.reset();
 ```
 
-If there are too many instances of your Particle device showing up in Homekit, you may want to flush your iOS device's DNS cache. Unfortunately, this also means you will lose any WiFi networks you have set up, and you'll need to re-enter those passwords. Go to _Settings_, _General_, _Reset_ and choose _Reset Network Settings_.
+If there are too many instances of your Particle device showing up in Homekit, you may want to restart your iPhone,iPad and if it doesn't work you need to flush your iOS device's DNS cache. Unfortunately, this also means you will lose any WiFi networks you have set up, and you'll need to re-enter those passwords. Go to _Settings_, _General_, _Reset_ and choose _Reset Network Settings_.
 
 ## Dependencies
 There are no library dependencies. All the crypto is based on WolfSSL, but highly customized to work on DeviceOS.
