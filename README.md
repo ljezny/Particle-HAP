@@ -1,7 +1,7 @@
 # particle-hap
 
 Particle HAP is a ~~proof-of-concept~~ tested and working tcp server, which allows you to connect Particle devices to Homekit, directly, without any in-the-middle HAP JS server.
-I am successfully using it to control my Window shutters, Lights, Nixie Clocks, Roomba (using serial link) and i've created simple weather station (temperature, humidity, light). Every devices works just fine and stable.
+I am successfully using it to control my Window shutters, Lights, Nixie Clocks, Roomba (using serial link) and i've created simple weather station (temperature, humidity, light). Every device works just fine and stable.
 
 ## BIG THANKS TO:
 I've used lot of inspiration and code from this repositories. I would really like to thank:
@@ -32,7 +32,7 @@ Example video of pairing and handling.
 
 ```
 
-Also be aware that there's constant `ACCESSORY_KEY` (in `HKConsts.h`). Should be unique per device. I've used constant just to save memory. But it can be a security leak.
+Also be aware that there's constant `ACCESSORY_KEY` (in `HKConsts.h`). Should be unique per device. I've used constant just to save memory. But it can be a security leak. If you need to really generate accessory key, look for 'generateAccessoryKey' method and store that key somehow in EEPROM.
 
 ## Integration
 
