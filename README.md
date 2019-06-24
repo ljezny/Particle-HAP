@@ -1,6 +1,7 @@
 # particle-hap
 
 Particle HAP is a ~~proof-of-concept~~ tested and working tcp server, which allows you to connect Particle devices to Homekit, directly, without any in-the-middle HAP JS server.
+I am successfully using it to control my Window shutters, Lights, Nixie Clocks, Roomba (using serial link) and i've created simple weather station (temperature, humidity, light). Every devices works just fine and stable.
 
 ## BIG THANKS TO:
 I've used lot of inspiration and code from this repositories. I would really like to thank:
@@ -56,9 +57,21 @@ There are no library dependencies. All the crypto is based on WolfSSL, but highl
 ## Known major issues
 - no major issues currently known
 
+## Limitations
+I had to use static shared memory buffers for processing request and response of Homekit TCP server. Dynamic allocations of memory causes fragmentation and unstability. So currently SHARED_REQUEST_BUFFER_LEN=1024 bytes and SHARED_RESPONSE_BUFFER_LEN=5000 bytes is used. You may reached response buffer limit, if you create some complex composite accessory (more than 5 services).
+
+## Troubleshooting
+Q: I am not able to see a device in pairing. Why?
+A: You need to be on same Wifi network. Photon connects to 2.4Ghz and your iPhone connects to 5Ghz network by default. Devices not see each other.
+
+Q: How to debug homekit accessory discovery?
+A: Download Discovery app from AppStore (Bonjour Discovery) and look for _hap._tcp node in that app. You should see your device in there.
+
+Q: Is there any logs?
+A: Yes, of course. I am using standard Serial log. I log only the warnings (let's say, the negative branches of IFs :-) )
+
 ## What's planned:
-- stability issues - but minor ones
-- more accessory types in examples (programmable switch, sensors)
+- more accessory types in examples (programmable switch, sensors). What do you need?
 
 ## Goal:
 - integration with [Nixie Clocks](https://www.daliborfarny.com) so it will support Non-commercial HAP.
@@ -80,4 +93,4 @@ Just contact me at [ljezny@gmail.com](mailto:ljezny@gmail.com)
 ## Licence
 Copyright 2019 Lukas Jezny
 
-Licensed under the GNU LPL license.
+Licensed under the MIT license.
