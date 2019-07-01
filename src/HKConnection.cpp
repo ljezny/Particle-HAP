@@ -247,10 +247,10 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
           hkLog.info("Handling message request: %s", msg.directory);
           Particle.publish("homekit/accessory", clientID(), PUBLIC);
           handleAccessoryRequest((const char *)SHARED_REQUEST_BUFFER, len);
-
-          RGB_STATUS_YELLOW.setActive(false);
-          result = true;
         }
+        
+        result = true;
+        RGB_STATUS_YELLOW.setActive(false);
     }
 
     processPostedCharacteristics();
