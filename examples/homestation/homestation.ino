@@ -10,6 +10,7 @@
 
 #include "JeznyHomeStationBridge.h"
 
+ApplicationWatchdog wd(60000, System.reset);
 
 JeznyHomeStationBridge *acc = new JeznyHomeStationBridge();
 
@@ -30,7 +31,7 @@ void setup() {
   Serial.begin();
 
   //HKPersistor().resetAll();
-  
+
   hkServer = new HKServer(acc->getDeviceType(),"Homestation","523-12-643",progress);
 
   acc->initAccessorySet();
@@ -43,10 +44,12 @@ void setup() {
 
 // loop() runs over and over again, as quickly as it can execute.
 void loop() {
+  wd.checkin();
   bool didAnything = false; //!hkServer->hasConnections();
   didAnything |= hkServer->handle(); //handle connections, did anything (i.e processed some requests etc.)
   didAnything |= acc->handle(); //handle accessory, did anything (i.e read some sensors)
   if(didAnything) {
     //hkLog.info("Free memory %lu",System.freeMemory());
   }
+
 }
