@@ -17,7 +17,7 @@ std::string SerialModemSwitchService::getPower (HKConnection *sender){
 
 void SerialModemSwitchService::setPower (bool oldValue, bool newValue, HKConnection *sender){
     on = newValue;
-    Particle.publish("serialmodem/power", String(newValue), PUBLIC);
+    Particle.publish("serialmodem/power", String(newValue), PRIVATE);
     if(on) {
         needsSendAT = true;
         
@@ -27,10 +27,10 @@ void SerialModemSwitchService::setPower (bool oldValue, bool newValue, HKConnect
 bool SerialModemSwitchService::handle() {
     if(needsSendAT) {
         needsSendAT = false;
-        Particle.publish("serialmodem/sendcommand", String(openATCommand), PUBLIC);
+        Particle.publish("serialmodem/sendcommand", String(openATCommand), PRIVATE);
         Serial1.write(openATCommand);
         delay(12000);
-        Particle.publish("serialmodem/sendcommand", String("ATH\r"), PUBLIC);
+        Particle.publish("serialmodem/sendcommand", String("ATH\r"), PRIVATE);
         Serial1.write("ATH\r");
         closeTimeout = millis() + 4000;
     }

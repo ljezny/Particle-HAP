@@ -22,7 +22,7 @@ std::string NixieClockAccessory::getPower (HKConnection *sender){
 }
 
 void NixieClockAccessory::setPower (bool oldValue, bool newValue, HKConnection *sender){
-    Particle.publish("nixie/power", newValue ? "on" : "off", PUBLIC);
+    Particle.publish("nixie/power", newValue ? "on" : "off", PRIVATE);
     on = newValue ? 1 : 0;
 }
 
