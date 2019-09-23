@@ -20,6 +20,7 @@ private:
     HKBonjour bonjour;
     UDP udp;
     bool paired = false;
+    bool isPairing = false;
     std::vector<HKConnection*> clients;
     int deviceType;
     std::string hapName;
@@ -33,10 +34,20 @@ public:
     ~HKServer();
     void start ();
     void stop();
+
     bool isPaired(){
       return paired;
     }
     void setPaired(bool paired);
+
+    bool isPairing(){
+      return isPairing;
+    }
+    
+    void setPairing(bool pairing) {
+      this->pairing = pairing;
+    }
+
     bool handle();
     std::string getDeviceIdentity() {
         return deviceIdentity;
