@@ -33,6 +33,9 @@ public:
     ~HKServer();
     void start ();
     void stop();
+    bool isPaired(){
+      return paired;
+    }
     void setPaired(bool paired);
     bool handle();
     std::string getDeviceIdentity() {
