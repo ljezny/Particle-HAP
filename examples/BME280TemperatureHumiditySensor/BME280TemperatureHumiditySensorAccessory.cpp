@@ -54,8 +54,8 @@ bool BME280TemperatureHumiditySensorAccessory::handle() {
       if(currentTemperatureChar) currentTemperatureChar->notify(NULL);
       if(currentHumidityChar) currentHumidityChar->notify(NULL);
 
-      Particle.publish("bme280/temperature", String(lastValueTemperature), PUBLIC);
-      Particle.publish("bme280/humidity", String(lastValueHumidity), PUBLIC);
+      Particle.publish("bme280/temperature", String(lastValueTemperature), PRIVATE);
+      Particle.publish("bme280/humidity", String(lastValueHumidity), PRIVATE);
 
       result = true;
   }

@@ -212,7 +212,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
         if (!strcmp(msg.directory, "pair-setup"))
         {
             hkLog.info("Handling Pair Setup...");
-            Particle.publish("homekit/pair-setup", clientID(), PUBLIC);
+            Particle.publish("homekit/pair-setup", clientID(), PRIVATE);
             handlePairSetup((const char *)SHARED_REQUEST_BUFFER);
         }
         else if (!strcmp(msg.directory, "pair-verify"))
@@ -221,14 +221,14 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
             if (!maxConnectionsVictim)
             {
               hkLog.info("Handling Pair Verify...");
-              Particle.publish("homekit/pair-verify", clientID(), PUBLIC);
+              Particle.publish("homekit/pair-verify", clientID(), PRIVATE);
               if (handlePairVerify((const char *)SHARED_REQUEST_BUFFER))
               {
                   isEncrypted = true;
                   server->setPaired(true);
               }
             } else {
-                  Particle.publish("homekit/connection-limit", clientID(), PUBLIC);
+                  Particle.publish("homekit/connection-limit", clientID(), PRIVATE);
                   //max connections has been reached.
                   memset(SHARED_RESPONSE_BUFFER, 0, SHARED_RESPONSE_BUFFER_LEN);
                   int len = snprintf((char *)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "HTTP/1.1 503 Service Unavailable\r\n\r\n");
@@ -245,7 +245,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
         {
           //connection is secured
           hkLog.info("Handling message request: %s", msg.directory);
-          Particle.publish("homekit/accessory", clientID(), PUBLIC);
+          Particle.publish("homekit/accessory", clientID(), PRIVATE);
           handleAccessoryRequest((const char *)SHARED_REQUEST_BUFFER, len);
         }
         

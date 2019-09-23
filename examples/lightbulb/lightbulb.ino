@@ -14,7 +14,7 @@
 SerialLogHandler logHandler;
 
 
-//HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0); 
+//HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D2,D1,D0);
 HAPAccessoryDescriptor *acc = new PhotonSystemLEDLightBulbAccessory();
 HKServer *hkServer = NULL;
 
@@ -24,6 +24,11 @@ void progress(Progress_t progress) {
 // Cloud functions must return int and take one String
 int restart(String extra) {
   System.reset();
+  return 0;
+}
+
+int resetAll(String extra) {
+  HKPersistor().resetAll();
   return 0;
 }
 
@@ -38,7 +43,7 @@ void setup() {
   hkServer->start();
 
   Particle.function("restart", restart);
-
+  Particle.function("resetAll", resetAll);
 }
 
 // loop() runs over and over again, as quickly as it can execute.

@@ -96,7 +96,7 @@ bool HKServer::handle() {
         hkLog.info("Client connected.");
         HKConnection *c = new HKConnection(this,newClient);
         clients.insert(clients.end(),c);
-        Particle.publish("homekit/accept", c->clientID(), PUBLIC);
+        Particle.publish("homekit/accept", c->clientID(), PRIVATE);
         result = true;
     }
 
@@ -108,7 +108,7 @@ bool HKServer::handle() {
 
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
-            Particle.publish("homekit/close", conn->clientID(), PUBLIC);
+            Particle.publish("homekit/close", conn->clientID(), PRIVATE);
             conn->close();
             clients.erase(clients.begin() + i);
             delete conn;

@@ -19,7 +19,7 @@ void RFRelaySwitchService::setPower (bool oldValue, bool newValue, HKConnection 
     on = newValue;
     needsSendCode = true;
 
-    Particle.publish("rfrelay/power", String(newValue), PUBLIC);
+    Particle.publish("rfrelay/power", String(newValue), PRIVATE);
 }
 
 bool RFRelaySwitchService::handle() {
@@ -29,7 +29,7 @@ bool RFRelaySwitchService::handle() {
       rcSwitch->setRepeatTransmit(10);
       rcSwitch->send(code, 24);
 
-      Particle.publish("rfrelay/sendcode", String(code), PUBLIC);
+      Particle.publish("rfrelay/sendcode", String(code), PRIVATE);
 
       return true;
     }

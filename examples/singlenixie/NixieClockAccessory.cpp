@@ -22,7 +22,7 @@ std::string NixieClockAccessory::getPower (HKConnection *sender){
 }
 
 void NixieClockAccessory::setPower (bool oldValue, bool newValue, HKConnection *sender){
-    Particle.publish("nixie/power", newValue ? "on" : "off", PUBLIC);
+    Particle.publish("nixie/power", newValue ? "on" : "off", PRIVATE);
     on = newValue ? 1 : 0;
 }
 
@@ -34,8 +34,8 @@ int fade(int pin, int from, int to) {
   int step = from < to ? 1 : -1;
   int v = from;
   while(v != to) {
-    analogWrite(pin,v,2000); //analogWriteMaxFrequency(pin)
-    delay(1);
+    analogWrite(pin,v,30);
+    delay(3);
     v += step;
   }
   return v;
@@ -44,7 +44,7 @@ int fade(int pin, int from, int to) {
 int showDigit(int pin) {
   digitalWrite(pin,0);
   fade(powerPIN,MIN_BRIGHTNESS,MAX_BRIGHTNESS);
-  delay(300);
+  //delay(200);
   fade(powerPIN,MAX_BRIGHTNESS,MIN_BRIGHTNESS);
   digitalWrite(pin,1);
 }
@@ -63,10 +63,9 @@ bool NixieClockAccessory::handle() {
 
           showDigit(digitPINs[(h / 10) % 10]);
           showDigit(digitPINs[h % 10]);
-          delay(600);
+          //delay(300);
           showDigit(digitPINs[(m / 10) % 10]);
           showDigit(digitPINs[m % 10]);
-
 
           lastShowMS = millis();
       }
