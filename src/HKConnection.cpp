@@ -301,118 +301,116 @@ bool HKConnection::handlePairVerify(const char *buffer)
     {
     case State_Pair_Verify_M1:
     {
-          server->setIsPairing(true);
+        server->progressPtr(Progress_Pair_Verify_M1);
+        hkLog.info("Pair Verify M1");
+        curve25519_key controllerKey;
+        int r = wc_curve25519_init(&controllerKey);
+        if (r)
+            hkLog.warn("wc_curve25519_init key: r:%d", r);
+        r = wc_curve25519_import_public_ex((const byte *)msg.data.dataPtrForIndex(3), 32, &controllerKey, EC25519_LITTLE_ENDIAN);
+        if (r)
+            hkLog.warn("wc_curve25519_import_public_ex: r:%d", r);
+        memcpy(&controllerKeyData, msg.data.dataPtrForIndex(3), 32);
 
-          server->progressPtr(Progress_Pair_Verify_M1);
-          hkLog.info("Pair Verify M1");
-          curve25519_key controllerKey;
-          int r = wc_curve25519_init(&controllerKey);
-          if (r)
-              hkLog.warn("wc_curve25519_init key: r:%d", r);
-          r = wc_curve25519_import_public_ex((const byte *)msg.data.dataPtrForIndex(3), 32, &controllerKey, EC25519_LITTLE_ENDIAN);
-          if (r)
-              hkLog.warn("wc_curve25519_import_public_ex: r:%d", r);
-          memcpy(&controllerKeyData, msg.data.dataPtrForIndex(3), 32);
+        curve25519_key secretKey;
+        r = wc_curve25519_init(&secretKey);
+        if (r)
+            hkLog.warn("wc_curve25519_init: r:%d", r);
+        WC_RNG rng;
+        wc_curve25519_make_key(&rng, CURVE25519_KEYSIZE, &secretKey);
+        if (r)
+            hkLog.warn("wc_curve25519_make_key: r:%d", r);
 
-          curve25519_key secretKey;
-          r = wc_curve25519_init(&secretKey);
-          if (r)
-              hkLog.warn("wc_curve25519_init: r:%d", r);
-          WC_RNG rng;
-          wc_curve25519_make_key(&rng, CURVE25519_KEYSIZE, &secretKey);
-          if (r)
-              hkLog.warn("wc_curve25519_make_key: r:%d", r);
+        word32 publicSecretKeySize = CURVE25519_KEYSIZE;
+        r = wc_curve25519_export_public_ex(&secretKey, publicSecretKeyData, &publicSecretKeySize, EC25519_LITTLE_ENDIAN);
+        if (r)
+            hkLog.warn("wc_curve25519_export_public_ex: r:%d", r);
+        word32 sharedKeySize = CURVE25519_KEYSIZE;
 
-          word32 publicSecretKeySize = CURVE25519_KEYSIZE;
-          r = wc_curve25519_export_public_ex(&secretKey, publicSecretKeyData, &publicSecretKeySize, EC25519_LITTLE_ENDIAN);
-          if (r)
-              hkLog.warn("wc_curve25519_export_public_ex: r:%d", r);
-          word32 sharedKeySize = CURVE25519_KEYSIZE;
+        r = wc_curve25519_shared_secret_ex(&secretKey, &controllerKey, sharedKey, &sharedKeySize, EC25519_LITTLE_ENDIAN);
+        if (r)
+            hkLog.warn("crypto_curve25519_shared_secret: %d", r);
 
-          r = wc_curve25519_shared_secret_ex(&secretKey, &controllerKey, sharedKey, &sharedKeySize, EC25519_LITTLE_ENDIAN);
-          if (r)
-              hkLog.warn("crypto_curve25519_shared_secret: %d", r);
+        int accessoryInfoSize = CURVE25519_KEYSIZE + CURVE25519_KEYSIZE + server->getDeviceIdentity().length();
+        byte accessoryInfo[accessoryInfoSize];
+        memcpy(accessoryInfo, publicSecretKeyData, CURVE25519_KEYSIZE);
+        memcpy(&accessoryInfo[CURVE25519_KEYSIZE], server->getDeviceIdentity().c_str(), server->getDeviceIdentity().length());
+        memcpy(&accessoryInfo[CURVE25519_KEYSIZE + server->getDeviceIdentity().length()], msg.data.dataPtrForIndex(3), CURVE25519_KEYSIZE);
 
-          int accessoryInfoSize = CURVE25519_KEYSIZE + CURVE25519_KEYSIZE + server->getDeviceIdentity().length();
-          byte accessoryInfo[accessoryInfoSize];
-          memcpy(accessoryInfo, publicSecretKeyData, CURVE25519_KEYSIZE);
-          memcpy(&accessoryInfo[CURVE25519_KEYSIZE], server->getDeviceIdentity().c_str(), server->getDeviceIdentity().length());
-          memcpy(&accessoryInfo[CURVE25519_KEYSIZE + server->getDeviceIdentity().length()], msg.data.dataPtrForIndex(3), CURVE25519_KEYSIZE);
+        word32 accessorySignSize = ED25519_SIG_SIZE;
+        byte accesorySign[accessorySignSize];
+        r = wc_ed25519_sign_msg(accessoryInfo, accessoryInfoSize, accesorySign, &accessorySignSize, accessoryKey);
+        if (r)
+            hkLog.warn("wc_ed25519_sign_msg: r:%d", r);
 
-          word32 accessorySignSize = ED25519_SIG_SIZE;
-          byte accesorySign[accessorySignSize];
-          r = wc_ed25519_sign_msg(accessoryInfo, accessoryInfoSize, accesorySign, &accessorySignSize, accessoryKey);
-          if (r)
-              hkLog.warn("wc_ed25519_sign_msg: r:%d", r);
+        HKNetworkMessageDataRecord signRecord;
+        signRecord.activate = true;
+        signRecord.data = new char[accessorySignSize];
+        signRecord.index = 10;
+        signRecord.length = accessorySignSize;
+        memcpy(signRecord.data, accesorySign, accessorySignSize);
 
-          HKNetworkMessageDataRecord signRecord;
-          signRecord.activate = true;
-          signRecord.data = new char[accessorySignSize];
-          signRecord.index = 10;
-          signRecord.length = accessorySignSize;
-          memcpy(signRecord.data, accesorySign, accessorySignSize);
+        HKNetworkMessageDataRecord idRecord;
+        idRecord.index = 1;
+        idRecord.activate = true;
+        idRecord.length = server->getDeviceIdentity().length();
+        idRecord.data = new char[idRecord.length];
+        memcpy(idRecord.data, server->getDeviceIdentity().c_str(), idRecord.length);
 
-          HKNetworkMessageDataRecord idRecord;
-          idRecord.index = 1;
-          idRecord.activate = true;
-          idRecord.length = server->getDeviceIdentity().length();
-          idRecord.data = new char[idRecord.length];
-          memcpy(idRecord.data, server->getDeviceIdentity().c_str(), idRecord.length);
+        HKNetworkMessageData data;
+        data.addRecord(signRecord);
+        data.addRecord(idRecord);
 
-          HKNetworkMessageData data;
-          data.addRecord(signRecord);
-          data.addRecord(idRecord);
+        char salt[] = "Pair-Verify-Encrypt-Salt";
+        char info[] = "Pair-Verify-Encrypt-Info";
+        size_t sessionKeySize = CHACHA20_POLY1305_AEAD_KEYSIZE;
+        r = wc_HKDF(SHA512, (const byte *)sharedKey, sharedKeySize, (const byte *)salt, strlen(salt), (const byte *)info, strlen(info), sessionKeyData, CHACHA20_POLY1305_AEAD_KEYSIZE);
+        if (r)
+            hkLog.warn("wc_HKDF: r:%d", r);
 
-          char salt[] = "Pair-Verify-Encrypt-Salt";
-          char info[] = "Pair-Verify-Encrypt-Info";
-          size_t sessionKeySize = CHACHA20_POLY1305_AEAD_KEYSIZE;
-          r = wc_HKDF(SHA512, (const byte *)sharedKey, sharedKeySize, (const byte *)salt, strlen(salt), (const byte *)info, strlen(info), sessionKeyData, CHACHA20_POLY1305_AEAD_KEYSIZE);
-          if (r)
-              hkLog.warn("wc_HKDF: r:%d", r);
+        const char *plainMsg = 0;
+        unsigned short msgLen = 0;
+        data.rawData(&plainMsg, &msgLen);
 
-          const char *plainMsg = 0;
-          unsigned short msgLen = 0;
-          data.rawData(&plainMsg, &msgLen);
+        size_t encryptMsgSize = 0;
+        byte encryptMsg[msgLen + 16];
+        r = wc_ChaCha20Poly1305_Encrypt(
+            (const byte *)sessionKeyData,
+            (const byte *)"\x0\x0\x0\x0PV-Msg02",
+            NULL, 0,
+            (const byte *)plainMsg, msgLen,
+            (byte *)encryptMsg,
+            (byte *)(encryptMsg + msgLen));
+        if (r)
+            hkLog.warn("wc_ChaCha20Poly1305_Encrypt: r:%d", r);
+        HKNetworkMessageDataRecord stage;
+        stage.activate = true;
+        stage.data = new char;
+        stage.data[0] = State_Pair_Verify_M2;
+        stage.index = 6;
+        stage.length = 1;
 
-          size_t encryptMsgSize = 0;
-          byte encryptMsg[msgLen + 16];
-          r = wc_ChaCha20Poly1305_Encrypt(
-              (const byte *)sessionKeyData,
-              (const byte *)"\x0\x0\x0\x0PV-Msg02",
-              NULL, 0,
-              (const byte *)plainMsg, msgLen,
-              (byte *)encryptMsg,
-              (byte *)(encryptMsg + msgLen));
-          if (r)
-              hkLog.warn("wc_ChaCha20Poly1305_Encrypt: r:%d", r);
-          HKNetworkMessageDataRecord stage;
-          stage.activate = true;
-          stage.data = new char;
-          stage.data[0] = State_Pair_Verify_M2;
-          stage.index = 6;
-          stage.length = 1;
+        HKNetworkMessageDataRecord encryptRecord;
+        encryptRecord.activate = true;
+        encryptRecord.index = 5;
+        encryptRecord.length = msgLen + 16;
+        encryptRecord.data = new char[encryptRecord.length];
+        memcpy(encryptRecord.data, encryptMsg, encryptRecord.length);
 
-          HKNetworkMessageDataRecord encryptRecord;
-          encryptRecord.activate = true;
-          encryptRecord.index = 5;
-          encryptRecord.length = msgLen + 16;
-          encryptRecord.data = new char[encryptRecord.length];
-          memcpy(encryptRecord.data, encryptMsg, encryptRecord.length);
+        HKNetworkMessageDataRecord pubKeyRecord;
+        pubKeyRecord.activate = true;
+        pubKeyRecord.data = new char[publicSecretKeySize];
+        pubKeyRecord.index = 3;
+        pubKeyRecord.length = publicSecretKeySize;
+        memcpy(pubKeyRecord.data, publicSecretKeyData, publicSecretKeySize);
 
-          HKNetworkMessageDataRecord pubKeyRecord;
-          pubKeyRecord.activate = true;
-          pubKeyRecord.data = new char[publicSecretKeySize];
-          pubKeyRecord.index = 3;
-          pubKeyRecord.length = publicSecretKeySize;
-          memcpy(pubKeyRecord.data, publicSecretKeyData, publicSecretKeySize);
+        response.data.addRecord(stage);
+        response.data.addRecord(pubKeyRecord);
+        response.data.addRecord(encryptRecord);
 
-          response.data.addRecord(stage);
-          response.data.addRecord(pubKeyRecord);
-          response.data.addRecord(encryptRecord);
+        delete[] plainMsg;
+        server->progressPtr(Progress_Pair_Verify_M2);
 
-          delete[] plainMsg;
-          server->progressPtr(Progress_Pair_Verify_M2);
-        }
     }
     break;
     case State_Pair_Verify_M3:
@@ -486,6 +484,7 @@ bool HKConnection::handlePairVerify(const char *buffer)
             response.data.addRecord(error);
             hkLog.warn("Pair NOT verified.");
             server->progressPtr(Progress_Error);
+            server->setPairing(false);
         }
     }
     }
@@ -542,7 +541,7 @@ void HKConnection::handlePairSetup(const char *buffer)
         mResponse.data.addRecord(error);
         hkLog.warn("State_M1_SRPStartRequest error isBusy");
       } else {
-        server->isPairing(true);
+        server->setPairing(true);
         server->progressPtr(Progress_M1_SRPStartRequest);
         hkLog.info("State_M1_SRPStartRequest");
         stateRecord.data[0] = State_M2_SRPStartRespond;
@@ -644,7 +643,7 @@ void HKConnection::handlePairSetup(const char *buffer)
 
             wc_SrpTerm(&srp);
             server->progressPtr(Progress_Error);
-            server->isPairing(false);
+            server->setPairing(false);
         }
         else
         { //success
@@ -812,7 +811,7 @@ void HKConnection::handlePairSetup(const char *buffer)
 
         delete subTLV8;
         wc_SrpTerm(&srp);
-        server->isPairing(false);
+        server->setPairing(false);
     }
     break;
     }
