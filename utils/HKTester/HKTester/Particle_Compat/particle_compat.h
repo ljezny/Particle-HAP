@@ -66,7 +66,15 @@ public:
     }
     
 };
-
+//LEDStatus RGB_STATUS_YELLOW(RGB_COLOR_YELLOW, LED_PATTERN_FADE, LED_PRIORITY_IMPORTANT);
+class LEDStatus {
+public:
+    LEDStatus(int x, int y, int z){
+        
+    }
+    void setActive(bool active) {
+    }
+};
 
 class TCPClient {
 private:
@@ -121,9 +129,10 @@ public:
         memcpy(buffer, read_buffer, read_buffer_offset);
         int result = read_buffer_offset;
         read_buffer_offset = 0;
+        sleep(1);
         return result;
     }
-    int write(unsigned char *buffer, size_t len, int timeout) {
+    int write(unsigned char *buffer, size_t len) {
         send(socket, buffer, len, 0);
         return len;
     }
@@ -307,6 +316,7 @@ int digitalRead(int pin);
 void digitalWrite(int pin, int value);
 void analogWrite(int pin, int value);
 void pinMode(int pin, int mode);
+
 extern EthernetClass Ethernet;
 extern UDP udp;
 extern EEPROMClass EEPROM;
@@ -316,6 +326,7 @@ extern ParticleClass Particle;
 
 #define INT 0
 #define PUBLIC 0
+#define PRIVATE 0
 
 #define A0 0
 #define D0 0
@@ -329,5 +340,8 @@ extern ParticleClass Particle;
 #define OUTPUT 0
 #define INPUT 1
 #define CHANGE 0
+#define RGB_COLOR_YELLOW 0
+#define LED_PATTERN_FADE 0
+#define LED_PRIORITY_IMPORTANT 0
 
 #endif /* particle_compat_h */

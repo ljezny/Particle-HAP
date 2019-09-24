@@ -5,7 +5,12 @@
 
 #include <set>
 
+#ifdef PARTICLE_COMPAT
+#include "../../utils/HKTester/HKTester/Particle_Compat/particle_compat.h"
+#else
 #include <Particle.h>
+#endif
+
 #include "HKLog.h"
 
 

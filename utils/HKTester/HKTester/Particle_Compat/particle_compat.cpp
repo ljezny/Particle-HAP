@@ -5,7 +5,7 @@
 //  Created by Lukas Jezny on 03/02/2019.
 //  Copyright © 2019 Lukas Jezny. All rights reserved.
 //
-#include "../../../../src/homekit/HKPersistor.h"
+#include "../../../../src/HKPersistor.h"
 
 #include <stdio.h>
 

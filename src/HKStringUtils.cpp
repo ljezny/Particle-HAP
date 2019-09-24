@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #ifdef PARTICLE_COMPAT
-#include "../../example/HKTester/HKTester/Particle_Compat/particle_compat.h"
+#include "../utils/HKTester/HKTester/Particle_Compat/particle_compat.h"
 #else
 #include <Particle.h>
 #endif

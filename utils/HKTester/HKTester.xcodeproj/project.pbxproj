@@ -8,50 +8,44 @@
 
 /* Begin PBXBuildFile section */
 		561259B82206E95600DCFA13 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259B72206E95600DCFA13 /* main.cpp */; };
-		56125A152206F24600DCFA13 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259C82206F24500DCFA13 /* memory.cpp */; };
-		56125A162206F24600DCFA13 /* logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259CB2206F24500DCFA13 /* logging.cpp */; };
-		56125A172206F24600DCFA13 /* misc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259D02206F24500DCFA13 /* misc.cpp */; };
-		56125A182206F24600DCFA13 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259D22206F24500DCFA13 /* random.cpp */; };
-		56125A192206F24600DCFA13 /* chacha20_poly1305.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259D52206F24500DCFA13 /* chacha20_poly1305.cpp */; };
-		56125A1A2206F24600DCFA13 /* ed25519.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259D92206F24500DCFA13 /* ed25519.cpp */; };
-		56125A1D2206F24600DCFA13 /* sha512.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259DE2206F24500DCFA13 /* sha512.cpp */; };
-		56125A1E2206F24600DCFA13 /* poly1305.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E02206F24500DCFA13 /* poly1305.cpp */; };
-		56125A1F2206F24600DCFA13 /* hmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E22206F24500DCFA13 /* hmac.cpp */; };
-		56125A212206F24600DCFA13 /* srp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E72206F24500DCFA13 /* srp.cpp */; };
-		56125A222206F24600DCFA13 /* wc_port.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259E82206F24500DCFA13 /* wc_port.cpp */; };
-		56125A232206F24600DCFA13 /* curve25519.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259EA2206F24500DCFA13 /* curve25519.cpp */; };
-		56125A242206F24600DCFA13 /* integer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259ED2206F24500DCFA13 /* integer.cpp */; };
-		56125A252206F24600DCFA13 /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259EF2206F24500DCFA13 /* hash.cpp */; };
-		56125A262206F24600DCFA13 /* chacha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259F32206F24500DCFA13 /* chacha.cpp */; };
-		56125A272206F24600DCFA13 /* HKAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259FA2206F24600DCFA13 /* HKAccessory.cpp */; };
-		56125A282206F24600DCFA13 /* HKStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561259FE2206F24600DCFA13 /* HKStringUtils.cpp */; };
-		56125A292206F24600DCFA13 /* HKNetworkResponse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A012206F24600DCFA13 /* HKNetworkResponse.cpp */; };
-		56125A2A2206F24600DCFA13 /* HKNetworkMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A022206F24600DCFA13 /* HKNetworkMessage.cpp */; };
-		56125A2B2206F24600DCFA13 /* HKNetworkMessageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A062206F24600DCFA13 /* HKNetworkMessageData.cpp */; };
-		56125A2C2206F24600DCFA13 /* HKServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A072206F24600DCFA13 /* HKServer.cpp */; };
-		56125A2D2206F24600DCFA13 /* HKConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A082206F24600DCFA13 /* HKConnection.cpp */; };
-		56125A2F2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A0C2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp */; };
-		56125A312206F24600DCFA13 /* HKConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A0F2206F24600DCFA13 /* HKConfig.cpp */; };
-		56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A112206F24600DCFA13 /* HKBonjour.cpp */; };
-		56125A332206F24600DCFA13 /* HKPersistor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A132206F24600DCFA13 /* HKPersistor.cpp */; };
 		56125A3522070D9B00DCFA13 /* particle_compat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3422070D9B00DCFA13 /* particle_compat.cpp */; };
 		56125A382207490000DCFA13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A372207490000DCFA13 /* Foundation.framework */; };
 		56125A3A22074AFC00DCFA13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56125A3922074AFC00DCFA13 /* CoreFoundation.framework */; };
-		56125A3D2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A3C2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp */; };
-		56125A442208D06300DCFA13 /* ge_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A422208D06300DCFA13 /* ge_low_mem.cpp */; };
-		56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A432208D06300DCFA13 /* fe_low_mem.cpp */; };
-		56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A462208D0FE00DCFA13 /* ge_operations.cpp */; };
-		56125A492208D0FE00DCFA13 /* fe_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56125A472208D0FE00DCFA13 /* fe_operations.cpp */; };
-		562778F82269E2B20004939B /* HKStringBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 562778F62269E2B20004939B /* HKStringBuffer.cpp */; };
-		56450936222A77BE00054765 /* HomekitBridgeAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */; };
-		5645093B222A82B600054765 /* RCSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56450939222A82B600054765 /* RCSwitch.cpp */; };
-		5645093E222A93CA00054765 /* MotionSensorAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5645093C222A93CA00054765 /* MotionSensorAccessory.cpp */; };
-		5675A7302221647D00942207 /* LightSensorAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5675A72E2221647D00942207 /* LightSensorAccessory.cpp */; };
-		56947C8C220AEFF300767C5A /* HKLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56947C8A220AEFF300767C5A /* HKLog.cpp */; };
-		56B4693C2269C5AB001A600A /* RelaySwitchAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56B469332269C5AA001A600A /* RelaySwitchAccessory.cpp */; };
-		56B4693E2269C5AB001A600A /* WindowsShutterService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56B469372269C5AB001A600A /* WindowsShutterService.cpp */; };
-		56D840CE223910480061092A /* LEDStripLightBulbAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */; };
-		56D840CF223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */; };
+		56EB60D5233A8D0700175FAF /* HAPHomekitBridgeAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6058233A8D0700175FAF /* HAPHomekitBridgeAccessory.cpp */; };
+		56EB60D6233A8D0700175FAF /* ge_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB605A233A8D0700175FAF /* ge_operations.cpp */; };
+		56EB60D7233A8D0700175FAF /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB605B233A8D0700175FAF /* memory.cpp */; };
+		56EB60D8233A8D0700175FAF /* ge_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB605D233A8D0700175FAF /* ge_low_mem.cpp */; };
+		56EB60D9233A8D0700175FAF /* fe_low_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB605E233A8D0700175FAF /* fe_low_mem.cpp */; };
+		56EB60DA233A8D0700175FAF /* logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB605F233A8D0700175FAF /* logging.cpp */; };
+		56EB60DB233A8D0700175FAF /* misc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6063233A8D0700175FAF /* misc.cpp */; };
+		56EB60DC233A8D0700175FAF /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6065233A8D0700175FAF /* random.cpp */; };
+		56EB60DD233A8D0700175FAF /* chacha20_poly1305.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6068233A8D0700175FAF /* chacha20_poly1305.cpp */; };
+		56EB60DE233A8D0700175FAF /* ed25519.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB606B233A8D0700175FAF /* ed25519.cpp */; };
+		56EB60DF233A8D0700175FAF /* fe_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB606C233A8D0700175FAF /* fe_operations.cpp */; };
+		56EB60E0233A8D0700175FAF /* sha512.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB606F233A8D0700175FAF /* sha512.cpp */; };
+		56EB60E1233A8D0700175FAF /* poly1305.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6071233A8D0700175FAF /* poly1305.cpp */; };
+		56EB60E2233A8D0700175FAF /* hmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6073233A8D0700175FAF /* hmac.cpp */; };
+		56EB60E3233A8D0700175FAF /* srp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6076233A8D0700175FAF /* srp.cpp */; };
+		56EB60E4233A8D0700175FAF /* wc_port.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6077233A8D0700175FAF /* wc_port.cpp */; };
+		56EB60E5233A8D0700175FAF /* curve25519.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6079233A8D0700175FAF /* curve25519.cpp */; };
+		56EB60E6233A8D0700175FAF /* integer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB607C233A8D0700175FAF /* integer.cpp */; };
+		56EB60E7233A8D0700175FAF /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB607D233A8D0700175FAF /* hash.cpp */; };
+		56EB60E8233A8D0700175FAF /* chacha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6081233A8D0700175FAF /* chacha.cpp */; };
+		56EB60E9233A8D0700175FAF /* HKAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6086233A8D0700175FAF /* HKAccessory.cpp */; };
+		56EB60EA233A8D0700175FAF /* HAPCompositeAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6089233A8D0700175FAF /* HAPCompositeAccessory.cpp */; };
+		56EB60EB233A8D0700175FAF /* HKStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB608D233A8D0700175FAF /* HKStringUtils.cpp */; };
+		56EB60EC233A8D0700175FAF /* HKNetworkResponse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6091233A8D0700175FAF /* HKNetworkResponse.cpp */; };
+		56EB60ED233A8D0700175FAF /* HKNetworkMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6092233A8D0700175FAF /* HKNetworkMessage.cpp */; };
+		56EB60EE233A8D0700175FAF /* HKNetworkMessageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6097233A8D0700175FAF /* HKNetworkMessageData.cpp */; };
+		56EB60EF233A8D0700175FAF /* HKLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6098233A8D0700175FAF /* HKLog.cpp */; };
+		56EB60F0233A8D0700175FAF /* HKServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB6099233A8D0700175FAF /* HKServer.cpp */; };
+		56EB60F1233A8D0700175FAF /* HKConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB609A233A8D0700175FAF /* HKConnection.cpp */; };
+		56EB60F2233A8D0700175FAF /* HKNetworkMessageDataRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB609D233A8D0700175FAF /* HKNetworkMessageDataRecord.cpp */; };
+		56EB60F3233A8D0700175FAF /* HKConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB60A0233A8D0700175FAF /* HKConfig.cpp */; };
+		56EB60F4233A8D0700175FAF /* HKStringBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB60A1233A8D0700175FAF /* HKStringBuffer.cpp */; };
+		56EB60F5233A8D0700175FAF /* HKBonjour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB60D2233A8D0700175FAF /* HKBonjour.cpp */; };
+		56EB60F6233A8D0700175FAF /* HKPersistor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB60D4233A8D0700175FAF /* HKPersistor.cpp */; };
+		56EB60FC233A971900175FAF /* RelaySwitchAccessory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56EB60FB233A971800175FAF /* RelaySwitchAccessory.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -70,100 +64,115 @@
 		561259B42206E95600DCFA13 /* HKTester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HKTester; sourceTree = BUILT_PRODUCTS_DIR; };
 		561259B72206E95600DCFA13 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = main.cpp; sourceTree = "<group>"; };
 		561259C02206EA0600DCFA13 /* particle_compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = particle_compat.h; sourceTree = "<group>"; };
-		561259C82206F24500DCFA13 /* memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
-		561259C92206F24500DCFA13 /* fe_operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fe_operations.h; sourceTree = "<group>"; };
-		561259CB2206F24500DCFA13 /* logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logging.cpp; sourceTree = "<group>"; };
-		561259CD2206F24500DCFA13 /* chacha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chacha.h; sourceTree = "<group>"; };
-		561259CE2206F24500DCFA13 /* settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = settings.h; sourceTree = "<group>"; };
-		561259CF2206F24500DCFA13 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		561259D02206F24500DCFA13 /* misc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = misc.cpp; sourceTree = "<group>"; };
-		561259D12206F24500DCFA13 /* misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = misc.h; sourceTree = "<group>"; };
-		561259D22206F24500DCFA13 /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = random.cpp; sourceTree = "<group>"; };
-		561259D32206F24500DCFA13 /* mpi_class.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mpi_class.h; sourceTree = "<group>"; };
-		561259D42206F24500DCFA13 /* poly1305.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poly1305.h; sourceTree = "<group>"; };
-		561259D52206F24500DCFA13 /* chacha20_poly1305.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = chacha20_poly1305.cpp; sourceTree = "<group>"; };
-		561259D62206F24500DCFA13 /* arc4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arc4.h; sourceTree = "<group>"; };
-		561259D72206F24500DCFA13 /* wolfmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wolfmath.h; sourceTree = "<group>"; };
-		561259D92206F24500DCFA13 /* ed25519.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ed25519.cpp; sourceTree = "<group>"; };
-		561259DB2206F24500DCFA13 /* logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logging.h; sourceTree = "<group>"; };
-		561259DD2206F24500DCFA13 /* error-crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "error-crypt.h"; sourceTree = "<group>"; };
-		561259DE2206F24500DCFA13 /* sha512.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sha512.cpp; sourceTree = "<group>"; };
-		561259DF2206F24500DCFA13 /* sha512.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha512.h; sourceTree = "<group>"; };
-		561259E02206F24500DCFA13 /* poly1305.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = poly1305.cpp; sourceTree = "<group>"; };
-		561259E12206F24500DCFA13 /* srp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = srp.h; sourceTree = "<group>"; };
-		561259E22206F24500DCFA13 /* hmac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hmac.cpp; sourceTree = "<group>"; };
-		561259E32206F24500DCFA13 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
-		561259E42206F24500DCFA13 /* wc_port.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wc_port.h; sourceTree = "<group>"; };
-		561259E72206F24500DCFA13 /* srp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = srp.cpp; sourceTree = "<group>"; };
-		561259E82206F24500DCFA13 /* wc_port.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wc_port.cpp; sourceTree = "<group>"; };
-		561259E92206F24500DCFA13 /* chacha20_poly1305.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chacha20_poly1305.h; sourceTree = "<group>"; };
-		561259EA2206F24500DCFA13 /* curve25519.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = curve25519.cpp; sourceTree = "<group>"; };
-		561259EB2206F24500DCFA13 /* memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memory.h; sourceTree = "<group>"; };
-		561259EC2206F24500DCFA13 /* ed25519.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ed25519.h; sourceTree = "<group>"; };
-		561259ED2206F24500DCFA13 /* integer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = integer.cpp; sourceTree = "<group>"; };
-		561259EF2206F24500DCFA13 /* hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hash.cpp; sourceTree = "<group>"; };
-		561259F02206F24500DCFA13 /* curve25519.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curve25519.h; sourceTree = "<group>"; };
-		561259F12206F24500DCFA13 /* visibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = visibility.h; sourceTree = "<group>"; };
-		561259F22206F24500DCFA13 /* integer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = integer.h; sourceTree = "<group>"; };
-		561259F32206F24500DCFA13 /* chacha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = chacha.cpp; sourceTree = "<group>"; };
-		561259F42206F24500DCFA13 /* ge_operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ge_operations.h; sourceTree = "<group>"; };
-		561259F52206F24500DCFA13 /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
-		561259F62206F24500DCFA13 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = random.h; sourceTree = "<group>"; };
-		561259F72206F24500DCFA13 /* mpi_superclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mpi_superclass.h; sourceTree = "<group>"; };
-		561259FA2206F24600DCFA13 /* HKAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKAccessory.cpp; sourceTree = "<group>"; };
-		561259FB2206F24600DCFA13 /* HKAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKAccessory.h; sourceTree = "<group>"; };
-		561259FC2206F24600DCFA13 /* HKConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConsts.h; sourceTree = "<group>"; };
-		561259FD2206F24600DCFA13 /* HKBonjour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKBonjour.h; sourceTree = "<group>"; };
-		561259FE2206F24600DCFA13 /* HKStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKStringUtils.cpp; sourceTree = "<group>"; };
-		56125A002206F24600DCFA13 /* HKNetworkMessageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessageData.h; sourceTree = "<group>"; };
-		56125A012206F24600DCFA13 /* HKNetworkResponse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkResponse.cpp; sourceTree = "<group>"; };
-		56125A022206F24600DCFA13 /* HKNetworkMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkMessage.cpp; sourceTree = "<group>"; };
-		56125A032206F24600DCFA13 /* HKConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConnection.h; sourceTree = "<group>"; };
-		56125A042206F24600DCFA13 /* HKServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKServer.h; sourceTree = "<group>"; };
-		56125A052206F24600DCFA13 /* HKPersistor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKPersistor.h; sourceTree = "<group>"; };
-		56125A062206F24600DCFA13 /* HKNetworkMessageData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkMessageData.cpp; sourceTree = "<group>"; };
-		56125A072206F24600DCFA13 /* HKServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKServer.cpp; sourceTree = "<group>"; };
-		56125A082206F24600DCFA13 /* HKConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKConnection.cpp; sourceTree = "<group>"; };
-		56125A092206F24600DCFA13 /* HKNetworkResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkResponse.h; sourceTree = "<group>"; };
-		56125A0B2206F24600DCFA13 /* HKNetworkMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessage.h; sourceTree = "<group>"; };
-		56125A0C2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkMessageDataRecord.cpp; sourceTree = "<group>"; };
-		56125A0D2206F24600DCFA13 /* HKConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConfig.h; sourceTree = "<group>"; };
-		56125A0F2206F24600DCFA13 /* HKConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKConfig.cpp; sourceTree = "<group>"; };
-		56125A102206F24600DCFA13 /* HKNetworkMessageDataRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessageDataRecord.h; sourceTree = "<group>"; };
-		56125A112206F24600DCFA13 /* HKBonjour.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKBonjour.cpp; sourceTree = "<group>"; };
-		56125A122206F24600DCFA13 /* HKStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKStringUtils.h; sourceTree = "<group>"; };
-		56125A132206F24600DCFA13 /* HKPersistor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKPersistor.cpp; sourceTree = "<group>"; };
 		56125A3422070D9B00DCFA13 /* particle_compat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = particle_compat.cpp; sourceTree = "<group>"; };
 		56125A372207490000DCFA13 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		56125A3922074AFC00DCFA13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		56125A3B2208C29900DCFA13 /* LightBulbAccessoryBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightBulbAccessoryBase.h; path = ../../../src/LightBulbAccessoryBase.h; sourceTree = "<group>"; };
-		56125A3C2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightBulbAccessoryBase.cpp; path = ../../../src/LightBulbAccessoryBase.cpp; sourceTree = "<group>"; };
-		56125A422208D06300DCFA13 /* ge_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_low_mem.cpp; sourceTree = "<group>"; };
-		56125A432208D06300DCFA13 /* fe_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_low_mem.cpp; sourceTree = "<group>"; };
-		56125A462208D0FE00DCFA13 /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
-		56125A472208D0FE00DCFA13 /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
-		56125A4F22103E9900DCFA13 /* HAPAccessoryDescriptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HAPAccessoryDescriptor.h; path = ../../../src/HAPAccessoryDescriptor.h; sourceTree = "<group>"; };
-		562778F62269E2B20004939B /* HKStringBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HKStringBuffer.cpp; sourceTree = "<group>"; };
-		562778F72269E2B20004939B /* HKStringBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HKStringBuffer.hpp; sourceTree = "<group>"; };
-		56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HomekitBridgeAccessory.cpp; path = ../../../src/HomekitBridgeAccessory.cpp; sourceTree = "<group>"; };
-		56450935222A77BE00054765 /* HomekitBridgeAccessory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HomekitBridgeAccessory.h; path = ../../../src/HomekitBridgeAccessory.h; sourceTree = "<group>"; };
-		56450939222A82B600054765 /* RCSwitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RCSwitch.cpp; sourceTree = "<group>"; };
-		5645093A222A82B600054765 /* RCSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCSwitch.h; sourceTree = "<group>"; };
-		5645093C222A93CA00054765 /* MotionSensorAccessory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MotionSensorAccessory.cpp; path = ../../../src/MotionSensorAccessory.cpp; sourceTree = "<group>"; };
-		5645093D222A93CA00054765 /* MotionSensorAccessory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MotionSensorAccessory.h; path = ../../../src/MotionSensorAccessory.h; sourceTree = "<group>"; };
-		5675A72E2221647D00942207 /* LightSensorAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LightSensorAccessory.cpp; path = ../../../src/LightSensorAccessory.cpp; sourceTree = "<group>"; };
-		5675A72F2221647D00942207 /* LightSensorAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightSensorAccessory.h; path = ../../../src/LightSensorAccessory.h; sourceTree = "<group>"; };
-		56947C8A220AEFF300767C5A /* HKLog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HKLog.cpp; sourceTree = "<group>"; };
-		56947C8B220AEFF300767C5A /* HKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKLog.h; sourceTree = "<group>"; };
-		56B469332269C5AA001A600A /* RelaySwitchAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RelaySwitchAccessory.cpp; path = ../../../src/RelaySwitchAccessory.cpp; sourceTree = "<group>"; };
-		56B469352269C5AB001A600A /* WindowsShutterService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WindowsShutterService.h; path = ../../../src/WindowsShutterService.h; sourceTree = "<group>"; };
-		56B469372269C5AB001A600A /* WindowsShutterService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WindowsShutterService.cpp; path = ../../../src/WindowsShutterService.cpp; sourceTree = "<group>"; };
-		56B469382269C5AB001A600A /* RelaySwitchAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RelaySwitchAccessory.h; path = ../../../src/RelaySwitchAccessory.h; sourceTree = "<group>"; };
-		56B4693B2269C5AB001A600A /* ServiceDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServiceDescriptor.h; path = ../../../src/ServiceDescriptor.h; sourceTree = "<group>"; };
-		56D840CA223910480061092A /* LEDStripLightBulbAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LEDStripLightBulbAccessory.h; path = ../../../src/LEDStripLightBulbAccessory.h; sourceTree = "<group>"; };
-		56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LEDStripLightBulbAccessory.cpp; path = ../../../src/LEDStripLightBulbAccessory.cpp; sourceTree = "<group>"; };
-		56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhotoSystemLEDLightBulbAccessory.cpp; path = ../../../src/PhotoSystemLEDLightBulbAccessory.cpp; sourceTree = "<group>"; };
-		56D840CD223910480061092A /* PhotoSystemLEDLightBulbAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoSystemLEDLightBulbAccessory.h; path = ../../../src/PhotoSystemLEDLightBulbAccessory.h; sourceTree = "<group>"; };
+		56EB6056233A8D0700175FAF /* HKLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKLog.h; sourceTree = "<group>"; };
+		56EB6057233A8D0700175FAF /* HKStringBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKStringBuffer.h; sourceTree = "<group>"; };
+		56EB6058233A8D0700175FAF /* HAPHomekitBridgeAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HAPHomekitBridgeAccessory.cpp; sourceTree = "<group>"; };
+		56EB605A233A8D0700175FAF /* ge_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_operations.cpp; sourceTree = "<group>"; };
+		56EB605B233A8D0700175FAF /* memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
+		56EB605C233A8D0700175FAF /* fe_operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fe_operations.h; sourceTree = "<group>"; };
+		56EB605D233A8D0700175FAF /* ge_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ge_low_mem.cpp; sourceTree = "<group>"; };
+		56EB605E233A8D0700175FAF /* fe_low_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_low_mem.cpp; sourceTree = "<group>"; };
+		56EB605F233A8D0700175FAF /* logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logging.cpp; sourceTree = "<group>"; };
+		56EB6060233A8D0700175FAF /* chacha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chacha.h; sourceTree = "<group>"; };
+		56EB6061233A8D0700175FAF /* settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = settings.h; sourceTree = "<group>"; };
+		56EB6062233A8D0700175FAF /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		56EB6063233A8D0700175FAF /* misc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = misc.cpp; sourceTree = "<group>"; };
+		56EB6064233A8D0700175FAF /* misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = misc.h; sourceTree = "<group>"; };
+		56EB6065233A8D0700175FAF /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = random.cpp; sourceTree = "<group>"; };
+		56EB6066233A8D0700175FAF /* mpi_class.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mpi_class.h; sourceTree = "<group>"; };
+		56EB6067233A8D0700175FAF /* poly1305.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poly1305.h; sourceTree = "<group>"; };
+		56EB6068233A8D0700175FAF /* chacha20_poly1305.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = chacha20_poly1305.cpp; sourceTree = "<group>"; };
+		56EB6069233A8D0700175FAF /* arc4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arc4.h; sourceTree = "<group>"; };
+		56EB606A233A8D0700175FAF /* wolfmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wolfmath.h; sourceTree = "<group>"; };
+		56EB606B233A8D0700175FAF /* ed25519.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ed25519.cpp; sourceTree = "<group>"; };
+		56EB606C233A8D0700175FAF /* fe_operations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fe_operations.cpp; sourceTree = "<group>"; };
+		56EB606D233A8D0700175FAF /* logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logging.h; sourceTree = "<group>"; };
+		56EB606E233A8D0700175FAF /* error-crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "error-crypt.h"; sourceTree = "<group>"; };
+		56EB606F233A8D0700175FAF /* sha512.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sha512.cpp; sourceTree = "<group>"; };
+		56EB6070233A8D0700175FAF /* sha512.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha512.h; sourceTree = "<group>"; };
+		56EB6071233A8D0700175FAF /* poly1305.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = poly1305.cpp; sourceTree = "<group>"; };
+		56EB6072233A8D0700175FAF /* srp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = srp.h; sourceTree = "<group>"; };
+		56EB6073233A8D0700175FAF /* hmac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hmac.cpp; sourceTree = "<group>"; };
+		56EB6074233A8D0700175FAF /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
+		56EB6075233A8D0700175FAF /* wc_port.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wc_port.h; sourceTree = "<group>"; };
+		56EB6076233A8D0700175FAF /* srp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = srp.cpp; sourceTree = "<group>"; };
+		56EB6077233A8D0700175FAF /* wc_port.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wc_port.cpp; sourceTree = "<group>"; };
+		56EB6078233A8D0700175FAF /* chacha20_poly1305.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chacha20_poly1305.h; sourceTree = "<group>"; };
+		56EB6079233A8D0700175FAF /* curve25519.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = curve25519.cpp; sourceTree = "<group>"; };
+		56EB607A233A8D0700175FAF /* memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memory.h; sourceTree = "<group>"; };
+		56EB607B233A8D0700175FAF /* ed25519.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ed25519.h; sourceTree = "<group>"; };
+		56EB607C233A8D0700175FAF /* integer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = integer.cpp; sourceTree = "<group>"; };
+		56EB607D233A8D0700175FAF /* hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hash.cpp; sourceTree = "<group>"; };
+		56EB607E233A8D0700175FAF /* curve25519.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = curve25519.h; sourceTree = "<group>"; };
+		56EB607F233A8D0700175FAF /* visibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = visibility.h; sourceTree = "<group>"; };
+		56EB6080233A8D0700175FAF /* integer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = integer.h; sourceTree = "<group>"; };
+		56EB6081233A8D0700175FAF /* chacha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = chacha.cpp; sourceTree = "<group>"; };
+		56EB6082233A8D0700175FAF /* ge_operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ge_operations.h; sourceTree = "<group>"; };
+		56EB6083233A8D0700175FAF /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
+		56EB6084233A8D0700175FAF /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = random.h; sourceTree = "<group>"; };
+		56EB6085233A8D0700175FAF /* mpi_superclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mpi_superclass.h; sourceTree = "<group>"; };
+		56EB6086233A8D0700175FAF /* HKAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKAccessory.cpp; sourceTree = "<group>"; };
+		56EB6087233A8D0700175FAF /* HKAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKAccessory.h; sourceTree = "<group>"; };
+		56EB6089233A8D0700175FAF /* HAPCompositeAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HAPCompositeAccessory.cpp; sourceTree = "<group>"; };
+		56EB608A233A8D0700175FAF /* HKConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConsts.h; sourceTree = "<group>"; };
+		56EB608B233A8D0700175FAF /* HAPHomekitBridgeAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAPHomekitBridgeAccessory.h; sourceTree = "<group>"; };
+		56EB608C233A8D0700175FAF /* HKBonjour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKBonjour.h; sourceTree = "<group>"; };
+		56EB608D233A8D0700175FAF /* HKStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKStringUtils.cpp; sourceTree = "<group>"; };
+		56EB608E233A8D0700175FAF /* HAPCompositeAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAPCompositeAccessory.h; sourceTree = "<group>"; };
+		56EB6090233A8D0700175FAF /* HKNetworkMessageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessageData.h; sourceTree = "<group>"; };
+		56EB6091233A8D0700175FAF /* HKNetworkResponse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkResponse.cpp; sourceTree = "<group>"; };
+		56EB6092233A8D0700175FAF /* HKNetworkMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkMessage.cpp; sourceTree = "<group>"; };
+		56EB6093233A8D0700175FAF /* HAPServiceDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAPServiceDescriptor.h; sourceTree = "<group>"; };
+		56EB6094233A8D0700175FAF /* HKConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConnection.h; sourceTree = "<group>"; };
+		56EB6095233A8D0700175FAF /* HKServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKServer.h; sourceTree = "<group>"; };
+		56EB6096233A8D0700175FAF /* HKPersistor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKPersistor.h; sourceTree = "<group>"; };
+		56EB6097233A8D0700175FAF /* HKNetworkMessageData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkMessageData.cpp; sourceTree = "<group>"; };
+		56EB6098233A8D0700175FAF /* HKLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKLog.cpp; sourceTree = "<group>"; };
+		56EB6099233A8D0700175FAF /* HKServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKServer.cpp; sourceTree = "<group>"; };
+		56EB609A233A8D0700175FAF /* HKConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKConnection.cpp; sourceTree = "<group>"; };
+		56EB609B233A8D0700175FAF /* HKNetworkResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkResponse.h; sourceTree = "<group>"; };
+		56EB609C233A8D0700175FAF /* HKNetworkMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessage.h; sourceTree = "<group>"; };
+		56EB609D233A8D0700175FAF /* HKNetworkMessageDataRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKNetworkMessageDataRecord.cpp; sourceTree = "<group>"; };
+		56EB609E233A8D0700175FAF /* HAPAccessoryDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAPAccessoryDescriptor.h; sourceTree = "<group>"; };
+		56EB609F233A8D0700175FAF /* HKConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKConfig.h; sourceTree = "<group>"; };
+		56EB60A0233A8D0700175FAF /* HKConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKConfig.cpp; sourceTree = "<group>"; };
+		56EB60A1233A8D0700175FAF /* HKStringBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKStringBuffer.cpp; sourceTree = "<group>"; };
+		56EB60A2233A8D0700175FAF /* HKNetworkMessageDataRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKNetworkMessageDataRecord.h; sourceTree = "<group>"; };
+		56EB60A6233A8D0700175FAF /* RCSwitch.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = RCSwitch.ipch; sourceTree = "<group>"; };
+		56EB60A7233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60AD233A8D0700175FAF /* particle-hap.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = "particle-hap.ipch"; sourceTree = "<group>"; };
+		56EB60AE233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60B0233A8D0700175FAF /* sha512.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = sha512.ipch; sourceTree = "<group>"; };
+		56EB60B1233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60B4233A8D0700175FAF /* MotionSensorService.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = MotionSensorService.ipch; sourceTree = "<group>"; };
+		56EB60B5233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60B7233A8D0700175FAF /* hmac.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = hmac.ipch; sourceTree = "<group>"; };
+		56EB60B8233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60BA233A8D0700175FAF /* HKConnection.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = HKConnection.ipch; sourceTree = "<group>"; };
+		56EB60BB233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60BD233A8D0700175FAF /* random.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = random.ipch; sourceTree = "<group>"; };
+		56EB60BE233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60C0233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60C1233A8D0700175FAF /* JeznyHomeStationBridge.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = JeznyHomeStationBridge.ipch; sourceTree = "<group>"; };
+		56EB60C3233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60C4233A8D0700175FAF /* integer.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = integer.ipch; sourceTree = "<group>"; };
+		56EB60C6233A8D0700175FAF /* HomekitBridgeAccessory.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = HomekitBridgeAccessory.ipch; sourceTree = "<group>"; };
+		56EB60C7233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60CA233A8D0700175FAF /* srp.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = srp.ipch; sourceTree = "<group>"; };
+		56EB60CB233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60CE233A8D0700175FAF /* mmap_address.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = mmap_address.bin; sourceTree = "<group>"; };
+		56EB60CF233A8D0700175FAF /* MotionSensorAccessory.ipch */ = {isa = PBXFileReference; lastKnownFileType = file; path = MotionSensorAccessory.ipch; sourceTree = "<group>"; };
+		56EB60D1233A8D0700175FAF /* particle-hap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "particle-hap.h"; sourceTree = "<group>"; };
+		56EB60D2233A8D0700175FAF /* HKBonjour.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKBonjour.cpp; sourceTree = "<group>"; };
+		56EB60D3233A8D0700175FAF /* HKStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKStringUtils.h; sourceTree = "<group>"; };
+		56EB60D4233A8D0700175FAF /* HKPersistor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HKPersistor.cpp; sourceTree = "<group>"; };
+		56EB60F8233A971800175FAF /* RelaySwitchAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelaySwitchAccessory.h; sourceTree = "<group>"; };
+		56EB60F9233A971800175FAF /* project.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = project.properties; sourceTree = "<group>"; };
+		56EB60FA233A971800175FAF /* relayswitch.ino */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = relayswitch.ino; sourceTree = "<group>"; };
+		56EB60FB233A971800175FAF /* RelaySwitchAccessory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RelaySwitchAccessory.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,7 +191,8 @@
 		561259AB2206E95600DCFA13 = {
 			isa = PBXGroup;
 			children = (
-				561259C32206F24500DCFA13 /* homekit */,
+				56EB60F7233A971800175FAF /* relayswitch */,
+				56EB6055233A8D0700175FAF /* src */,
 				561259B62206E95600DCFA13 /* HKTester */,
 				561259B52206E95600DCFA13 /* Products */,
 				56125A362207490000DCFA13 /* Frameworks */,
@@ -200,27 +210,8 @@
 		561259B62206E95600DCFA13 /* HKTester */ = {
 			isa = PBXGroup;
 			children = (
-				56B469332269C5AA001A600A /* RelaySwitchAccessory.cpp */,
-				56B469382269C5AB001A600A /* RelaySwitchAccessory.h */,
-				56B4693B2269C5AB001A600A /* ServiceDescriptor.h */,
-				56B469372269C5AB001A600A /* WindowsShutterService.cpp */,
-				56B469352269C5AB001A600A /* WindowsShutterService.h */,
-				56D840CB223910480061092A /* LEDStripLightBulbAccessory.cpp */,
-				56D840CA223910480061092A /* LEDStripLightBulbAccessory.h */,
-				56D840CC223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp */,
-				56D840CD223910480061092A /* PhotoSystemLEDLightBulbAccessory.h */,
-				56450938222A82B600054765 /* rcswitch */,
-				5675A72E2221647D00942207 /* LightSensorAccessory.cpp */,
-				5675A72F2221647D00942207 /* LightSensorAccessory.h */,
-				56125A4F22103E9900DCFA13 /* HAPAccessoryDescriptor.h */,
-				56125A3C2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp */,
-				56125A3B2208C29900DCFA13 /* LightBulbAccessoryBase.h */,
 				561259B72206E95600DCFA13 /* main.cpp */,
 				561259BF2206E9E100DCFA13 /* Particle_Compat */,
-				56450934222A77BE00054765 /* HomekitBridgeAccessory.cpp */,
-				56450935222A77BE00054765 /* HomekitBridgeAccessory.h */,
-				5645093C222A93CA00054765 /* MotionSensorAccessory.cpp */,
-				5645093D222A93CA00054765 /* MotionSensorAccessory.h */,
 			);
 			path = HKTester;
 			sourceTree = "<group>";
@@ -234,93 +225,6 @@
 			path = Particle_Compat;
 			sourceTree = "<group>";
 		};
-		561259C32206F24500DCFA13 /* homekit */ = {
-			isa = PBXGroup;
-			children = (
-				561259C52206F24500DCFA13 /* crypto */,
-				561259FA2206F24600DCFA13 /* HKAccessory.cpp */,
-				561259FB2206F24600DCFA13 /* HKAccessory.h */,
-				56125A112206F24600DCFA13 /* HKBonjour.cpp */,
-				561259FD2206F24600DCFA13 /* HKBonjour.h */,
-				56125A0F2206F24600DCFA13 /* HKConfig.cpp */,
-				56125A0D2206F24600DCFA13 /* HKConfig.h */,
-				56125A082206F24600DCFA13 /* HKConnection.cpp */,
-				56125A032206F24600DCFA13 /* HKConnection.h */,
-				561259FC2206F24600DCFA13 /* HKConsts.h */,
-				56125A022206F24600DCFA13 /* HKNetworkMessage.cpp */,
-				56125A0B2206F24600DCFA13 /* HKNetworkMessage.h */,
-				56125A062206F24600DCFA13 /* HKNetworkMessageData.cpp */,
-				56125A002206F24600DCFA13 /* HKNetworkMessageData.h */,
-				56125A0C2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp */,
-				56125A102206F24600DCFA13 /* HKNetworkMessageDataRecord.h */,
-				56125A012206F24600DCFA13 /* HKNetworkResponse.cpp */,
-				56125A092206F24600DCFA13 /* HKNetworkResponse.h */,
-				56125A132206F24600DCFA13 /* HKPersistor.cpp */,
-				56125A052206F24600DCFA13 /* HKPersistor.h */,
-				56125A072206F24600DCFA13 /* HKServer.cpp */,
-				56125A042206F24600DCFA13 /* HKServer.h */,
-				561259FE2206F24600DCFA13 /* HKStringUtils.cpp */,
-				56125A122206F24600DCFA13 /* HKStringUtils.h */,
-				56947C8A220AEFF300767C5A /* HKLog.cpp */,
-				56947C8B220AEFF300767C5A /* HKLog.h */,
-				562778F62269E2B20004939B /* HKStringBuffer.cpp */,
-				562778F72269E2B20004939B /* HKStringBuffer.hpp */,
-			);
-			name = homekit;
-			path = ../../src/homekit;
-			sourceTree = "<group>";
-		};
-		561259C52206F24500DCFA13 /* crypto */ = {
-			isa = PBXGroup;
-			children = (
-				56125A472208D0FE00DCFA13 /* fe_operations.cpp */,
-				56125A462208D0FE00DCFA13 /* ge_operations.cpp */,
-				56125A432208D06300DCFA13 /* fe_low_mem.cpp */,
-				56125A422208D06300DCFA13 /* ge_low_mem.cpp */,
-				561259D62206F24500DCFA13 /* arc4.h */,
-				561259F32206F24500DCFA13 /* chacha.cpp */,
-				561259CD2206F24500DCFA13 /* chacha.h */,
-				561259D52206F24500DCFA13 /* chacha20_poly1305.cpp */,
-				561259E92206F24500DCFA13 /* chacha20_poly1305.h */,
-				561259EA2206F24500DCFA13 /* curve25519.cpp */,
-				561259F02206F24500DCFA13 /* curve25519.h */,
-				561259D92206F24500DCFA13 /* ed25519.cpp */,
-				561259EC2206F24500DCFA13 /* ed25519.h */,
-				561259DD2206F24500DCFA13 /* error-crypt.h */,
-				561259C92206F24500DCFA13 /* fe_operations.h */,
-				561259F42206F24500DCFA13 /* ge_operations.h */,
-				561259EF2206F24500DCFA13 /* hash.cpp */,
-				561259F52206F24500DCFA13 /* hash.h */,
-				561259E22206F24500DCFA13 /* hmac.cpp */,
-				561259E32206F24500DCFA13 /* hmac.h */,
-				561259ED2206F24500DCFA13 /* integer.cpp */,
-				561259F22206F24500DCFA13 /* integer.h */,
-				561259CB2206F24500DCFA13 /* logging.cpp */,
-				561259DB2206F24500DCFA13 /* logging.h */,
-				561259C82206F24500DCFA13 /* memory.cpp */,
-				561259EB2206F24500DCFA13 /* memory.h */,
-				561259D02206F24500DCFA13 /* misc.cpp */,
-				561259D12206F24500DCFA13 /* misc.h */,
-				561259D32206F24500DCFA13 /* mpi_class.h */,
-				561259F72206F24500DCFA13 /* mpi_superclass.h */,
-				561259E02206F24500DCFA13 /* poly1305.cpp */,
-				561259D42206F24500DCFA13 /* poly1305.h */,
-				561259D22206F24500DCFA13 /* random.cpp */,
-				561259F62206F24500DCFA13 /* random.h */,
-				561259CE2206F24500DCFA13 /* settings.h */,
-				561259DE2206F24500DCFA13 /* sha512.cpp */,
-				561259DF2206F24500DCFA13 /* sha512.h */,
-				561259E72206F24500DCFA13 /* srp.cpp */,
-				561259E12206F24500DCFA13 /* srp.h */,
-				561259CF2206F24500DCFA13 /* types.h */,
-				561259F12206F24500DCFA13 /* visibility.h */,
-				561259E82206F24500DCFA13 /* wc_port.cpp */,
-				561259E42206F24500DCFA13 /* wc_port.h */,
-				561259D72206F24500DCFA13 /* wolfmath.h */,
-			);
-			path = crypto;
-			sourceTree = "<group>";
-		};
 		56125A362207490000DCFA13 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -330,14 +234,326 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		56450938222A82B600054765 /* rcswitch */ = {
+		56EB6055233A8D0700175FAF /* src */ = {
 			isa = PBXGroup;
 			children = (
-				56450939222A82B600054765 /* RCSwitch.cpp */,
-				5645093A222A82B600054765 /* RCSwitch.h */,
+				56EB6056233A8D0700175FAF /* HKLog.h */,
+				56EB6057233A8D0700175FAF /* HKStringBuffer.h */,
+				56EB6058233A8D0700175FAF /* HAPHomekitBridgeAccessory.cpp */,
+				56EB6059233A8D0700175FAF /* crypto */,
+				56EB6086233A8D0700175FAF /* HKAccessory.cpp */,
+				56EB6087233A8D0700175FAF /* HKAccessory.h */,
+				56EB6088233A8D0700175FAF /* homekit */,
+				56EB6089233A8D0700175FAF /* HAPCompositeAccessory.cpp */,
+				56EB608A233A8D0700175FAF /* HKConsts.h */,
+				56EB608B233A8D0700175FAF /* HAPHomekitBridgeAccessory.h */,
+				56EB608C233A8D0700175FAF /* HKBonjour.h */,
+				56EB608D233A8D0700175FAF /* HKStringUtils.cpp */,
+				56EB608E233A8D0700175FAF /* HAPCompositeAccessory.h */,
+				56EB608F233A8D0700175FAF /* target */,
+				56EB6090233A8D0700175FAF /* HKNetworkMessageData.h */,
+				56EB6091233A8D0700175FAF /* HKNetworkResponse.cpp */,
+				56EB6092233A8D0700175FAF /* HKNetworkMessage.cpp */,
+				56EB6093233A8D0700175FAF /* HAPServiceDescriptor.h */,
+				56EB6094233A8D0700175FAF /* HKConnection.h */,
+				56EB6095233A8D0700175FAF /* HKServer.h */,
+				56EB6096233A8D0700175FAF /* HKPersistor.h */,
+				56EB6097233A8D0700175FAF /* HKNetworkMessageData.cpp */,
+				56EB6098233A8D0700175FAF /* HKLog.cpp */,
+				56EB6099233A8D0700175FAF /* HKServer.cpp */,
+				56EB609A233A8D0700175FAF /* HKConnection.cpp */,
+				56EB609B233A8D0700175FAF /* HKNetworkResponse.h */,
+				56EB609C233A8D0700175FAF /* HKNetworkMessage.h */,
+				56EB609D233A8D0700175FAF /* HKNetworkMessageDataRecord.cpp */,
+				56EB609E233A8D0700175FAF /* HAPAccessoryDescriptor.h */,
+				56EB609F233A8D0700175FAF /* HKConfig.h */,
+				56EB60A0233A8D0700175FAF /* HKConfig.cpp */,
+				56EB60A1233A8D0700175FAF /* HKStringBuffer.cpp */,
+				56EB60A2233A8D0700175FAF /* HKNetworkMessageDataRecord.h */,
+				56EB60A3233A8D0700175FAF /* .vscode */,
+				56EB60D1233A8D0700175FAF /* particle-hap.h */,
+				56EB60D2233A8D0700175FAF /* HKBonjour.cpp */,
+				56EB60D3233A8D0700175FAF /* HKStringUtils.h */,
+				56EB60D4233A8D0700175FAF /* HKPersistor.cpp */,
 			);
-			name = rcswitch;
-			path = ../../../src/rcswitch;
+			name = src;
+			path = ../../src;
+			sourceTree = "<group>";
+		};
+		56EB6059233A8D0700175FAF /* crypto */ = {
+			isa = PBXGroup;
+			children = (
+				56EB605A233A8D0700175FAF /* ge_operations.cpp */,
+				56EB605B233A8D0700175FAF /* memory.cpp */,
+				56EB605C233A8D0700175FAF /* fe_operations.h */,
+				56EB605D233A8D0700175FAF /* ge_low_mem.cpp */,
+				56EB605E233A8D0700175FAF /* fe_low_mem.cpp */,
+				56EB605F233A8D0700175FAF /* logging.cpp */,
+				56EB6060233A8D0700175FAF /* chacha.h */,
+				56EB6061233A8D0700175FAF /* settings.h */,
+				56EB6062233A8D0700175FAF /* types.h */,
+				56EB6063233A8D0700175FAF /* misc.cpp */,
+				56EB6064233A8D0700175FAF /* misc.h */,
+				56EB6065233A8D0700175FAF /* random.cpp */,
+				56EB6066233A8D0700175FAF /* mpi_class.h */,
+				56EB6067233A8D0700175FAF /* poly1305.h */,
+				56EB6068233A8D0700175FAF /* chacha20_poly1305.cpp */,
+				56EB6069233A8D0700175FAF /* arc4.h */,
+				56EB606A233A8D0700175FAF /* wolfmath.h */,
+				56EB606B233A8D0700175FAF /* ed25519.cpp */,
+				56EB606C233A8D0700175FAF /* fe_operations.cpp */,
+				56EB606D233A8D0700175FAF /* logging.h */,
+				56EB606E233A8D0700175FAF /* error-crypt.h */,
+				56EB606F233A8D0700175FAF /* sha512.cpp */,
+				56EB6070233A8D0700175FAF /* sha512.h */,
+				56EB6071233A8D0700175FAF /* poly1305.cpp */,
+				56EB6072233A8D0700175FAF /* srp.h */,
+				56EB6073233A8D0700175FAF /* hmac.cpp */,
+				56EB6074233A8D0700175FAF /* hmac.h */,
+				56EB6075233A8D0700175FAF /* wc_port.h */,
+				56EB6076233A8D0700175FAF /* srp.cpp */,
+				56EB6077233A8D0700175FAF /* wc_port.cpp */,
+				56EB6078233A8D0700175FAF /* chacha20_poly1305.h */,
+				56EB6079233A8D0700175FAF /* curve25519.cpp */,
+				56EB607A233A8D0700175FAF /* memory.h */,
+				56EB607B233A8D0700175FAF /* ed25519.h */,
+				56EB607C233A8D0700175FAF /* integer.cpp */,
+				56EB607D233A8D0700175FAF /* hash.cpp */,
+				56EB607E233A8D0700175FAF /* curve25519.h */,
+				56EB607F233A8D0700175FAF /* visibility.h */,
+				56EB6080233A8D0700175FAF /* integer.h */,
+				56EB6081233A8D0700175FAF /* chacha.cpp */,
+				56EB6082233A8D0700175FAF /* ge_operations.h */,
+				56EB6083233A8D0700175FAF /* hash.h */,
+				56EB6084233A8D0700175FAF /* random.h */,
+				56EB6085233A8D0700175FAF /* mpi_superclass.h */,
+			);
+			path = crypto;
+			sourceTree = "<group>";
+		};
+		56EB6088233A8D0700175FAF /* homekit */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = homekit;
+			sourceTree = "<group>";
+		};
+		56EB608F233A8D0700175FAF /* target */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = target;
+			sourceTree = "<group>";
+		};
+		56EB60A3233A8D0700175FAF /* .vscode */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60A4233A8D0700175FAF /* ipch */,
+			);
+			path = .vscode;
+			sourceTree = "<group>";
+		};
+		56EB60A4233A8D0700175FAF /* ipch */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60A5233A8D0700175FAF /* 9b9a285ed8187ddb */,
+				56EB60A8233A8D0700175FAF /* 1033ff36c188d53c */,
+				56EB60A9233A8D0700175FAF /* 2a56e6bf207ec60b */,
+				56EB60AA233A8D0700175FAF /* ea17d90ad2f83d54 */,
+				56EB60AB233A8D0700175FAF /* 4f3346777e7de6a6 */,
+				56EB60AC233A8D0700175FAF /* 66f4b036f2b57d09 */,
+				56EB60AF233A8D0700175FAF /* 95ba02596195814a */,
+				56EB60B2233A8D0700175FAF /* f1dd4f01ccf01e65 */,
+				56EB60B3233A8D0700175FAF /* 45740d8edd535feb */,
+				56EB60B6233A8D0700175FAF /* d1545ab0907674c7 */,
+				56EB60B9233A8D0700175FAF /* 12453dc60a1b1059 */,
+				56EB60BC233A8D0700175FAF /* 4a7ff1b47240b2f7 */,
+				56EB60BF233A8D0700175FAF /* 4df57c2e4e6626a7 */,
+				56EB60C2233A8D0700175FAF /* d76eb4c02f066784 */,
+				56EB60C5233A8D0700175FAF /* 84cfb10efaccde64 */,
+				56EB60C8233A8D0700175FAF /* 337d5501461de9dc */,
+				56EB60C9233A8D0700175FAF /* 66c72588ab0883e5 */,
+				56EB60CC233A8D0700175FAF /* 47e2e9910a20a3b7 */,
+				56EB60CD233A8D0700175FAF /* 291668746307b876 */,
+				56EB60D0233A8D0700175FAF /* 258cab4bcd170f76 */,
+			);
+			path = ipch;
+			sourceTree = "<group>";
+		};
+		56EB60A5233A8D0700175FAF /* 9b9a285ed8187ddb */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60A6233A8D0700175FAF /* RCSwitch.ipch */,
+				56EB60A7233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = 9b9a285ed8187ddb;
+			sourceTree = "<group>";
+		};
+		56EB60A8233A8D0700175FAF /* 1033ff36c188d53c */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = 1033ff36c188d53c;
+			sourceTree = "<group>";
+		};
+		56EB60A9233A8D0700175FAF /* 2a56e6bf207ec60b */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = 2a56e6bf207ec60b;
+			sourceTree = "<group>";
+		};
+		56EB60AA233A8D0700175FAF /* ea17d90ad2f83d54 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ea17d90ad2f83d54;
+			sourceTree = "<group>";
+		};
+		56EB60AB233A8D0700175FAF /* 4f3346777e7de6a6 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = 4f3346777e7de6a6;
+			sourceTree = "<group>";
+		};
+		56EB60AC233A8D0700175FAF /* 66f4b036f2b57d09 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60AD233A8D0700175FAF /* particle-hap.ipch */,
+				56EB60AE233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = 66f4b036f2b57d09;
+			sourceTree = "<group>";
+		};
+		56EB60AF233A8D0700175FAF /* 95ba02596195814a */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60B0233A8D0700175FAF /* sha512.ipch */,
+				56EB60B1233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = 95ba02596195814a;
+			sourceTree = "<group>";
+		};
+		56EB60B2233A8D0700175FAF /* f1dd4f01ccf01e65 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = f1dd4f01ccf01e65;
+			sourceTree = "<group>";
+		};
+		56EB60B3233A8D0700175FAF /* 45740d8edd535feb */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60B4233A8D0700175FAF /* MotionSensorService.ipch */,
+				56EB60B5233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = 45740d8edd535feb;
+			sourceTree = "<group>";
+		};
+		56EB60B6233A8D0700175FAF /* d1545ab0907674c7 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60B7233A8D0700175FAF /* hmac.ipch */,
+				56EB60B8233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = d1545ab0907674c7;
+			sourceTree = "<group>";
+		};
+		56EB60B9233A8D0700175FAF /* 12453dc60a1b1059 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60BA233A8D0700175FAF /* HKConnection.ipch */,
+				56EB60BB233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = 12453dc60a1b1059;
+			sourceTree = "<group>";
+		};
+		56EB60BC233A8D0700175FAF /* 4a7ff1b47240b2f7 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60BD233A8D0700175FAF /* random.ipch */,
+				56EB60BE233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = 4a7ff1b47240b2f7;
+			sourceTree = "<group>";
+		};
+		56EB60BF233A8D0700175FAF /* 4df57c2e4e6626a7 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60C0233A8D0700175FAF /* mmap_address.bin */,
+				56EB60C1233A8D0700175FAF /* JeznyHomeStationBridge.ipch */,
+			);
+			path = 4df57c2e4e6626a7;
+			sourceTree = "<group>";
+		};
+		56EB60C2233A8D0700175FAF /* d76eb4c02f066784 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60C3233A8D0700175FAF /* mmap_address.bin */,
+				56EB60C4233A8D0700175FAF /* integer.ipch */,
+			);
+			path = d76eb4c02f066784;
+			sourceTree = "<group>";
+		};
+		56EB60C5233A8D0700175FAF /* 84cfb10efaccde64 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60C6233A8D0700175FAF /* HomekitBridgeAccessory.ipch */,
+				56EB60C7233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = 84cfb10efaccde64;
+			sourceTree = "<group>";
+		};
+		56EB60C8233A8D0700175FAF /* 337d5501461de9dc */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = 337d5501461de9dc;
+			sourceTree = "<group>";
+		};
+		56EB60C9233A8D0700175FAF /* 66c72588ab0883e5 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60CA233A8D0700175FAF /* srp.ipch */,
+				56EB60CB233A8D0700175FAF /* mmap_address.bin */,
+			);
+			path = 66c72588ab0883e5;
+			sourceTree = "<group>";
+		};
+		56EB60CC233A8D0700175FAF /* 47e2e9910a20a3b7 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = 47e2e9910a20a3b7;
+			sourceTree = "<group>";
+		};
+		56EB60CD233A8D0700175FAF /* 291668746307b876 */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60CE233A8D0700175FAF /* mmap_address.bin */,
+				56EB60CF233A8D0700175FAF /* MotionSensorAccessory.ipch */,
+			);
+			path = 291668746307b876;
+			sourceTree = "<group>";
+		};
+		56EB60D0233A8D0700175FAF /* 258cab4bcd170f76 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = 258cab4bcd170f76;
+			sourceTree = "<group>";
+		};
+		56EB60F7233A971800175FAF /* relayswitch */ = {
+			isa = PBXGroup;
+			children = (
+				56EB60F8233A971800175FAF /* RelaySwitchAccessory.h */,
+				56EB60F9233A971800175FAF /* project.properties */,
+				56EB60FA233A971800175FAF /* relayswitch.ino */,
+				56EB60FB233A971800175FAF /* RelaySwitchAccessory.cpp */,
+			);
+			name = relayswitch;
+			path = ../../examples/relayswitch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -396,49 +612,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				56125A212206F24600DCFA13 /* srp.cpp in Sources */,
-				56125A282206F24600DCFA13 /* HKStringUtils.cpp in Sources */,
-				56125A332206F24600DCFA13 /* HKPersistor.cpp in Sources */,
-				56450936222A77BE00054765 /* HomekitBridgeAccessory.cpp in Sources */,
-				5675A7302221647D00942207 /* LightSensorAccessory.cpp in Sources */,
+				56EB60D7233A8D0700175FAF /* memory.cpp in Sources */,
 				561259B82206E95600DCFA13 /* main.cpp in Sources */,
-				56125A242206F24600DCFA13 /* integer.cpp in Sources */,
-				56D840CE223910480061092A /* LEDStripLightBulbAccessory.cpp in Sources */,
-				56125A2F2206F24600DCFA13 /* HKNetworkMessageDataRecord.cpp in Sources */,
-				56125A1F2206F24600DCFA13 /* hmac.cpp in Sources */,
-				56125A492208D0FE00DCFA13 /* fe_operations.cpp in Sources */,
-				56B4693C2269C5AB001A600A /* RelaySwitchAccessory.cpp in Sources */,
-				56125A2A2206F24600DCFA13 /* HKNetworkMessage.cpp in Sources */,
-				56125A292206F24600DCFA13 /* HKNetworkResponse.cpp in Sources */,
-				56125A182206F24600DCFA13 /* random.cpp in Sources */,
-				56125A442208D06300DCFA13 /* ge_low_mem.cpp in Sources */,
-				5645093E222A93CA00054765 /* MotionSensorAccessory.cpp in Sources */,
-				5645093B222A82B600054765 /* RCSwitch.cpp in Sources */,
-				56125A1A2206F24600DCFA13 /* ed25519.cpp in Sources */,
-				56125A3D2208C29A00DCFA13 /* LightBulbAccessoryBase.cpp in Sources */,
-				56125A322206F24600DCFA13 /* HKBonjour.cpp in Sources */,
-				56125A232206F24600DCFA13 /* curve25519.cpp in Sources */,
+				56EB60E2233A8D0700175FAF /* hmac.cpp in Sources */,
+				56EB60EB233A8D0700175FAF /* HKStringUtils.cpp in Sources */,
+				56EB60EF233A8D0700175FAF /* HKLog.cpp in Sources */,
+				56EB60F4233A8D0700175FAF /* HKStringBuffer.cpp in Sources */,
+				56EB60F6233A8D0700175FAF /* HKPersistor.cpp in Sources */,
+				56EB60F3233A8D0700175FAF /* HKConfig.cpp in Sources */,
+				56EB60E8233A8D0700175FAF /* chacha.cpp in Sources */,
+				56EB60DF233A8D0700175FAF /* fe_operations.cpp in Sources */,
+				56EB60DB233A8D0700175FAF /* misc.cpp in Sources */,
+				56EB60ED233A8D0700175FAF /* HKNetworkMessage.cpp in Sources */,
+				56EB60DD233A8D0700175FAF /* chacha20_poly1305.cpp in Sources */,
+				56EB60F2233A8D0700175FAF /* HKNetworkMessageDataRecord.cpp in Sources */,
+				56EB60EE233A8D0700175FAF /* HKNetworkMessageData.cpp in Sources */,
+				56EB60E6233A8D0700175FAF /* integer.cpp in Sources */,
+				56EB60E5233A8D0700175FAF /* curve25519.cpp in Sources */,
+				56EB60EC233A8D0700175FAF /* HKNetworkResponse.cpp in Sources */,
+				56EB60F1233A8D0700175FAF /* HKConnection.cpp in Sources */,
+				56EB60E0233A8D0700175FAF /* sha512.cpp in Sources */,
+				56EB60E1233A8D0700175FAF /* poly1305.cpp in Sources */,
+				56EB60E4233A8D0700175FAF /* wc_port.cpp in Sources */,
+				56EB60E7233A8D0700175FAF /* hash.cpp in Sources */,
+				56EB60D6233A8D0700175FAF /* ge_operations.cpp in Sources */,
+				56EB60F5233A8D0700175FAF /* HKBonjour.cpp in Sources */,
+				56EB60DC233A8D0700175FAF /* random.cpp in Sources */,
+				56EB60FC233A971900175FAF /* RelaySwitchAccessory.cpp in Sources */,
+				56EB60E3233A8D0700175FAF /* srp.cpp in Sources */,
+				56EB60DA233A8D0700175FAF /* logging.cpp in Sources */,
+				56EB60DE233A8D0700175FAF /* ed25519.cpp in Sources */,
+				56EB60F0233A8D0700175FAF /* HKServer.cpp in Sources */,
+				56EB60EA233A8D0700175FAF /* HAPCompositeAccessory.cpp in Sources */,
+				56EB60E9233A8D0700175FAF /* HKAccessory.cpp in Sources */,
+				56EB60D9233A8D0700175FAF /* fe_low_mem.cpp in Sources */,
 				56125A3522070D9B00DCFA13 /* particle_compat.cpp in Sources */,
-				56D840CF223910480061092A /* PhotoSystemLEDLightBulbAccessory.cpp in Sources */,
-				56125A1E2206F24600DCFA13 /* poly1305.cpp in Sources */,
-				56125A482208D0FE00DCFA13 /* ge_operations.cpp in Sources */,
-				56125A2C2206F24600DCFA13 /* HKServer.cpp in Sources */,
-				56125A272206F24600DCFA13 /* HKAccessory.cpp in Sources */,
-				56125A222206F24600DCFA13 /* wc_port.cpp in Sources */,
-				562778F82269E2B20004939B /* HKStringBuffer.cpp in Sources */,
-				56125A252206F24600DCFA13 /* hash.cpp in Sources */,
-				56125A2B2206F24600DCFA13 /* HKNetworkMessageData.cpp in Sources */,
-				56125A192206F24600DCFA13 /* chacha20_poly1305.cpp in Sources */,
-				56125A2D2206F24600DCFA13 /* HKConnection.cpp in Sources */,
-				56125A262206F24600DCFA13 /* chacha.cpp in Sources */,
-				56947C8C220AEFF300767C5A /* HKLog.cpp in Sources */,
-				56125A152206F24600DCFA13 /* memory.cpp in Sources */,
-				56B4693E2269C5AB001A600A /* WindowsShutterService.cpp in Sources */,
-				56125A172206F24600DCFA13 /* misc.cpp in Sources */,
-				56125A162206F24600DCFA13 /* logging.cpp in Sources */,
-				56125A452208D06300DCFA13 /* fe_low_mem.cpp in Sources */,
-				56125A1D2206F24600DCFA13 /* sha512.cpp in Sources */,
-				56125A312206F24600DCFA13 /* HKConfig.cpp in Sources */,
+				56EB60D8233A8D0700175FAF /* ge_low_mem.cpp in Sources */,
+				56EB60D5233A8D0700175FAF /* HAPHomekitBridgeAccessory.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

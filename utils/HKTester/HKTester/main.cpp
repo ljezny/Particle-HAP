@@ -11,26 +11,20 @@
 
 #include "Particle_Compat/particle_compat.h"
 
-#include "../../../src/homekit/HKConfig.h"
-#include "../../../src/homekit/HKServer.h"
+#include "../../../src/HKConfig.h"
+#include "../../../src/HKServer.h"
 
 #import <Foundation/Foundation.h>
 
 #include <stdio.h>
 
 
-#include "../../../src/LightBulbAccessoryBase.h"
-#include "../../../src/LightSensorAccessory.h"
-#include "../../../src/HomekitBridgeAccessory.h"
-#include "../../../src/MotionSensorAccessory.h"
-#include "../../../src/LEDStripLightBulbAccessory.h"
+#include "../../../examples/relayswitch/RelaySwitchAccessory.h"
 
 NSNetService *nsService;
 
-//HAPAccessoryDescriptor *acc = new WindowsShutterAccessory();
-HAPAccessoryDescriptor *acc = new LEDStripLightBulbAccessory(D0,D1,D2);
-//HAPAccessoryDescriptor *acc = new LightSensorAccessory();
-//HomekitBridgeAccessory *acc = new HomekitBridgeAccessory();
+HAPAccessoryDescriptor *acc = new RelaySwitchAccessory(0,false);
+
 
 void progress(Progress_t progress) {
     Serial.printf("PROGRESS: %d\n",progress);
