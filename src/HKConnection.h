@@ -39,6 +39,7 @@ class HKConnection {
 private:
     TCPClient client = TCPClient();
     Srp srp;
+    bool hasSrp = false;
 
     byte controllerKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];
     byte sessionKeyData[CHACHA20_POLY1305_AEAD_KEYSIZE];

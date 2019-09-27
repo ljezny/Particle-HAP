@@ -33,6 +33,9 @@ HKConnection::~HKConnection()
     {
         notifiableCharacteristics.at(i)->removeNotifiedConnection(this);
     }
+    if(hasSrp){
+      wc_SrpTerm(&srp);
+    }
 }
 
 HKConnection::operator bool()
@@ -542,6 +545,7 @@ void HKConnection::handlePairSetup(const char *buffer)
       }
 
       int r = wc_SrpInit(&srp, SRP_TYPE_SHA512, SRP_CLIENT_SIDE);
+      hasSrp = true;
       srp.keyGenFunc_cb = wc_SrpSetKeyH;
       if (!r)
           r = wc_SrpSetUsername(&srp, (const byte *)"Pair-Setup", strlen("Pair-Setup"));
