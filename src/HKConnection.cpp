@@ -260,13 +260,25 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
     return result;
 }
 
-char reply[1024] = {0};
 void HKConnection::announce(char *desc)
 {
-    memset(reply, 0, 1024);
-    int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
-    hkLog.info("Announce: %s, data: %s", clientID(), reply);
-    writeData((byte *)reply, len);
+    memset(SHARED_RESPONSE_BUFFER, 0, SHARED_RESPONSE_BUFFER_LEN);
+    int len = snprintf((char*)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    hkLog.info("Announce: %s, data: %s", clientID(), SHARED_RESPONSE_BUFFER);
+    writeData((byte *)SHARED_RESPONSE_BUFFER, len);
+}
+
+void HKConnection::processPostedCharacteristics()
+{
+    for (int i = 0; i < postedCharacteristics.size(); i++)
+    {
+        characteristics *c = postedCharacteristics.at(i);
+        int len = snprintf(NULL, 0, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
+        char buffer[len + 1] = {0};
+        snprintf(buffer, len + 1, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
+        announce(buffer);
+    }
+    postedCharacteristics.clear();
 }
 
 int wc_SrpSetKeyH(Srp *srp, byte *secret, word32 size)
@@ -833,19 +845,6 @@ void HKConnection::handleAccessoryRequest(const char *buffer, size_t size)
     }
 }
 
-char broadcastTemp[1024] = {0}; //make it global, so it wont count to stack size limit
-void HKConnection::processPostedCharacteristics()
-{
-    memset(broadcastTemp, 0, 1024);
-    for (int i = 0; i < postedCharacteristics.size(); i++)
-    {
-        characteristics *c = postedCharacteristics.at(i);
-        memset(broadcastTemp, 0, 1024);
-        snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
-        announce(broadcastTemp);
-    }
-    postedCharacteristics.clear();
-}
 
 void HKConnection::postCharacteristicsValue(characteristics *c)
 {
