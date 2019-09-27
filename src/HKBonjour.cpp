@@ -35,12 +35,12 @@
 #define  MDNS_SERVER_PORT        5353
 #define  MDNS_NQUERY_RESEND_TIME 1000   // 1 second, name query resend timeout
 #define  MDNS_SQUERY_RESEND_TIME 1000  // 10 seconds, service query resend timeout
-#define  MDNS_SRV_TTL       120
+#define  MDNS_SRV_TTL       1400
 #define  MDNS_TXT_TTL       1400
 #define  MDNS_PTR_TTL       1400
 
 #define  MDNS_MAX_SERVICES_PER_PACKET  6
-#define  MSNS_ANNOUNCE_TIME_SEC  10 //Send announce packet every 5 seconds
+#define  MSNS_ANNOUNCE_TIME_SEC  120 //Send announce packet every 5 seconds
 
 static uint8_t mdnsMulticastIPAddr[] = { 224, 0, 0, 251 };
 //static uint8_t mdnsHWAddr[] = { 0x01, 0x00, 0x5e, 0x00, 0x00, 0xfb };
