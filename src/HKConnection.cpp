@@ -530,74 +530,60 @@ void HKConnection::handlePairSetup(const char *buffer)
     {
     case State_M1_SRPStartRequest:
     {
-      if(server->isPairing()){
-        mResponse.data.addRecord(stateRecord);
-        HKNetworkMessageDataRecord error;
-        error.activate = true;
-        error.data = new char[1];
-        error.data[0] = 7;
-        error.index = 7;
-        error.length = 1;
-        mResponse.data.addRecord(error);
-        hkLog.warn("State_M1_SRPStartRequest error isBusy");
-      } else {
-        server->setPairing(true);
-        server->progressPtr(Progress_M1_SRPStartRequest);
-        hkLog.info("State_M1_SRPStartRequest");
-        stateRecord.data[0] = State_M2_SRPStartRespond;
-        HKNetworkMessageDataRecord saltRec;
-        HKNetworkMessageDataRecord publicKeyRec;
+      server->progressPtr(Progress_M1_SRPStartRequest);
+      hkLog.info("State_M1_SRPStartRequest");
+      stateRecord.data[0] = State_M2_SRPStartRespond;
+      HKNetworkMessageDataRecord saltRec;
+      HKNetworkMessageDataRecord publicKeyRec;
 
-        byte salt[16];
-        for (int i = 0; i < 16; i++)
-        {
-            salt[i] = rand();
-        }
-
-        int r = wc_SrpInit(&srp, SRP_TYPE_SHA512, SRP_CLIENT_SIDE);
-        srp.keyGenFunc_cb = wc_SrpSetKeyH;
-        if (!r)
-            r = wc_SrpSetUsername(&srp, (const byte *)"Pair-Setup", strlen("Pair-Setup"));
-        if (r)
-            hkLog.warn("wc_SrpSetUsername: r:%d", r);
-        if (!r)
-            r = wc_SrpSetParams(&srp, (const byte *)N, sizeof(N), (const byte *)generator, 1, salt, 16);
-        if (r)
-            hkLog.warn("wc_SrpSetParams: r:%d", r);
-        if (!r)
-            r = wc_SrpSetPassword(&srp, (const byte *)server->getPasscode().c_str(), server->getPasscode().length());
-        if (r)
-            hkLog.warn("wc_SrpSetPassword: r:%d", r);
-        if (!r)
-            r = wc_SrpGetVerifier(&srp, (byte *)publicKey, &publicKeyLength); //use publicKey to store v
-        if (r)
-            hkLog.warn("wc_SrpGetVerifier: r:%d", r);
-        srp.side = SRP_SERVER_SIDE; //switch to server mode
-        if (!r)
-            r = wc_SrpSetVerifier(&srp, (byte *)publicKey, publicKeyLength);
-        if (r)
-            hkLog.warn("wc_SrpSetVerifier: r:%d", r);
-        if (!r)
-            r = wc_SrpGetPublic(&srp, (byte *)publicKey, &publicKeyLength);
-        if (r)
-            hkLog.warn("wc_SrpGetPublic: r:%d", r);
-        saltRec.index = 2;
-        saltRec.activate = true;
-        saltRec.length = sizeof(salt);
-        saltRec.data = new char[saltRec.length];
-        memcpy(saltRec.data, salt, saltRec.length);
-        publicKeyRec.index = 3;
-        publicKeyRec.activate = true;
-        publicKeyRec.length = publicKeyLength;
-        publicKeyRec.data = new char[publicKeyRec.length];
-        memcpy(publicKeyRec.data, publicKey, publicKeyRec.length);
-
-        mResponse.data.addRecord(stateRecord);
-        mResponse.data.addRecord(publicKeyRec);
-        mResponse.data.addRecord(saltRec);
-        server->progressPtr(Progress_M2_SRPStartRespond);
+      byte salt[16];
+      for (int i = 0; i < 16; i++)
+      {
+          salt[i] = rand();
       }
 
+      int r = wc_SrpInit(&srp, SRP_TYPE_SHA512, SRP_CLIENT_SIDE);
+      srp.keyGenFunc_cb = wc_SrpSetKeyH;
+      if (!r)
+          r = wc_SrpSetUsername(&srp, (const byte *)"Pair-Setup", strlen("Pair-Setup"));
+      if (r)
+          hkLog.warn("wc_SrpSetUsername: r:%d", r);
+      if (!r)
+          r = wc_SrpSetParams(&srp, (const byte *)N, sizeof(N), (const byte *)generator, 1, salt, 16);
+      if (r)
+          hkLog.warn("wc_SrpSetParams: r:%d", r);
+      if (!r)
+          r = wc_SrpSetPassword(&srp, (const byte *)server->getPasscode().c_str(), server->getPasscode().length());
+      if (r)
+          hkLog.warn("wc_SrpSetPassword: r:%d", r);
+      if (!r)
+          r = wc_SrpGetVerifier(&srp, (byte *)publicKey, &publicKeyLength); //use publicKey to store v
+      if (r)
+          hkLog.warn("wc_SrpGetVerifier: r:%d", r);
+      srp.side = SRP_SERVER_SIDE; //switch to server mode
+      if (!r)
+          r = wc_SrpSetVerifier(&srp, (byte *)publicKey, publicKeyLength);
+      if (r)
+          hkLog.warn("wc_SrpSetVerifier: r:%d", r);
+      if (!r)
+          r = wc_SrpGetPublic(&srp, (byte *)publicKey, &publicKeyLength);
+      if (r)
+          hkLog.warn("wc_SrpGetPublic: r:%d", r);
+      saltRec.index = 2;
+      saltRec.activate = true;
+      saltRec.length = sizeof(salt);
+      saltRec.data = new char[saltRec.length];
+      memcpy(saltRec.data, salt, saltRec.length);
+      publicKeyRec.index = 3;
+      publicKeyRec.activate = true;
+      publicKeyRec.length = publicKeyLength;
+      publicKeyRec.data = new char[publicKeyRec.length];
+      memcpy(publicKeyRec.data, publicKey, publicKeyRec.length);
+
+      mResponse.data.addRecord(stateRecord);
+      mResponse.data.addRecord(publicKeyRec);
+      mResponse.data.addRecord(saltRec);
+      server->progressPtr(Progress_M2_SRPStartRespond);
     }
     break;
 
@@ -643,7 +629,6 @@ void HKConnection::handlePairSetup(const char *buffer)
 
             wc_SrpTerm(&srp);
             server->progressPtr(Progress_Error);
-            server->setPairing(false);
         }
         else
         { //success
@@ -811,7 +796,6 @@ void HKConnection::handlePairSetup(const char *buffer)
 
         delete subTLV8;
         wc_SrpTerm(&srp);
-        server->setPairing(false);
     }
     break;
     }
