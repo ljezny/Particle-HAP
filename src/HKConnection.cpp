@@ -484,7 +484,6 @@ bool HKConnection::handlePairVerify(const char *buffer)
             response.data.addRecord(error);
             hkLog.warn("Pair NOT verified.");
             server->progressPtr(Progress_Error);
-            server->setPairing(false);
         }
     }
     }
