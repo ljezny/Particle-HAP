@@ -77,26 +77,26 @@ void LightBulbAccessoryBase::initAccessorySet() {
     Service *lightService1 = new Service(serviceType_lightBulb);
     lightAcc1->addService(lightService1);
 
-    stringCharacteristics *lightServiceName1 = new stringCharacteristics(charType_serviceName, premission_read, 0);
+    stringCharacteristics *lightServiceName1 = new stringCharacteristics(charType_serviceName, permission_read, 0);
     lightServiceName1->characteristics::setValue("Bulb name");
     lightAcc1->addCharacteristics(lightService1, lightServiceName1);
 
-    boolCharacteristics *powerState1 = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
+    boolCharacteristics *powerState1 = new boolCharacteristics(charType_on, permission_read|permission_write|permission_notify);
     powerState1->perUserQuery = std::bind(&LightBulbAccessoryBase::getPower, this, std::placeholders::_1);
     powerState1->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::powerTrackable, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
     lightAcc1->addCharacteristics(lightService1, powerState1);
 
-    brightnessStateChar = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
+    brightnessStateChar = new intCharacteristics(charType_brightness, permission_read|permission_write, 0, 100, 1, unit_percentage);
     brightnessStateChar->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedBrightness, this, std::placeholders::_1);
     brightnessStateChar->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::setLedBrightness, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
     lightAcc1->addCharacteristics(lightService1, brightnessStateChar);
 
-    intCharacteristics *ledSaturationStateChar = new intCharacteristics(charType_saturation, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
+    intCharacteristics *ledSaturationStateChar = new intCharacteristics(charType_saturation, permission_read|permission_write|permission_notify, 0, 100, 1, unit_percentage);
     ledSaturationStateChar->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedSaturation, this, std::placeholders::_1);
     ledSaturationStateChar->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::setLedSaturation, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
     lightAcc1->addCharacteristics(lightService1, ledSaturationStateChar);
 
-    intCharacteristics *ledHueStateChar = new intCharacteristics(charType_hue, premission_read|premission_write|premission_notify, 0, 360, 1, unit_arcDegree);
+    intCharacteristics *ledHueStateChar = new intCharacteristics(charType_hue, permission_read|permission_write|permission_notify, 0, 360, 1, unit_arcDegree);
     ledHueStateChar->perUserQuery = std::bind(&LightBulbAccessoryBase::getLedHue, this, std::placeholders::_1);
     ledHueStateChar->valueChangeFunctionCall = std::bind(&LightBulbAccessoryBase::setLedHue, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
     lightAcc1->addCharacteristics(lightService1, ledHueStateChar);

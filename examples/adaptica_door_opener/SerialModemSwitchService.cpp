@@ -54,11 +54,11 @@ void SerialModemSwitchService::initService(Accessory *accessory) {
   Service *switchService = new Service(serviceType_switch);
   accessory->addService(switchService);
 
-  stringCharacteristics *serviceName = new stringCharacteristics(charType_serviceName, premission_read, 0);
+  stringCharacteristics *serviceName = new stringCharacteristics(charType_serviceName, permission_read, 0);
   serviceName->characteristics::setValue("Switch");
   accessory->addCharacteristics(switchService, serviceName);
 
-  powerState = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
+  powerState = new boolCharacteristics(charType_on, permission_read|permission_write|permission_notify);
   powerState->perUserQuery = std::bind(&SerialModemSwitchService::getPower, this, std::placeholders::_1);
   powerState->valueChangeFunctionCall = std::bind(&SerialModemSwitchService::setPower, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
   accessory->addCharacteristics(switchService, powerState);

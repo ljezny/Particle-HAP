@@ -45,11 +45,11 @@ void RelaySwitchAccessory::initAccessorySet() {
   Service *switchService = new Service(serviceType_switch);
   switchAcc->addService(switchService);
 
-  stringCharacteristics *switchServiceName = new stringCharacteristics(charType_serviceName, premission_read, 0);
+  stringCharacteristics *switchServiceName = new stringCharacteristics(charType_serviceName, permission_read, 0);
   switchServiceName->characteristics::setValue("Relay Switch");
   switchAcc->addCharacteristics(switchService, switchServiceName);
 
-  boolCharacteristics *powerState = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
+  boolCharacteristics *powerState = new boolCharacteristics(charType_on, permission_read|permission_write|permission_notify);
   powerState->perUserQuery = std::bind(&RelaySwitchAccessory::getPower, this, std::placeholders::_1);
   powerState->valueChangeFunctionCall = std::bind(&RelaySwitchAccessory::setPower, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
   switchAcc->addCharacteristics(switchService, powerState);

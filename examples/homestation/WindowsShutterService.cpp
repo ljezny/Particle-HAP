@@ -120,20 +120,20 @@ void WindowsShutterService::initService(Accessory *accessory) {
     Service *windowsCoverService = new Service(serviceType_windowCover);
     accessory->addService(windowsCoverService);
 
-    stringCharacteristics *nameCharacteristic = new stringCharacteristics(charType_serviceName, premission_read, 0);
+    stringCharacteristics *nameCharacteristic = new stringCharacteristics(charType_serviceName, permission_read, 0);
     nameCharacteristic->characteristics::setValue("Window name");
     accessory->addCharacteristics(windowsCoverService, nameCharacteristic);
 
-    intCharacteristics *targetPositionChar = new intCharacteristics(charType_targetPosition, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
+    intCharacteristics *targetPositionChar = new intCharacteristics(charType_targetPosition, permission_read|permission_write|permission_notify, 0, 100, 1, unit_percentage);
     targetPositionChar->characteristics::setValue(format("%d",targetPosition));
     targetPositionChar->valueChangeFunctionCall = std::bind(&WindowsShutterService::setTargetPosition, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
     accessory->addCharacteristics(windowsCoverService, targetPositionChar);
 
-    currentPositionChar = new intCharacteristics(charType_currentPosition, premission_read|premission_notify, 0, 100, 1, unit_percentage);
+    currentPositionChar = new intCharacteristics(charType_currentPosition, permission_read|permission_notify, 0, 100, 1, unit_percentage);
     currentPositionChar->characteristics::setValue(format("%d",position));
     accessory->addCharacteristics(windowsCoverService, currentPositionChar);
 
-    positionStateChar = new intCharacteristics(charType_positionState, premission_read|premission_notify, 0, 2, 1, unit_percentage);
+    positionStateChar = new intCharacteristics(charType_positionState, permission_read|permission_notify, 0, 2, 1, unit_percentage);
     positionStateChar->characteristics::setValue(format("%d",state));
     accessory->addCharacteristics(windowsCoverService, positionStateChar);
 
