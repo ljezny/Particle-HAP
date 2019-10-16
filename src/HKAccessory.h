@@ -188,12 +188,9 @@ typedef enum {
 } charType;
 
 enum {
-    premission_read = 1,
     permission_read = 1,
-    premission_write = 1 << 1,
     permission_write = 1 << 1,
-    premission_notify = 1 << 2  //Notify = Accessory will notice the controller
-    permission_notify = 1 << 2
+    permission_notify = 1 << 2  //Notify = Accessory will notice the controller
 };
 
 typedef enum {
