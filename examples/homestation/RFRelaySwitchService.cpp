@@ -44,11 +44,11 @@ void RFRelaySwitchService::initService(Accessory *accessory) {
   Service *switchService = new Service(serviceType_switch);
   accessory->addService(switchService);
 
-  stringCharacteristics *roombaServiceName = new stringCharacteristics(charType_serviceName, premission_read, 0);
+  stringCharacteristics *roombaServiceName = new stringCharacteristics(charType_serviceName, permission_read, 0);
   roombaServiceName->characteristics::setValue("Relay Switch");
   accessory->addCharacteristics(switchService, roombaServiceName);
 
-  boolCharacteristics *powerState = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
+  boolCharacteristics *powerState = new boolCharacteristics(charType_on, permission_read|permission_write|permission_notify);
   powerState->perUserQuery = std::bind(&RFRelaySwitchService::getPower, this, std::placeholders::_1);
   powerState->valueChangeFunctionCall = std::bind(&RFRelaySwitchService::setPower, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
   accessory->addCharacteristics(switchService, powerState);

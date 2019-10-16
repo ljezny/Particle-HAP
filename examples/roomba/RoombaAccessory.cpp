@@ -91,11 +91,11 @@ void RoombaAccessory::initAccessorySet() {
   Service *switchService = new Service(serviceType_switch);
   roombaAcc->addService(switchService);
 
-  stringCharacteristics *roombaServiceName = new stringCharacteristics(charType_serviceName, premission_read, 0);
+  stringCharacteristics *roombaServiceName = new stringCharacteristics(charType_serviceName, permission_read, 0);
   roombaServiceName->characteristics::setValue("Roomba");
   roombaAcc->addCharacteristics(switchService, roombaServiceName);
 
-  boolCharacteristics *powerState = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
+  boolCharacteristics *powerState = new boolCharacteristics(charType_on, permission_read|permission_write|permission_notify);
   powerState->perUserQuery = std::bind(&RoombaAccessory::getPower, this, std::placeholders::_1);
   powerState->valueChangeFunctionCall = std::bind(&RoombaAccessory::setPower, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
   roombaAcc->addCharacteristics(switchService, powerState);
@@ -103,15 +103,15 @@ void RoombaAccessory::initAccessorySet() {
   Service *batteryService = new Service(serviceType_battery);
   roombaAcc->addService(batteryService);
 
-  intCharacteristics *batteryLevelChar = new intCharacteristics(charType_batteryLevel, premission_read|premission_notify, 0, 100, 1, unit_percentage);
+  intCharacteristics *batteryLevelChar = new intCharacteristics(charType_batteryLevel, permission_read|permission_notify, 0, 100, 1, unit_percentage);
   batteryLevelChar->perUserQuery = std::bind(&RoombaAccessory::getBatteryLevel, this, std::placeholders::_1);
   roombaAcc->addCharacteristics(batteryService, batteryLevelChar);
 
-  intCharacteristics *chargingStateChar = new intCharacteristics(charType_sensorChargingState, premission_read|premission_notify, 0, 2, 1, unit_percentage);
+  intCharacteristics *chargingStateChar = new intCharacteristics(charType_sensorChargingState, permission_read|permission_notify, 0, 2, 1, unit_percentage);
   chargingStateChar->perUserQuery = std::bind(&RoombaAccessory::getChargingState, this, std::placeholders::_1);
   roombaAcc->addCharacteristics(batteryService, chargingStateChar);
 
-  intCharacteristics *statusLowBatteryChar = new intCharacteristics(charType_sensorLowBattery, premission_read|premission_notify, 0, 1, 1, unit_percentage);
+  intCharacteristics *statusLowBatteryChar = new intCharacteristics(charType_sensorLowBattery, permission_read|permission_notify, 0, 1, 1, unit_percentage);
   statusLowBatteryChar->perUserQuery = std::bind(&RoombaAccessory::getStatusLowBattery, this, std::placeholders::_1);
   roombaAcc->addCharacteristics(batteryService, statusLowBatteryChar);
 }

@@ -19,7 +19,7 @@ inline string wrap(const char *str) { return (string)"\""+str+"\""; }
 //Value String
 string attribute(unsigned int type, unsigned short acclaim, int p, string value) {
     string result;
-    if (p & premission_read) {
+    if (p & permission_read) {
         result += wrap("value")+":";
         result += value;
         result += ",";
@@ -27,9 +27,9 @@ string attribute(unsigned int type, unsigned short acclaim, int p, string value)
 
     result += wrap("perms")+":";
     result += "[";
-    if (p & premission_read) result += wrap("pr")+",";
-    if (p & premission_write) result += wrap("pw")+",";
-    if (p & premission_notify) result += wrap("ev")+",";
+    if (p & permission_read) result += wrap("pr")+",";
+    if (p & permission_write) result += wrap("pw")+",";
+    if (p & permission_notify) result += wrap("ev")+",";
     result = result.substr(0, result.size()-1);
     result += "]";
     result += ",";
@@ -51,7 +51,7 @@ string attribute(unsigned int type, unsigned short acclaim, int p, string value,
     string result;
     char tempStr[16];
 
-    if (p & premission_read) {
+    if (p & permission_read) {
         result += wrap("value")+":"+value;
         result += ",";
     }
@@ -70,9 +70,9 @@ string attribute(unsigned int type, unsigned short acclaim, int p, string value,
 
     result += wrap("perms")+":";
     result += "[";
-    if (p & premission_read) result += wrap("pr")+",";
-    if (p & premission_write) result += wrap("pw")+",";
-    if (p & premission_notify) result += wrap("ev")+",";
+    if (p & permission_read) result += wrap("pr")+",";
+    if (p & permission_write) result += wrap("pw")+",";
+    if (p & permission_notify) result += wrap("ev")+",";
     result = result.substr(0, result.size()-1);
     result += "]";
     result += ",";
@@ -108,7 +108,7 @@ string attribute(unsigned int type, unsigned short acclaim, int p, string value,
     string result;
     char tempStr[16];
 
-    if (p & premission_read) {
+    if (p & permission_read) {
         result += wrap("value")+":"+value;
         result += ",";
     }
@@ -127,9 +127,9 @@ string attribute(unsigned int type, unsigned short acclaim, int p, string value,
 
     result += wrap("perms")+":";
     result += "[";
-    if (p & premission_read) result += wrap("pr")+",";
-    if (p & premission_write) result += wrap("pw")+",";
-    if (p & premission_notify) result += wrap("ev")+",";
+    if (p & permission_read) result += wrap("pr")+",";
+    if (p & permission_write) result += wrap("pw")+",";
+    if (p & permission_notify) result += wrap("ev")+",";
     result = result.substr(0, result.size()-1);
     result += "]";
     result += ",";
@@ -164,7 +164,7 @@ string attribute(unsigned int type, unsigned short acclaim, int p, string value,
 //Raw value
 string attribute(unsigned int type, unsigned short acclaim, int p, bool value) {
     string result;
-    if (p & premission_read) {
+    if (p & permission_read) {
         result += wrap("value")+":";
         if (value) result += "true";
         else result += "false";
@@ -173,9 +173,9 @@ string attribute(unsigned int type, unsigned short acclaim, int p, bool value) {
 
     result += wrap("perms")+":";
     result += "[";
-    if (p & premission_read) result += wrap("pr")+",";
-    if (p & premission_write) result += wrap("pw")+",";
-    if (p & premission_notify) result += wrap("ev")+",";
+    if (p & permission_read) result += wrap("pr")+",";
+    if (p & permission_write) result += wrap("pw")+",";
+    if (p & permission_notify) result += wrap("ev")+",";
     result = result.substr(0, result.size()-1);
     result += "]";
     result += ",";
@@ -199,7 +199,7 @@ string attribute(unsigned int type, unsigned short acclaim, int p, int value, in
 
     snprintf(tempStr, 16, "%d", value);
 
-    if (p & premission_read) {
+    if (p & permission_read) {
         result += wrap("value")+":"+tempStr;
         result += ",";
     }
@@ -218,9 +218,9 @@ string attribute(unsigned int type, unsigned short acclaim, int p, int value, in
 
     result += wrap("perms")+":";
     result += "[";
-    if (p & premission_read) result += wrap("pr")+",";
-    if (p & premission_write) result += wrap("pw")+",";
-    if (p & premission_notify) result += wrap("ev")+",";
+    if (p & permission_read) result += wrap("pr")+",";
+    if (p & permission_write) result += wrap("pw")+",";
+    if (p & permission_notify) result += wrap("ev")+",";
     result = result.substr(0, result.size()-1);
     result += "]";
     result += ",";
@@ -258,7 +258,7 @@ string attribute(unsigned int type, unsigned short acclaim, int p, float value, 
 
     snprintf(tempStr, 16, "%f", value);
 
-    if (p & premission_read) {
+    if (p & permission_read) {
         result += wrap("value")+":"+tempStr;
         result += ",";
     }
@@ -277,9 +277,9 @@ string attribute(unsigned int type, unsigned short acclaim, int p, float value, 
 
     result += wrap("perms")+":";
     result += "[";
-    if (p & premission_read) result += wrap("pr")+",";
-    if (p & premission_write) result += wrap("pw")+",";
-    if (p & premission_notify) result += wrap("ev")+",";
+    if (p & permission_read) result += wrap("pr")+",";
+    if (p & permission_write) result += wrap("pw")+",";
+    if (p & permission_notify) result += wrap("ev")+",";
     result = result.substr(0, result.size()-1);
     result += "]";
     result += ",";
@@ -316,16 +316,16 @@ string attribute(unsigned int type, unsigned short acclaim, int p, string value,
     string result;
     char tempStr[4];
 
-    if (p & premission_read) {
+    if (p & permission_read) {
         result += wrap("value")+":"+value.c_str();
         result += ",";
     }
 
     result += wrap("perms")+":";
     result += "[";
-    if (p & premission_read) result += wrap("pr")+",";
-    if (p & premission_write) result += wrap("pw")+",";
-    if (p & premission_notify) result += wrap("ev")+",";
+    if (p & permission_read) result += wrap("pr")+",";
+    if (p & permission_write) result += wrap("pw")+",";
+    if (p & permission_notify) result += wrap("ev")+",";
     result = result.substr(0, result.size()-1);
     result += "]";
     result += ",";
@@ -385,25 +385,25 @@ void characteristics::notify(HKConnection* conn) {
 }
 
 string boolCharacteristics::describe(HKConnection *sender) {
-    string result = attribute(type, iid, premission, value(sender));
+    string result = attribute(type, iid, permission, value(sender));
     //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string floatCharacteristics::describe(HKConnection *sender) {
-    string result = attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
+    string result = attribute(type, iid, permission, value(sender), _minVal, _maxVal, _step, _unit);
     //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string intCharacteristics::describe(HKConnection *sender) {
-    string result = attribute(type, iid, premission, value(sender), _minVal, _maxVal, _step, _unit);
+    string result = attribute(type, iid, permission, value(sender), _minVal, _maxVal, _step, _unit);
     //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
 
 string stringCharacteristics::describe(HKConnection *sender) {
-    string result = attribute(type, iid, premission, value(sender), maxLen);
+    string result = attribute(type, iid, permission, value(sender), maxLen);
     //hkLog.info("boolCharacteristics::describe: %s",result.c_str());
     return result;
 }
@@ -717,27 +717,27 @@ void addInfoServiceToAccessory(Accessory *acc, string accName, string manufactue
     Service *infoService = new Service(serviceType_accessoryInfo);
     acc->addService(infoService);
 
-    stringCharacteristics *accNameCha = new stringCharacteristics(charType_serviceName, premission_read, 0);
+    stringCharacteristics *accNameCha = new stringCharacteristics(charType_serviceName, permission_read, 0);
     accNameCha->characteristics::setValue(accName);
     acc->addCharacteristics(infoService, accNameCha);
 
-    stringCharacteristics *manNameCha = new stringCharacteristics(charType_manufactuer, premission_read, 0);
+    stringCharacteristics *manNameCha = new stringCharacteristics(charType_manufactuer, permission_read, 0);
     manNameCha->characteristics::setValue(manufactuerName);
     acc->addCharacteristics(infoService, manNameCha);
 
-    stringCharacteristics *modelNameCha = new stringCharacteristics(charType_modelName, premission_read, 0);
+    stringCharacteristics *modelNameCha = new stringCharacteristics(charType_modelName, permission_read, 0);
     modelNameCha->characteristics::setValue(modelName);
     acc->addCharacteristics(infoService, modelNameCha);
 
-    stringCharacteristics *serialNameCha = new stringCharacteristics(charType_serialNumber, premission_read, 0);
+    stringCharacteristics *serialNameCha = new stringCharacteristics(charType_serialNumber, permission_read, 0);
     serialNameCha->characteristics::setValue(serialNumber);
     acc->addCharacteristics(infoService, serialNameCha);
 
-    stringCharacteristics *fwNameCha = new stringCharacteristics(charType_firmwareRevision, premission_read, 0);
+    stringCharacteristics *fwNameCha = new stringCharacteristics(charType_firmwareRevision, permission_read, 0);
     fwNameCha->characteristics::setValue(firmware);
     acc->addCharacteristics(infoService, fwNameCha);
 
-    boolCharacteristics *identify = new boolCharacteristics(charType_identify, premission_write);
+    boolCharacteristics *identify = new boolCharacteristics(charType_identify, permission_write);
     identify->characteristics::setValue("false");
     identify->valueChangeFunctionCall = identifyCallback;
     acc->addCharacteristics(infoService, identify);

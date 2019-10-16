@@ -91,11 +91,11 @@ void NixieClockAccessory::initAccessorySet() {
   Service *lightService = new Service(serviceType_lightBulb);
   nixieAcc->addService(lightService);
 
-  stringCharacteristics *lightServiceName = new stringCharacteristics(charType_serviceName, premission_read, 0);
+  stringCharacteristics *lightServiceName = new stringCharacteristics(charType_serviceName, permission_read, 0);
   lightServiceName->characteristics::setValue("Single Nixie");
   nixieAcc->addCharacteristics(lightService, lightServiceName);
 
-  boolCharacteristics *powerState = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
+  boolCharacteristics *powerState = new boolCharacteristics(charType_on, permission_read|permission_write|permission_notify);
   powerState->perUserQuery = std::bind(&NixieClockAccessory::getPower, this, std::placeholders::_1);
   powerState->valueChangeFunctionCall = std::bind(&NixieClockAccessory::setPower, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
   nixieAcc->addCharacteristics(lightService, powerState);

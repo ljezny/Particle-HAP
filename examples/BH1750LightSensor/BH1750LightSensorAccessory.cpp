@@ -61,15 +61,15 @@ void BH1750LightSensorAccessory::initAccessorySet() {
     Service *lightSensorService = new Service(serviceType_lightSensor);
     BH1750LightSensorAccessory->addService(lightSensorService);
 
-    stringCharacteristics *nameCharacteristic = new stringCharacteristics(charType_serviceName, premission_read, 0);
+    stringCharacteristics *nameCharacteristic = new stringCharacteristics(charType_serviceName, permission_read, 0);
     nameCharacteristic->characteristics::setValue("Light sensor");
     BH1750LightSensorAccessory->addCharacteristics(lightSensorService, nameCharacteristic);
 
-    boolCharacteristics *statusActive = new boolCharacteristics(charType_sensorActive, premission_read|premission_notify);
+    boolCharacteristics *statusActive = new boolCharacteristics(charType_sensorActive, permission_read|permission_notify);
     statusActive->characteristics::setValue("true");
     BH1750LightSensorAccessory->addCharacteristics(lightSensorService, statusActive);
 
-    currentAmbilightChar = new floatCharacteristics(charType_currentAmbientLightLevel, premission_read|premission_notify, 0.0001, 100000.0, 0, unit_lux);
+    currentAmbilightChar = new floatCharacteristics(charType_currentAmbientLightLevel, permission_read|permission_notify, 0.0001, 100000.0, 0, unit_lux);
     currentAmbilightChar->perUserQuery = std::bind(&BH1750LightSensorAccessory::getCurrentAmbilightLevel, this, std::placeholders::_1);
     BH1750LightSensorAccessory->addCharacteristics(lightSensorService, currentAmbilightChar);
 
