@@ -75,22 +75,22 @@ void BME280TemperatureHumiditySensorAccessory::initAccessorySet() {
     Service *temperatureSensorService = new Service(serviceType_temperatureSensor);
     sensorAccessory->addService(temperatureSensorService);
 
-    stringCharacteristics *temperatureNameCharacteristic = new stringCharacteristics(charType_serviceName, premission_read, 0);
+    stringCharacteristics *temperatureNameCharacteristic = new stringCharacteristics(charType_serviceName, permission_read, 0);
     temperatureNameCharacteristic->characteristics::setValue("Temperature sensor");
     sensorAccessory->addCharacteristics(temperatureSensorService, temperatureNameCharacteristic);
 
-    currentTemperatureChar = new floatCharacteristics(charType_currentTemperature, premission_read|premission_notify,-50, 50, 0.1, unit_celsius);
+    currentTemperatureChar = new floatCharacteristics(charType_currentTemperature, permission_read|permission_notify,-50, 50, 0.1, unit_celsius);
     currentTemperatureChar->perUserQuery = std::bind(&BME280TemperatureHumiditySensorAccessory::getCurrentTemperature, this, std::placeholders::_1);
     sensorAccessory->addCharacteristics(temperatureSensorService, currentTemperatureChar);
 
     Service *humiditySensorService = new Service(serviceType_humiditySensor);
     sensorAccessory->addService(humiditySensorService);
 
-    stringCharacteristics *humidityNameCharacteristic = new stringCharacteristics(charType_serviceName, premission_read, 0);
+    stringCharacteristics *humidityNameCharacteristic = new stringCharacteristics(charType_serviceName, permission_read, 0);
     humidityNameCharacteristic->characteristics::setValue("Humidity sensor");
     sensorAccessory->addCharacteristics(humiditySensorService, humidityNameCharacteristic);
 
-    currentHumidityChar = new floatCharacteristics(charType_currentHumidity, premission_read|premission_notify, 0, 100, 1, unit_percentage);
+    currentHumidityChar = new floatCharacteristics(charType_currentHumidity, permission_read|permission_notify, 0, 100, 1, unit_percentage);
     currentHumidityChar->perUserQuery = std::bind(&BME280TemperatureHumiditySensorAccessory::getCurrentHumidity, this, std::placeholders::_1);
     sensorAccessory->addCharacteristics(humiditySensorService, currentHumidityChar);
 

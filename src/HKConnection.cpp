@@ -33,6 +33,9 @@ HKConnection::~HKConnection()
     {
         notifiableCharacteristics.at(i)->removeNotifiedConnection(this);
     }
+    if(hasSrp){
+      wc_SrpTerm(&srp);
+    }
 }
 
 HKConnection::operator bool()
@@ -257,13 +260,25 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
     return result;
 }
 
-char reply[1024] = {0};
 void HKConnection::announce(char *desc)
 {
-    memset(reply, 0, 1024);
-    int len = snprintf(reply, 1024, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
-    hkLog.info("Announce: %s, data: %s", clientID(), reply);
-    writeData((byte *)reply, len);
+    memset(SHARED_RESPONSE_BUFFER, 0, SHARED_RESPONSE_BUFFER_LEN);
+    int len = snprintf((char*)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    hkLog.info("Announce: %s, data: %s", clientID(), SHARED_RESPONSE_BUFFER);
+    writeData((byte *)SHARED_RESPONSE_BUFFER, len);
+}
+
+void HKConnection::processPostedCharacteristics()
+{
+    for (int i = 0; i < postedCharacteristics.size(); i++)
+    {
+        characteristics *c = postedCharacteristics.at(i);
+        int len = snprintf(NULL, 0, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
+        char buffer[len + 1] = {0};
+        snprintf(buffer, len + 1, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
+        announce(buffer);
+    }
+    postedCharacteristics.clear();
 }
 
 int wc_SrpSetKeyH(Srp *srp, byte *secret, word32 size)
@@ -484,7 +499,6 @@ bool HKConnection::handlePairVerify(const char *buffer)
             response.data.addRecord(error);
             hkLog.warn("Pair NOT verified.");
             server->progressPtr(Progress_Error);
-            server->setPairing(false);
         }
     }
     }
@@ -530,74 +544,61 @@ void HKConnection::handlePairSetup(const char *buffer)
     {
     case State_M1_SRPStartRequest:
     {
-      if(server->isPairing()){
-        mResponse.data.addRecord(stateRecord);
-        HKNetworkMessageDataRecord error;
-        error.activate = true;
-        error.data = new char[1];
-        error.data[0] = 7;
-        error.index = 7;
-        error.length = 1;
-        mResponse.data.addRecord(error);
-        hkLog.warn("State_M1_SRPStartRequest error isBusy");
-      } else {
-        server->setPairing(true);
-        server->progressPtr(Progress_M1_SRPStartRequest);
-        hkLog.info("State_M1_SRPStartRequest");
-        stateRecord.data[0] = State_M2_SRPStartRespond;
-        HKNetworkMessageDataRecord saltRec;
-        HKNetworkMessageDataRecord publicKeyRec;
+      server->progressPtr(Progress_M1_SRPStartRequest);
+      hkLog.info("State_M1_SRPStartRequest");
+      stateRecord.data[0] = State_M2_SRPStartRespond;
+      HKNetworkMessageDataRecord saltRec;
+      HKNetworkMessageDataRecord publicKeyRec;
 
-        byte salt[16];
-        for (int i = 0; i < 16; i++)
-        {
-            salt[i] = rand();
-        }
-
-        int r = wc_SrpInit(&srp, SRP_TYPE_SHA512, SRP_CLIENT_SIDE);
-        srp.keyGenFunc_cb = wc_SrpSetKeyH;
-        if (!r)
-            r = wc_SrpSetUsername(&srp, (const byte *)"Pair-Setup", strlen("Pair-Setup"));
-        if (r)
-            hkLog.warn("wc_SrpSetUsername: r:%d", r);
-        if (!r)
-            r = wc_SrpSetParams(&srp, (const byte *)N, sizeof(N), (const byte *)generator, 1, salt, 16);
-        if (r)
-            hkLog.warn("wc_SrpSetParams: r:%d", r);
-        if (!r)
-            r = wc_SrpSetPassword(&srp, (const byte *)server->getPasscode().c_str(), server->getPasscode().length());
-        if (r)
-            hkLog.warn("wc_SrpSetPassword: r:%d", r);
-        if (!r)
-            r = wc_SrpGetVerifier(&srp, (byte *)publicKey, &publicKeyLength); //use publicKey to store v
-        if (r)
-            hkLog.warn("wc_SrpGetVerifier: r:%d", r);
-        srp.side = SRP_SERVER_SIDE; //switch to server mode
-        if (!r)
-            r = wc_SrpSetVerifier(&srp, (byte *)publicKey, publicKeyLength);
-        if (r)
-            hkLog.warn("wc_SrpSetVerifier: r:%d", r);
-        if (!r)
-            r = wc_SrpGetPublic(&srp, (byte *)publicKey, &publicKeyLength);
-        if (r)
-            hkLog.warn("wc_SrpGetPublic: r:%d", r);
-        saltRec.index = 2;
-        saltRec.activate = true;
-        saltRec.length = sizeof(salt);
-        saltRec.data = new char[saltRec.length];
-        memcpy(saltRec.data, salt, saltRec.length);
-        publicKeyRec.index = 3;
-        publicKeyRec.activate = true;
-        publicKeyRec.length = publicKeyLength;
-        publicKeyRec.data = new char[publicKeyRec.length];
-        memcpy(publicKeyRec.data, publicKey, publicKeyRec.length);
-
-        mResponse.data.addRecord(stateRecord);
-        mResponse.data.addRecord(publicKeyRec);
-        mResponse.data.addRecord(saltRec);
-        server->progressPtr(Progress_M2_SRPStartRespond);
+      byte salt[16];
+      for (int i = 0; i < 16; i++)
+      {
+          salt[i] = rand();
       }
 
+      int r = wc_SrpInit(&srp, SRP_TYPE_SHA512, SRP_CLIENT_SIDE);
+      hasSrp = true;
+      srp.keyGenFunc_cb = wc_SrpSetKeyH;
+      if (!r)
+          r = wc_SrpSetUsername(&srp, (const byte *)"Pair-Setup", strlen("Pair-Setup"));
+      if (r)
+          hkLog.warn("wc_SrpSetUsername: r:%d", r);
+      if (!r)
+          r = wc_SrpSetParams(&srp, (const byte *)N, sizeof(N), (const byte *)generator, 1, salt, 16);
+      if (r)
+          hkLog.warn("wc_SrpSetParams: r:%d", r);
+      if (!r)
+          r = wc_SrpSetPassword(&srp, (const byte *)server->getPasscode().c_str(), server->getPasscode().length());
+      if (r)
+          hkLog.warn("wc_SrpSetPassword: r:%d", r);
+      if (!r)
+          r = wc_SrpGetVerifier(&srp, (byte *)publicKey, &publicKeyLength); //use publicKey to store v
+      if (r)
+          hkLog.warn("wc_SrpGetVerifier: r:%d", r);
+      srp.side = SRP_SERVER_SIDE; //switch to server mode
+      if (!r)
+          r = wc_SrpSetVerifier(&srp, (byte *)publicKey, publicKeyLength);
+      if (r)
+          hkLog.warn("wc_SrpSetVerifier: r:%d", r);
+      if (!r)
+          r = wc_SrpGetPublic(&srp, (byte *)publicKey, &publicKeyLength);
+      if (r)
+          hkLog.warn("wc_SrpGetPublic: r:%d", r);
+      saltRec.index = 2;
+      saltRec.activate = true;
+      saltRec.length = sizeof(salt);
+      saltRec.data = new char[saltRec.length];
+      memcpy(saltRec.data, salt, saltRec.length);
+      publicKeyRec.index = 3;
+      publicKeyRec.activate = true;
+      publicKeyRec.length = publicKeyLength;
+      publicKeyRec.data = new char[publicKeyRec.length];
+      memcpy(publicKeyRec.data, publicKey, publicKeyRec.length);
+
+      mResponse.data.addRecord(stateRecord);
+      mResponse.data.addRecord(publicKeyRec);
+      mResponse.data.addRecord(saltRec);
+      server->progressPtr(Progress_M2_SRPStartRespond);
     }
     break;
 
@@ -643,7 +644,6 @@ void HKConnection::handlePairSetup(const char *buffer)
 
             wc_SrpTerm(&srp);
             server->progressPtr(Progress_Error);
-            server->setPairing(false);
         }
         else
         { //success
@@ -811,7 +811,6 @@ void HKConnection::handlePairSetup(const char *buffer)
 
         delete subTLV8;
         wc_SrpTerm(&srp);
-        server->setPairing(false);
     }
     break;
     }
@@ -846,19 +845,6 @@ void HKConnection::handleAccessoryRequest(const char *buffer, size_t size)
     }
 }
 
-char broadcastTemp[1024] = {0}; //make it global, so it wont count to stack size limit
-void HKConnection::processPostedCharacteristics()
-{
-    memset(broadcastTemp, 0, 1024);
-    for (int i = 0; i < postedCharacteristics.size(); i++)
-    {
-        characteristics *c = postedCharacteristics.at(i);
-        memset(broadcastTemp, 0, 1024);
-        snprintf(broadcastTemp, 1024, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
-        announce(broadcastTemp);
-    }
-    postedCharacteristics.clear();
-}
 
 void HKConnection::postCharacteristicsValue(characteristics *c)
 {

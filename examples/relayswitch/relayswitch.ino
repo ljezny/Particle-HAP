@@ -11,7 +11,7 @@
 #include "RelaySwitchAccessory.h"
 
 
-SerialLogHandler logHandler;
+SerialLogHandler logHandler(LOG_LEVEL_ALL);
 
 
 RelaySwitchAccessory *acc = new RelaySwitchAccessory(D0,1);
