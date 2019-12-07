@@ -12,12 +12,14 @@ class NixieClockAccessory: public HAPAccessoryDescriptor {
 private:
   int on = 1;
   int lastShowMS = 0;
-  int TIME_PERIOD = 2000;
+  int TIME_PERIOD = 1000;
+  int brightness = 255;
   void lightIdentify(bool oldValue, bool newValue, HKConnection *sender);
 
   std::string getPower (HKConnection *sender);
   void setPower (bool oldValue, bool newValue, HKConnection *sender);
-
+  std::string getBrightness (HKConnection *sender);
+  void setBrightness (int oldValue, int newValue, HKConnection *sender);
   Timezone *timezone = NULL;
 public:
   NixieClockAccessory() {
