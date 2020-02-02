@@ -95,6 +95,18 @@ bool HKServer::handle() {
     if(newClient) {
         hkLog.info("Client connected.");
         HKConnection *c = new HKConnection(this,newClient);
+        int i = clients.size() - 1;
+        while(i>=0) //delete all previously connected clients with same IP with current
+        {
+            HKConnection *conn = clients.at(i);
+            if (!strcmp(conn->clientID(),c->clientID()))
+            {
+                conn->close();
+                clients.erase(clients.begin() + i);
+                delete conn;
+            }
+            i--;
+        }
         clients.insert(clients.end(),c);
         Particle.publish("homekit/accept", c->clientID(), PRIVATE);
         result = true;
