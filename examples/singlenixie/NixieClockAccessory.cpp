@@ -43,9 +43,11 @@ void NixieClockAccessory::lightIdentify(bool oldValue, bool newValue, HKConnecti
 int fade(int pin, int from, int to) {
   int step = from < to ? 1 : -1;
   int v = from;
+  int totalDelay = 250;
+  int stepDelay = (totalDelay * 1000) / abs(to - from);
   while(v != to) {
     SoftPWMSet(pin,v);
-    delay(1);
+    delayMicroseconds(stepDelay);
     v += step;
   }
   return v;
@@ -68,15 +70,17 @@ bool NixieClockAccessory::handle() {
           int h = hour(local);
           int m = minute(local);
 
+          digitalWrite(powerPIN, 1);
           showDigit(digitPINs[(h / 10) % 10], brightness);
           showDigit(digitPINs[h % 10], brightness);
-          delay(200);
+          delay(400);
           showDigit(digitPINs[(m / 10) % 10], brightness);
           showDigit(digitPINs[m % 10], brightness);
+          digitalWrite(powerPIN, 0);
 
           lastShowMS = millis();
 
-          brightnessStateChar->notify(NULL);
+
       }
 
     }
@@ -86,7 +90,7 @@ void NixieClockAccessory::initAccessorySet() {
   Particle.variable("nixie_on", &this->on, INT);
 
   pinMode(powerPIN, OUTPUT);
-  digitalWrite(powerPIN, 1);
+
 
   Accessory *nixieAcc = new Accessory();
 
@@ -98,23 +102,24 @@ void NixieClockAccessory::initAccessorySet() {
   Service *lightService = new Service(serviceType_lightBulb);
   nixieAcc->addService(lightService);
 
-  stringCharacteristics *lightServiceName = new stringCharacteristics(charType_serviceName, permission_read, 0);
+  stringCharacteristics *lightServiceName = new stringCharacteristics(charType_serviceName, premission_read, 0);
   lightServiceName->characteristics::setValue("Single Nixie");
   nixieAcc->addCharacteristics(lightService, lightServiceName);
 
-  boolCharacteristics *powerState = new boolCharacteristics(charType_on, permission_read|permission_write|permission_notify);
+  boolCharacteristics *powerState = new boolCharacteristics(charType_on, premission_read|premission_write|premission_notify);
   powerState->perUserQuery = std::bind(&NixieClockAccessory::getPower, this, std::placeholders::_1);
   powerState->valueChangeFunctionCall = std::bind(&NixieClockAccessory::setPower, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
   nixieAcc->addCharacteristics(lightService, powerState);
 
-  brightnessStateChar = new intCharacteristics(charType_brightness, premission_read|premission_write, 0, 100, 1, unit_percentage);
+  brightnessStateChar = new intCharacteristics(charType_brightness, premission_read|premission_write|premission_notify, 0, 100, 1, unit_percentage);
   brightnessStateChar->perUserQuery = std::bind(&NixieClockAccessory::getBrightness, this, std::placeholders::_1);
   brightnessStateChar->valueChangeFunctionCall = std::bind(&NixieClockAccessory::setBrightness, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3);
-
   nixieAcc->addCharacteristics(lightService, brightnessStateChar);
 
   SoftPWMBegin(SOFTPWM_INVERTED);
+  digitalWrite(powerPIN, 1);
   for(int i = 0; i<10; i++) {
     showDigit(digitPINs[i], brightness);
   }
+  digitalWrite(powerPIN, 0);
 }

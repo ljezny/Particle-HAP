@@ -12,7 +12,7 @@ class NixieClockAccessory: public HAPAccessoryDescriptor {
 private:
   int on = 1;
   int lastShowMS = 0;
-  int TIME_PERIOD = 1000;
+  int TIME_PERIOD = 2000;
   int brightness = 255;
   void lightIdentify(bool oldValue, bool newValue, HKConnection *sender);
 
