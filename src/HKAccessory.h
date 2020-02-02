@@ -210,9 +210,9 @@ private:
 public:
     Accessory *accessory;
     const unsigned int type;
-    const int premission;
+    const int permission;
     int iid;
-    characteristics(unsigned int _type, int _premission): type(_type), premission(_premission) {}
+    characteristics(unsigned int _type, int _permission): type(_type), permission(_permission) {}
     virtual string value(HKConnection *sender) = 0;
     void setValue(string str) {
         setValue(str, NULL);
@@ -220,8 +220,8 @@ public:
     virtual void setValue(string str, HKConnection *sender) = 0;
     virtual string describe(HKConnection *sender) = 0;
     query_value_t perUserQuery = 0;
-    bool writable() { return premission&premission_write; }
-    bool notifiable() { return premission&premission_notify; }
+    bool writable() { return permission&permission_write; }
+    bool notifiable() { return permission&permission_notify; }
     void notify(HKConnection* conn);
     void addNotifiedConnection(HKConnection *c){
       notifiedConnections.push_back(c);
@@ -251,7 +251,7 @@ public:
 
     //void (*valueChangeFunctionCall)(bool oldValue, bool newValue, HKConnection *sender) = NULL;
     bool_value_changed_t valueChangeFunctionCall = NULL;
-    boolCharacteristics(unsigned int _type, int _premission): characteristics(_type, _premission) {}
+    boolCharacteristics(unsigned int _type, int _permission): characteristics(_type, _permission) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
             return perUserQuery(sender);
@@ -275,7 +275,7 @@ public:
     const float _minVal, _maxVal, _step;
     const unit _unit;
     float_value_changed_t valueChangeFunctionCall = NULL;
-    floatCharacteristics(unsigned int _type, int _premission, float minVal, float maxVal, float step, unit charUnit): characteristics(_type, _premission), _minVal(minVal), _maxVal(maxVal), _step(step), _unit(charUnit) {}
+    floatCharacteristics(unsigned int _type, int _permission, float minVal, float maxVal, float step, unit charUnit): characteristics(_type, _permission), _minVal(minVal), _maxVal(maxVal), _step(step), _unit(charUnit) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
             return perUserQuery(sender);
@@ -300,7 +300,7 @@ public:
     const int _minVal, _maxVal, _step;
     const unit _unit;
     int_value_changed_t valueChangeFunctionCall = NULL;
-    intCharacteristics(unsigned int _type, int _premission, int minVal, int maxVal, int step, unit charUnit): characteristics(_type, _premission), _minVal(minVal), _maxVal(maxVal), _step(step), _unit(charUnit) {
+    intCharacteristics(unsigned int _type, int _permission, int minVal, int maxVal, int step, unit charUnit): characteristics(_type, _permission), _minVal(minVal), _maxVal(maxVal), _step(step), _unit(charUnit) {
         _value = minVal;
     }
     virtual string value(HKConnection *sender) {
@@ -326,7 +326,7 @@ public:
     string _value;
     const unsigned short maxLen;
     string_value_changed_t valueChangeFunctionCall = NULL;
-    stringCharacteristics(unsigned int _type, int _premission, unsigned short _maxLen): characteristics(_type, _premission), maxLen(_maxLen) {}
+    stringCharacteristics(unsigned int _type, int _permission, unsigned short _maxLen): characteristics(_type, _permission), maxLen(_maxLen) {}
     virtual string value(HKConnection *sender) {
         if (perUserQuery != 0)
             return "\""+perUserQuery(sender)+"\"";
