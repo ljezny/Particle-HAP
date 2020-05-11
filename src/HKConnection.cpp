@@ -137,7 +137,6 @@ void HKConnection::decryptData(uint8_t *payload, size_t *size)
             nonce[i++] = x % 256;
             x /= 256;
         }
-        size_t decrypted_len = *decrypted_size - decrypted_offset;
 
         int r = wc_ChaCha20Poly1305_Decrypt(
             (const byte *)writeKey,
@@ -378,7 +377,6 @@ bool HKConnection::handlePairVerify(const char *buffer)
 
         char salt[] = "Pair-Verify-Encrypt-Salt";
         char info[] = "Pair-Verify-Encrypt-Info";
-        size_t sessionKeySize = CHACHA20_POLY1305_AEAD_KEYSIZE;
         r = wc_HKDF(SHA512, (const byte *)sharedKey, sharedKeySize, (const byte *)salt, strlen(salt), (const byte *)info, strlen(info), sessionKeyData, CHACHA20_POLY1305_AEAD_KEYSIZE);
         if (r)
             hkLog.warn("wc_HKDF: r:%d", r);
@@ -387,7 +385,6 @@ bool HKConnection::handlePairVerify(const char *buffer)
         unsigned short msgLen = 0;
         data.rawData(&plainMsg, &msgLen);
 
-        size_t encryptMsgSize = 0;
         byte encryptMsg[msgLen + 16];
         r = wc_ChaCha20Poly1305_Encrypt(
             (const byte *)sessionKeyData,

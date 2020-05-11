@@ -73,7 +73,7 @@ void HKServer::setPaired(bool p) {
     sprintf(deviceTypeStr, "%d",deviceType);
 
     char recordTxt[160] = {0};
-    int len = sprintf(recordTxt, "%csf=%d%cid=%s%cpv=1.0%cc#=%s%cs#=1%cff=0%cmd=%s%cci=%s",4, p ? 0 : 1,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,3+configNumberLen,configNumberStr,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
+    sprintf(recordTxt, "%csf=%d%cid=%s%cpv=1.0%cc#=%s%cs#=1%cff=0%cmd=%s%cci=%s",4, p ? 0 : 1,(char)deviceIdentity.length()+3,deviceIdentity.c_str(),6,3+configNumberLen,configNumberStr,4,4,(char)hapName.length() + 3,hapName.c_str(),3 + strlen(deviceTypeStr),deviceTypeStr);
 
     char bonjourName[128] = {0};
 

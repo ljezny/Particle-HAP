@@ -413,7 +413,6 @@ errorReturn:
 bool HKBonjour::run()
 {
    bool result = false;
-   uint8_t i;
    unsigned long now = millis();
    // now, should we re-announce our services again?
    if ((now - this->_lastAnnounceMillis) > 1000*MSNS_ANNOUNCE_TIME_SEC) {
