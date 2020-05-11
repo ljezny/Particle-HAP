@@ -23,4 +23,6 @@
 #define CUSTOM_RAND_GENERATE_BLOCK customRngFunc
 extern int customRngFunc(byte* output, word32 sz);
 
+#define WOLFSSL_IGNORE_FILE_WARN
+
 #endif
