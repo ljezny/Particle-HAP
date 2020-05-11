@@ -606,7 +606,7 @@ void HKConnection::handlePairSetup(const char *buffer)
         stateRecord.data[0] = State_M4_SRPVerifyRespond;
         const char *keyStr = 0;
         int keyLen = 0;
-        const char *proofStr;
+        char *proofStr = NULL;
         int proofLen = 0;
         keyStr = msg.data.dataPtrForIndex(3);
         keyLen = msg.data.lengthForIndex(3);
