@@ -409,8 +409,6 @@ MDNSError_t HKBonjour::_sendMDNSMessage(uint32_t peerAddress, uint32_t xid, int 
 
    this->endPacket();
 
-errorReturn:
-
    hkLog.info("Bonjour advertised");
    return statusCode;
 }
