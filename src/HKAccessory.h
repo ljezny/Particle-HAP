@@ -82,7 +82,7 @@ typedef enum {
     charType_videoRotation      = 0x3C,
     charType_videoValAttr       = 0x3D,
 
-#pragma - The following is only default by the device after iOS 9
+// - The following is only default by the device after iOS 9
 
     charType_firmwareRevision   = 0x52,
     charType_hardwareRevision   = 0x53,
@@ -129,7 +129,7 @@ typedef enum {
     charType_sensorChargingState= 0x8F,
 
 
-#pragma - The following is service provide
+// - The following is service provide
     serviceType_accessoryInfo      = 0x3E,
     serviceType_camera             = 0x3F,
     serviceType_fan                = 0x40,
@@ -166,13 +166,13 @@ typedef enum {
     serviceType_battery            = 0x96,
     serviceType_carbonDioxideSensor= 0x97,
 
-#pragma - The following is for bluetooth characteristic
+// - The following is for bluetooth characteristic
     btCharType_pairSetup = 0x4C,
     btCharType_pairVerify = 0x4E,
     btCharType_pairingFeature = 0x4F,
     btCharType_pairings = 0x50,
     btCharType_serviceInstanceID = 0x51,
-#pragma - The following is for bluetooth service
+// - The following is for bluetooth service
     btServiceType_accessoryInformation = 0xFED3,
     btServiceType_camera            = 0xFEC9,
     btServiceType_fan               = 0xFECB,
