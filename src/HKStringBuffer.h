@@ -80,6 +80,12 @@ public:
         this->append(rhs);
         return *this; // return the result by reference
     }
+
+    HKStringBuffer& operator+=(const char* rhs) 
+    {
+        this->append(rhs);
+        return *this;
+    }
 };
 
 #endif /* HKStringBuffer_hpp */
