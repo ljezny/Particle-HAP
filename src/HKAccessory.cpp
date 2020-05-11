@@ -377,7 +377,7 @@ string dictionaryWrap(string *key, string *value, unsigned short len) {
 }
 
 void characteristics::notify(HKConnection* conn) {
-  for(int i = 0; i<notifiedConnections.size();i++){
+  for(uint i = 0; i<notifiedConnections.size();i++){
       if(conn != notifiedConnections.at(i)) {
           notifiedConnections.at(i)->postCharacteristicsValue(this);
       }
@@ -634,7 +634,7 @@ void handleAccessory(const char *request, unsigned int requestLen, char *respons
 
             char *buffer2 = characteristicsBuffer;
             while (strlen(buffer2) && statusCode != 400) {
-                bool reachLast = false; bool updateNotify = false;
+                bool updateNotify = false;
                 char *buffer1;
                 buffer1 = strtok_r(buffer2, "}", &buffer2);
                 if (*buffer2 != 0) buffer2+=2;

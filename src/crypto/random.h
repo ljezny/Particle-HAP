@@ -154,6 +154,9 @@ extern "C" {
     /* NO_OLD_RNGNAME removes RNG struct name to prevent possible type conflicts,
      * can't be used with CTaoCrypt FIPS */
 #if !defined(NO_OLD_RNGNAME) && !defined(HAVE_FIPS)
+#ifdef RNG
+#undef RNG
+#endif
 #define RNG WC_RNG
 #endif
     

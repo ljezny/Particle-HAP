@@ -29,7 +29,7 @@ HKConnection::HKConnection(HKServer *s, TCPClient c)
 
 HKConnection::~HKConnection()
 {
-    for (int i = 0; i < notifiableCharacteristics.size(); i++)
+    for (uint i = 0; i < notifiableCharacteristics.size(); i++)
     {
         notifiableCharacteristics.at(i)->removeNotifiedConnection(this);
     }
@@ -50,7 +50,7 @@ void HKConnection::writeEncryptedData(uint8_t *payload, size_t size)
     delay(100);
     memset(SHARED_TEMP_CRYPTO_BUFFER, 0, SHARED_TEMP_CRYPTO_BUFFER_LEN);
 
-    int payload_offset = 0;
+    uint payload_offset = 0;
     int part = 0;
     while (payload_offset < size)
     {
@@ -119,7 +119,7 @@ void HKConnection::decryptData(uint8_t *payload, size_t *size)
     byte nonce[12];
     memset(nonce, 0, sizeof(nonce));
 
-    int payload_offset = 0;
+    uint payload_offset = 0;
     int decrypted_offset = 0;
     while (payload_offset < payload_size)
     {
@@ -137,7 +137,6 @@ void HKConnection::decryptData(uint8_t *payload, size_t *size)
             nonce[i++] = x % 256;
             x /= 256;
         }
-        size_t decrypted_len = *decrypted_size - decrypted_offset;
 
         int r = wc_ChaCha20Poly1305_Decrypt(
             (const byte *)writeKey,
@@ -263,14 +262,14 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
 void HKConnection::announce(char *desc)
 {
     memset(SHARED_RESPONSE_BUFFER, 0, SHARED_RESPONSE_BUFFER_LEN);
-    int len = snprintf((char*)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    int len = snprintf((char*)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %u\r\n\r\n%s", strlen(desc), desc);
     hkLog.info("Announce: %s, data: %s", clientID(), SHARED_RESPONSE_BUFFER);
     writeData((byte *)SHARED_RESPONSE_BUFFER, len);
 }
 
 void HKConnection::processPostedCharacteristics()
 {
-    for (int i = 0; i < postedCharacteristics.size(); i++)
+    for (uint i = 0; i < postedCharacteristics.size(); i++)
     {
         characteristics *c = postedCharacteristics.at(i);
         int len = snprintf(NULL, 0, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
@@ -378,7 +377,6 @@ bool HKConnection::handlePairVerify(const char *buffer)
 
         char salt[] = "Pair-Verify-Encrypt-Salt";
         char info[] = "Pair-Verify-Encrypt-Info";
-        size_t sessionKeySize = CHACHA20_POLY1305_AEAD_KEYSIZE;
         r = wc_HKDF(SHA512, (const byte *)sharedKey, sharedKeySize, (const byte *)salt, strlen(salt), (const byte *)info, strlen(info), sessionKeyData, CHACHA20_POLY1305_AEAD_KEYSIZE);
         if (r)
             hkLog.warn("wc_HKDF: r:%d", r);
@@ -387,7 +385,6 @@ bool HKConnection::handlePairVerify(const char *buffer)
         unsigned short msgLen = 0;
         data.rawData(&plainMsg, &msgLen);
 
-        size_t encryptMsgSize = 0;
         byte encryptMsg[msgLen + 16];
         r = wc_ChaCha20Poly1305_Encrypt(
             (const byte *)sessionKeyData,
@@ -609,7 +606,7 @@ void HKConnection::handlePairSetup(const char *buffer)
         stateRecord.data[0] = State_M4_SRPVerifyRespond;
         const char *keyStr = 0;
         int keyLen = 0;
-        const char *proofStr;
+        char *proofStr = NULL;
         int proofLen = 0;
         keyStr = msg.data.dataPtrForIndex(3);
         keyLen = msg.data.lengthForIndex(3);
@@ -848,7 +845,7 @@ void HKConnection::handleAccessoryRequest(const char *buffer, size_t size)
 
 void HKConnection::postCharacteristicsValue(characteristics *c)
 {
-    for (int i = 0; i < postedCharacteristics.size(); i++)
+    for (uint i = 0; i < postedCharacteristics.size(); i++)
     {
         characteristics *item = postedCharacteristics.at(i);
         if (c == item)

@@ -15,7 +15,7 @@ void HAPCompositeAccessory::identity(bool oldValue, bool newValue, HKConnection 
 
 bool HAPCompositeAccessory::handle() {
     bool result = false;
-    for(int i = 0; i < descriptors.size(); i++) {
+    for(uint i = 0; i < descriptors.size(); i++) {
         //process only one accessory per "loop" step. So we dont delay Particle connection, Bonjour so much. Never mind it will be process one step later
         result |= descriptors.at(i)->handle();
     }
@@ -29,7 +29,7 @@ void HAPCompositeAccessory::initAccessorySet(){
     addInfoServiceToAccessory(accessory, "Composite accessory", "Vendor name", "Model  name", "1","1.0.0", std::bind(&HAPCompositeAccessory::identity, this, std::placeholders::_1, std::placeholders::_2,std::placeholders::_3));
     accSet->addAccessory(accessory);
 
-    for(int i = 0; i < descriptors.size(); i++) {
+    for(uint i = 0; i < descriptors.size(); i++) {
         descriptors.at(i)->initService(accessory);
     }
 }
