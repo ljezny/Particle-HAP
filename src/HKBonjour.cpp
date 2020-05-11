@@ -42,6 +42,11 @@
 #define  MDNS_MAX_SERVICES_PER_PACKET  6
 #define  MSNS_ANNOUNCE_TIME_SEC  1 //Send announce packet every 1 seconds
 
+// This is from Arduino Ethernet library types.h, and is included here to remove compiler warnings...
+#define	_ENDIAN_LITTLE_	0	/**<  This must be defined if system is little-endian alignment */
+#define	_ENDIAN_BIG_		1
+#define 	SYSTEM_ENDIAN		_ENDIAN_LITTLE_
+
 static uint8_t mdnsMulticastIPAddr[] = { 224, 0, 0, 251 };
 //static uint8_t mdnsHWAddr[] = { 0x01, 0x00, 0x5e, 0x00, 0x00, 0xfb };
 
