@@ -44,7 +44,7 @@ void HKServer::start () {
 }
 
 void HKServer::stop () {
-    for(int i = 0; i < clients.size(); i++) {
+    for(uint i = 0; i < clients.size(); i++) {
       HKConnection *conn = clients.at(i);
       conn->close();
       delete conn;

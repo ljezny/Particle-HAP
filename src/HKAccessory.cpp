@@ -377,7 +377,7 @@ string dictionaryWrap(string *key, string *value, unsigned short len) {
 }
 
 void characteristics::notify(HKConnection* conn) {
-  for(int i = 0; i<notifiedConnections.size();i++){
+  for(uint i = 0; i<notifiedConnections.size();i++){
       if(conn != notifiedConnections.at(i)) {
           notifiedConnections.at(i)->postCharacteristicsValue(this);
       }

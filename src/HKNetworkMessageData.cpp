@@ -56,7 +56,7 @@ void HKNetworkMessageData::rawData(const char **dataPtr, unsigned short *len) {
     string buffer = "";
     for (int i = 0; i < 10; i++) {
         if (records[i].activate) {
-            for (int j = 0; j != records[i].length;) {
+            for (uint j = 0; j != records[i].length;) {
                 unsigned char len = records[i].length-j>255?255:records[i].length-j;
                 string temp(&records[i].data[j], len);
                 temp = (char)records[i].index+((char)len+temp);

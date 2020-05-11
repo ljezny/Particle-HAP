@@ -29,7 +29,7 @@ HKConnection::HKConnection(HKServer *s, TCPClient c)
 
 HKConnection::~HKConnection()
 {
-    for (int i = 0; i < notifiableCharacteristics.size(); i++)
+    for (uint i = 0; i < notifiableCharacteristics.size(); i++)
     {
         notifiableCharacteristics.at(i)->removeNotifiedConnection(this);
     }
@@ -50,7 +50,7 @@ void HKConnection::writeEncryptedData(uint8_t *payload, size_t size)
     delay(100);
     memset(SHARED_TEMP_CRYPTO_BUFFER, 0, SHARED_TEMP_CRYPTO_BUFFER_LEN);
 
-    int payload_offset = 0;
+    uint payload_offset = 0;
     int part = 0;
     while (payload_offset < size)
     {
@@ -119,7 +119,7 @@ void HKConnection::decryptData(uint8_t *payload, size_t *size)
     byte nonce[12];
     memset(nonce, 0, sizeof(nonce));
 
-    int payload_offset = 0;
+    uint payload_offset = 0;
     int decrypted_offset = 0;
     while (payload_offset < payload_size)
     {
@@ -270,7 +270,7 @@ void HKConnection::announce(char *desc)
 
 void HKConnection::processPostedCharacteristics()
 {
-    for (int i = 0; i < postedCharacteristics.size(); i++)
+    for (uint i = 0; i < postedCharacteristics.size(); i++)
     {
         characteristics *c = postedCharacteristics.at(i);
         int len = snprintf(NULL, 0, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
@@ -848,7 +848,7 @@ void HKConnection::handleAccessoryRequest(const char *buffer, size_t size)
 
 void HKConnection::postCharacteristicsValue(characteristics *c)
 {
-    for (int i = 0; i < postedCharacteristics.size(); i++)
+    for (uint i = 0; i < postedCharacteristics.size(); i++)
     {
         characteristics *item = postedCharacteristics.at(i);
         if (c == item)

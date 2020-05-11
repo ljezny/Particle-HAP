@@ -10,7 +10,7 @@
 
 bool HAPHomekitBridgeAccessory::handle() {
     bool result = false;
-    for(int i = 0; i < descriptors.size(); i++) {
+    for(uint i = 0; i < descriptors.size(); i++) {
         //process only one accessory per "loop" step. So we dont delay Particle connection, Bonjour so much. Never mind it will be process one step later
         result |= descriptors.at(i)->handle();
     }
@@ -18,7 +18,7 @@ bool HAPHomekitBridgeAccessory::handle() {
 }
 
 void HAPHomekitBridgeAccessory::initAccessorySet(){
-    for(int i = 0; i < descriptors.size(); i++) {
+    for(uint i = 0; i < descriptors.size(); i++) {
         descriptors.at(i)->initAccessorySet();
     }
 }
