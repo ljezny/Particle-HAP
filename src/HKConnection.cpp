@@ -262,7 +262,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
 void HKConnection::announce(char *desc)
 {
     memset(SHARED_RESPONSE_BUFFER, 0, SHARED_RESPONSE_BUFFER_LEN);
-    int len = snprintf((char*)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %lu\r\n\r\n%s", strlen(desc), desc);
+    int len = snprintf((char*)SHARED_RESPONSE_BUFFER, SHARED_RESPONSE_BUFFER_LEN, "EVENT/1.0 200 OK\r\nContent-Type: application/hap+json\r\nContent-Length: %u\r\n\r\n%s", strlen(desc), desc);
     hkLog.info("Announce: %s, data: %s", clientID(), SHARED_RESPONSE_BUFFER);
     writeData((byte *)SHARED_RESPONSE_BUFFER, len);
 }
