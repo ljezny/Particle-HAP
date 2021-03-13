@@ -60,6 +60,7 @@ private:
     std::vector<characteristics *> notifiableCharacteristics;
     std::vector<characteristics *> postedCharacteristics;
 
+    void doWriteData(uint8_t *data, int size);
     void writeEncryptedData(uint8_t* payload,size_t size);
     void decryptData(uint8_t* buffer,size_t *size);
     void readData(uint8_t* buffer,size_t *size);

@@ -43,6 +43,19 @@ HKConnection::operator bool()
     return client;
 }
 
+void HKConnection::doWriteData(uint8_t *data, int size) {
+  if (isConnected())
+  {
+      int bytes = client.write(data, size, 100); //100 ms timeout should be enough
+      int err = client.getWriteError();
+      if (err != 0 || bytes != size)
+      {
+          hkLog.warn("doWriteData: failed (error = %d), number of bytes written: %d", err, bytes);
+          close();
+      }
+  }
+}
+
 void HKConnection::writeEncryptedData(uint8_t *payload, size_t size)
 {
     hkLog.info("writeEncryptedData responseLen:%d", size);
@@ -86,15 +99,7 @@ void HKConnection::writeEncryptedData(uint8_t *payload, size_t size)
 
         part++;
 
-        if (isConnected())
-        {
-            int bytes = client.write(SHARED_TEMP_CRYPTO_BUFFER, chunk_size + 16 + 2);
-            int err = client.getWriteError();
-            if (err != 0)
-            {
-                hkLog.warn("writeEncryptedData:: failed (error = %d), number of bytes written: %d", err, bytes);
-            }
-        }
+        doWriteData(SHARED_TEMP_CRYPTO_BUFFER, chunk_size + 16 + 2);
     }
 }
 
@@ -194,7 +199,7 @@ void HKConnection::writeData(uint8_t *responseBuffer, size_t responseLen)
         else
         {
             hkLog.info("writeData responseLen:%d", responseLen);
-            client.write((uint8_t *)responseBuffer, (size_t)responseLen);
+            doWriteData((uint8_t *)responseBuffer, (size_t)responseLen);
         }
     }
 }
@@ -207,7 +212,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
     bool result = false;
     if (len > 0)
     {
-        lastKeepAliveMs = millis();
+
         RGB_STATUS_YELLOW.setActive(true);
         hkLog.info("Request Message read length: %d ", len);
         HKNetworkMessage msg((const char *)SHARED_REQUEST_BUFFER);
@@ -262,6 +267,12 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
         result = true;
         RGB_STATUS_YELLOW.setActive(false);
     }
+
+    if((millis()-lastKeepAliveMs) > 1000) { //send nothing every 1second to check if client is still connected
+      lastKeepAliveMs = millis();
+      announce("");
+    }
+
 
     processPostedCharacteristics();
     return result;
