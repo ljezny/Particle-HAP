@@ -268,13 +268,16 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
         RGB_STATUS_YELLOW.setActive(false);
     }
 
-    if((millis()-lastKeepAliveMs) > 1000) { //send nothing every 1second to check if client is still connected
-      lastKeepAliveMs = millis();
-      announce("");
+    if (isEncrypted){
+      if((millis()-lastKeepAliveMs) > 1000) { //send nothing every 1second to check if client is still connected
+        lastKeepAliveMs = millis();
+        announce("");
+      }
+
+
+      processPostedCharacteristics();
     }
 
-
-    processPostedCharacteristics();
     return result;
 }
 
