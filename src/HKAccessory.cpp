@@ -547,7 +547,10 @@ void handleAccessory(const char *request, unsigned int requestLen, char *respons
             drec.index = 6; drec.length = 1;
             HKNetworkMessageData data;
             data.addRecord(drec);
-            data.rawData((const char **)&replyData, &replyDataLen);
+            char *tempBuffer;
+            data.rawData((const char **)&tempBuffer, &replyDataLen);
+            memcpy(replyData, tempBuffer, replyDataLen);
+            free(tempBuffer);
             returnType = pairingTlv8Type;
             statusCode = 200;
         } else {
@@ -562,7 +565,10 @@ void handleAccessory(const char *request, unsigned int requestLen, char *respons
             drec.index = 6; drec.length = 1;
             HKNetworkMessageData data;
             data.addRecord(drec);
-            data.rawData((const char **)&replyData, &replyDataLen);
+            char *tempBuffer;
+            data.rawData((const char **)&tempBuffer, &replyDataLen);
+            memcpy(replyData, tempBuffer, replyDataLen);
+            free(tempBuffer);
             returnType = pairingTlv8Type;
             statusCode = 200;
         }
