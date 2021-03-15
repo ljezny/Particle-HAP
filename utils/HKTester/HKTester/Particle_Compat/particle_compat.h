@@ -132,9 +132,9 @@ public:
         sleep(1);
         return result;
     }
-    int write(unsigned char *buffer, size_t len) {
-        send(socket, buffer, len, 0);
-        return len;
+    int write(unsigned char *buffer, size_t len, int timeout) {
+        return send(socket, buffer, len, timeout);
+        //return len;
     }
     int getWriteError() {
         return 0;

@@ -243,7 +243,6 @@
 				56EB6059233A8D0700175FAF /* crypto */,
 				56EB6086233A8D0700175FAF /* HKAccessory.cpp */,
 				56EB6087233A8D0700175FAF /* HKAccessory.h */,
-				56EB6088233A8D0700175FAF /* homekit */,
 				56EB6089233A8D0700175FAF /* HAPCompositeAccessory.cpp */,
 				56EB608A233A8D0700175FAF /* HKConsts.h */,
 				56EB608B233A8D0700175FAF /* HAPHomekitBridgeAccessory.h */,
@@ -329,13 +328,6 @@
 				56EB6085233A8D0700175FAF /* mpi_superclass.h */,
 			);
 			path = crypto;
-			sourceTree = "<group>";
-		};
-		56EB6088233A8D0700175FAF /* homekit */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = homekit;
 			sourceTree = "<group>";
 		};
 		56EB608F233A8D0700175FAF /* target */ = {

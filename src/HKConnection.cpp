@@ -295,7 +295,8 @@ void HKConnection::processPostedCharacteristics()
     {
         characteristics *c = postedCharacteristics.at(i);
         int len = snprintf(NULL, 0, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
-        char buffer[len + 1] = {0};
+        char buffer[len + 1];
+        memset(buffer, len + 1, 1);
         snprintf(buffer, len + 1, "{\"characteristics\":[{\"aid\": %d, \"iid\": %d, \"value\": %s}]}", c->accessory->aid, c->iid, c->value(NULL).c_str());
         announce(buffer);
     }
