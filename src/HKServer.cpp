@@ -109,7 +109,7 @@ bool HKServer::handle() {
         }
         clients.insert(clients.end(),c);
 #ifdef DEBUG_PARTICLE_EVENTS
-        Particle.publish("homekit/accept", c->clientID(), PRIVATE);
+        //Particle.publish("homekit/accept", c->clientID(), PRIVATE);
 #endif
         result = true;
     }
@@ -123,7 +123,7 @@ bool HKServer::handle() {
         if(!conn->isConnected()) {
             hkLog.info("Client removed.");
 #ifdef DEBUG_PARTICLE_EVENTS
-            Particle.publish("homekit/close", conn->clientID(), PRIVATE);
+            //Particle.publish("homekit/close", conn->clientID(), PRIVATE);
 #endif
             conn->close();
             clients.erase(clients.begin() + i);
