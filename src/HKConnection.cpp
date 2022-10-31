@@ -220,7 +220,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
         {
             hkLog.info("Handling Pair Setup...");
 #ifdef DEBUG_PARTICLE_EVENTS
-            Particle.publish("homekit/pair-setup", clientID(), PRIVATE);
+            //Particle.publish("homekit/pair-setup", clientID(), PRIVATE);
 #endif
             handlePairSetup((const char *)SHARED_REQUEST_BUFFER);
         }
@@ -231,7 +231,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
             {
               hkLog.info("Handling Pair Verify...");
 #ifdef DEBUG_PARTICLE_EVENTS
-              Particle.publish("homekit/pair-verify", clientID(), PRIVATE);
+              //Particle.publish("homekit/pair-verify", clientID(), PRIVATE);
 #endif
               if (handlePairVerify((const char *)SHARED_REQUEST_BUFFER))
               {
@@ -240,7 +240,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
               }
             } else {
 #ifdef DEBUG_PARTICLE_EVENTS
-                  Particle.publish("homekit/connection-limit", clientID(), PRIVATE);
+                  //Particle.publish("homekit/connection-limit", clientID(), PRIVATE);
 #endif
                   //max connections has been reached.
                   memset(SHARED_RESPONSE_BUFFER, 0, SHARED_RESPONSE_BUFFER_LEN);
@@ -259,7 +259,7 @@ bool HKConnection::handleConnection(bool maxConnectionsVictim)
           //connection is secured
           hkLog.info("Handling message request: %s", msg.directory);
 #ifdef DEBUG_PARTICLE_EVENTS
-          Particle.publish("homekit/accessory", clientID(), PRIVATE);
+          //Particle.publish("homekit/accessory", clientID(), PRIVATE);
 #endif
           handleAccessoryRequest((const char *)SHARED_REQUEST_BUFFER, len);
         }
@@ -883,3 +883,4 @@ void HKConnection::addNotifiedCharacteristics(characteristics *c)
 {
     notifiableCharacteristics.push_back(c);
 }
+
