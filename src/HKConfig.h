@@ -25,6 +25,4 @@ extern int customRngFunc(byte* output, word32 sz);
 
 #define WOLFSSL_IGNORE_FILE_WARN
 
-#define DEBUG_PARTICLE_EVENTS
-
 #endif
