@@ -29,6 +29,8 @@ Example video of pairing and handling.
 //So allow 8 connections, every 9th will be closed send HTTP 503 and closed.
 //It seems that even 2 connections are working just fine, if you need to use sockets for something else.
 #define MAX_CONNECTIONS 8
+// Enable Particle event publishing when various HomeKit events take place
+#define DEBUG_PARTICLE_EVENTS
 
 ```
 
